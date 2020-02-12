@@ -534,4 +534,8 @@ DerivedData/
 
 ## Virtual env 
 lok/
+
+## Visual Studio Code
+.vscode/
+
 # End of https://www.gitignore.io/api/node,react,django,python,reactnative
