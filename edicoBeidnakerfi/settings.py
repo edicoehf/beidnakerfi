@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'edicoBeidnakerfi',
+    'tastypie',
 ]
 
 MIDDLEWARE = [
@@ -75,10 +77,15 @@ WSGI_APPLICATION = 'edicoBeidnakerfi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'lvxrktan',
+        'USER': 'lvxrktan',
+        'PASSWORD': 'RfqF9i7GqCx-i2EkNppyAwF-EBno_D2u',
+        'HOST': 'dumbo.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
