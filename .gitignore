@@ -532,5 +532,6 @@ DerivedData/
 /*.gcno
 
 
-
+## Virtual env 
+lok/
 # End of https://www.gitignore.io/api/node,react,django,python,reactnative
