@@ -8,7 +8,7 @@ from tastypie.validation import Validation
 from django.db.models import signals
 from tastypie.models import create_api_key
 
-from backend.models import Sellers
+from backend.models import Sellers, Departments
 
 class SellerResource(ModelResource):
     class Meta:
@@ -30,3 +30,9 @@ class UserResource(ModelResource):
         if authentication.is_authenticated:
             signals.post_save.connect(create_api_key, sender=User)
             print("is authenticated YES")
+
+class DepartmentResource(ModelResource):
+    class Meta:
+        queryset = Departments.objects.all()
+        resource_name = 'departments'
+        filtering = {'name': ALL}
