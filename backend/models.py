@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -28,13 +29,11 @@ class Sellers(models.Model):
     class Meta:
         db_table = 'sellers'
 
-
-
 class Cheques(models.Model):
     price = models.FloatField()
     description = models.CharField(max_length=200)
-    buid = models.ForeignKey('BuyerUsers', on_delete=models.CASCADE)
-    suid = models.ForeignKey('SellerUsers', on_delete=models.CASCADE)
+    buid = models.ForeignKey(User, on_delete=models.CASCADE)
+    suid = models.ForeignKey(User, on_delete=models.CASCADE)
     did = models.ForeignKey('Departments', on_delete=models.CASCADE)
 
     class Meta:
