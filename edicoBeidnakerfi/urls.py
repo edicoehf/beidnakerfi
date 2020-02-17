@@ -17,7 +17,7 @@ from django.contrib import admin, auth
 from django.urls import path
 
 from django.conf.urls import url, include
-from edicoBeidnakerfi.api import SellerResource, UserResource
+from backend.api import SellerResource, UserResource
 
 seller_resource = SellerResource()
 user_resource = UserResource()
