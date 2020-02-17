@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 
 const LoginForm = props => {
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const onSubmit = data => { 
       console.log(data);
       
