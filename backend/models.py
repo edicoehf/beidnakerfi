@@ -32,8 +32,8 @@ class Sellers(models.Model):
 class Cheques(models.Model):
     price = models.FloatField()
     description = models.CharField(max_length=200)
-    buid = models.ForeignKey(User, on_delete=models.CASCADE)
-    suid = models.ForeignKey(User, on_delete=models.CASCADE)
+    buid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='buid')
+    suid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='suid')
     did = models.ForeignKey('Departments', on_delete=models.CASCADE)
 
     class Meta:
