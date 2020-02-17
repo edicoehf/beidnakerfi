@@ -13,9 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.contrib import admin, auth
 from django.urls import path
+
+from django.conf.urls import url, include
+from edicoBeidnakerfi.api import SellerResource, UserResource
+
+seller_resource = SellerResource()
+user_resource = UserResource()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^api/sellers/', include(seller_resource.urls)),
+    url(r'^api/user/', include(user_resource.urls))
 ]
