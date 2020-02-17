@@ -25,3 +25,5 @@ class UserResource(ModelResource):
         print(authentication.is_authenticated)
         if authentication.is_authenticated:
             signals.post_save.connect(create_api_key, sender=User)
+
+            #test
