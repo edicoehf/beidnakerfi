@@ -1,5 +1,5 @@
 from django.contrib import admin
-from backend.models import Buyers, Sellers, Cheques, Privileges, Departments
+from api.models import Buyers, Sellers, Cheques, Privileges, Departments
 
 # Register your models here.
 admin.site.register(Buyers)

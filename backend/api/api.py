@@ -8,7 +8,7 @@ from tastypie.http import HttpUnauthorized, HttpForbidden, HttpNotFound
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.utils import trailing_slash
 
-from backend.models import Sellers, Departments, Buyers, Cheques
+from api.models import Sellers, Departments, Buyers, Cheques
 
 class SellerResource(ModelResource):
     class Meta:

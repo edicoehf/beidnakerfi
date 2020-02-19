@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from tastypie.api import Api
-from backend.api import UserResource, LoginResource, SellerResource, DepartmentResource, BuyerResource, ChequesResource
+from api.api import UserResource, LoginResource, SellerResource, DepartmentResource, BuyerResource, ChequesResource
 
 seller = Api(api_name='seller')
 seller.register(SellerResource())
