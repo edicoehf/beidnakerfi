@@ -1,4 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+from django.db.models import signals
+from tastypie.models import create_api_key
+
+signals.post_save.connect(create_api_key, sender=User)
 
 # Create your models here.
 class Privileges(models.Model):
@@ -21,38 +27,17 @@ class Departments(models.Model):
     class Meta:
         db_table = 'departments'
 
-class BuyerUsers(models.Model):
-    name = models.CharField(max_length=50)
-    email = models.EmailField()
-    password = models.CharField(max_length=50)
-    bid = models.ForeignKey('Buyers', on_delete=models.CASCADE)
-    pid = models.ForeignKey('Privileges', on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'buyer_users'
-
 class Sellers(models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
         db_table = 'sellers'
 
-class SellerUsers(models.Model):
-    name = models.CharField(max_length=50)
-    email = models.EmailField()
-    password = models.CharField(max_length=50)
-    sid = models.ForeignKey('Sellers', on_delete=models.CASCADE)
-    pid = models.ForeignKey('Privileges', on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'seller_users'
-
-
 class Cheques(models.Model):
     price = models.FloatField()
     description = models.CharField(max_length=200)
-    buid = models.ForeignKey('BuyerUsers', on_delete=models.CASCADE)
-    suid = models.ForeignKey('SellerUsers', on_delete=models.CASCADE)
+    buid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='buid')
+    suid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='suid')
     did = models.ForeignKey('Departments', on_delete=models.CASCADE)
 
     class Meta:
