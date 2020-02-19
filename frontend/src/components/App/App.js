@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import './App.css';
 
-import reducers from '../../reducers'
+import reducers from '../../reducers';
 import LoginForm from '../LoginForm/LoginForm';
 
 function App() {
