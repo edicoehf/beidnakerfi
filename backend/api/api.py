@@ -48,6 +48,12 @@ class UserResource(ModelResource):
     def _api_key(self, user):
         return user.api_key.key
 
+    def _user_group(self, user):
+        group_list = []
+        for group in user.groups.all():
+            group_list.append(group)
+        return group_list
+
     def prepend_urls(self):
         params = (self._meta.resource_name, trailing_slash())
         return [
@@ -66,7 +72,7 @@ class UserResource(ModelResource):
         if user:
             if user.is_active:
                 login(request, user)
-                return self.create_response(request, {'success': True, 'api_key': self._api_key(user), 'username': username})
+                return self.create_response(request, {'success': True, 'api_key': self._api_key(user), 'username': username, 'groups': self._user_group(user)})
             else:
                 return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
         else:

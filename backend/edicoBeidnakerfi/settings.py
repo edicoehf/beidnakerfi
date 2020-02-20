@@ -134,5 +134,9 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000"
 ]
 
+TASTYPIE_DEFAULT_FORMATS = ['json']
+
+TASTYPIE_ALLOW_MISSING_SLASH = True
+
 # Activate Django-Heroku.
 django_heroku.settings(locals())
