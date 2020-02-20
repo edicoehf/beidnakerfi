@@ -1,14 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { getUsers } from '../../services/userService'
+import { login } from '../../services/userService'
 import './LoginForm.css'
 import Logo from '../../img/edico-logo.png'
 
 const LoginForm = props => {
   const { register, handleSubmit, errors } = useForm();
-  
-  const onSubmit = data => {
-    const users = getUsers();
+
+  const onSubmit = async (data) => {
+    const users = await login(data);
     console.log(users);
       // Add service layer call here
   }

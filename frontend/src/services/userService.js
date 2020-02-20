@@ -1,10 +1,12 @@
 const axios = require('axios').default;
 
 
-export const getUsers = () => {
-    axios.get('http://localhost:8000/api/user')
-        .then(data => {
-            return data;
-        })
+export const login =  async (userlogin) => {
+    const  query = await axios.post('http://localhost:8000/api/users/login/', {
+        username: userlogin.username,
+        password: userlogin.password,
+    }).then((resp) => resp).catch(
+      (e) => /* eslint-disable */ console.log(e) /* eslint-enable */
+    )
+    return query
 }
-
