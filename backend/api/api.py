@@ -50,13 +50,16 @@ class UserResource(ModelResource):
 
     def _user_group(self, user):
         groups = user.groups.all()
-        if groups.count() > 1:
-            group_list = []
-            for group in user.groups.all():
-                group_list.append(group)
-            return group_list
+        if groups:
+            if groups.count() > 1:
+                group_list = []
+                for group in user.groups.all():
+                    group_list.append(group)
+                return group_list
+            else:
+                return groups[0].name
         else:
-            return groups[0].name
+            return None
 
     def prepend_urls(self):
         params = (self._meta.resource_name, trailing_slash())
@@ -76,7 +79,6 @@ class UserResource(ModelResource):
         if user:
             if user.is_active:
                 login(request, user)
-                print(self._user_group(user))
                 return self.create_response(request, {'success': True, 'api_key': self._api_key(user), 'username': username, 'groups': self._user_group(user)})
             else:
                 return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
