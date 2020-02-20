@@ -1,5 +1,0 @@
-build:
-    docker:
-        fe: frontend/Dockerfile
-        be: backend/Dockerfile
-    
