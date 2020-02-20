@@ -8,7 +8,7 @@ from tastypie.http import HttpUnauthorized, HttpForbidden, HttpNotFound
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.utils import trailing_slash
 
-from backend.models import Sellers, Departments, Buyers, Cheques
+from api.models import Sellers, Departments, Buyers, Cheques
 
 class SellerResource(ModelResource):
     class Meta:
@@ -41,14 +41,9 @@ class ChequesResource(ModelResource):
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
-        resource_name = 'user'
+        resource_name = 'users'
         excludes = ['email', 'password', 'is_superuser']
         authentication = ApiKeyAuthentication()
-
-class LoginResource(Resource):
-    class Meta:
-        resource_name = 'login'
-        allowed_methods= ['post']
 
     def _api_key(self, user):
         return user.api_key.key
@@ -76,6 +71,40 @@ class LoginResource(Resource):
                 return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
         else:
             return self.create_response(request, {'success': False, 'reason': 'Incorrect username or password'}, HttpUnauthorized)
+
+# DEPRECATED
+#
+# class LoginResource(Resource):
+#     class Meta:
+#         resource_name = 'login'
+#         allowed_methods= ['post']
+
+#     def _api_key(self, user):
+#         return user.api_key.key
+
+#     def prepend_urls(self):
+#         params = (self._meta.resource_name, trailing_slash())
+#         return [
+#             url(r"^(?P<resource_name>%s)/login%s$" % params, self.wrap_view('login'), name="api_login")
+#         ]
+
+#     def login(self, request, **kwargs):
+#         self.method_check(request, allowed=['post'])
+#         data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        
+#         username = data.get('username', '')
+#         password = data.get('password', '')
+
+#         user = authenticate(username=username, password=password)
+
+#         if user:
+#             if user.is_active:
+#                 login(request, user)
+#                 return self.create_response(request, {'success': True, 'api_key': self._api_key(user), 'username': username})
+#             else:
+#                 return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
+#         else:
+#             return self.create_response(request, {'success': False, 'reason': 'Incorrect username or password'}, HttpUnauthorized)
 
     # def logout(self, request, **kwargs):
     #     self.method_check(request, allowed=['get'])

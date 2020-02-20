@@ -4,8 +4,8 @@ from django.db.models import signals
 from tastypie.models import create_api_key
 
 
-class BackendConfig(AppConfig):
-    name = 'backend'
+class apiConfig(AppConfig):
+    name = 'api'
 
     def ready(self):
         signals.post_save.connect(create_api_key, sender=User)

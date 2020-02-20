@@ -533,7 +533,7 @@ DerivedData/
 
 
 ## Virtual env 
-lok/
+venv/
 
 ## Visual Studio Code
 .vscode/

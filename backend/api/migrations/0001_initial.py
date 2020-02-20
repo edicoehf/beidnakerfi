@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=50)),
                 ('email', models.EmailField(max_length=254)),
                 ('password', models.CharField(max_length=50)),
-                ('bid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='backend.Buyers')),
+                ('bid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Buyers')),
             ],
         ),
         migrations.CreateModel(
@@ -50,8 +50,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=50)),
                 ('email', models.EmailField(max_length=254)),
                 ('password', models.CharField(max_length=50)),
-                ('pid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='backend.Privileges')),
-                ('sid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='backend.Sellers')),
+                ('pid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Privileges')),
+                ('sid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Sellers')),
             ],
         ),
         migrations.CreateModel(
@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50)),
                 ('costsite', models.CharField(max_length=50)),
-                ('bid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='backend.Buyers')),
+                ('bid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Buyers')),
             ],
         ),
         migrations.CreateModel(
@@ -69,14 +69,14 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('price', models.FloatField()),
                 ('description', models.CharField(max_length=200)),
-                ('buid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='backend.BuyerUsers')),
-                ('did', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='backend.Departments')),
-                ('suid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='backend.SellerUsers')),
+                ('buid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.BuyerUsers')),
+                ('did', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Departments')),
+                ('suid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.SellerUsers')),
             ],
         ),
         migrations.AddField(
             model_name='buyerusers',
             name='pid',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='backend.Privileges'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.Privileges'),
         ),
     ]
