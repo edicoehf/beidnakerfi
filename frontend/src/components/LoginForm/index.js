@@ -4,18 +4,21 @@ import { loginUser } from '../../actions/userAction';
 import './LoginForm.css'
 import Logo from '../../img/edico-logo.png'
 import { useSelector, useDispatch } from 'react-redux';
+import * as service from '../../services'
 
 const LoginForm = props => {
   const { register, handleSubmit, errors } = useForm();
-  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user);
 
+  const dispatch = useDispatch();
+  if(service.isEmpty(userInfo)) alert('mamma inga')
   const onSubmit = async (data) => {
-    dispatch(await loginUser(data));
+  dispatch(await loginUser(data));
+
+
 
       // Add service layer call here
   }
-  const userInfo = useSelector((state) => state.user);
-  //console.log(userInfo)
   return (
     <div className='form'>
       <img src={Logo} alt='logo'/>
