@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import api from './apiReducer';
+import user from './userReducer';
 
 
 export default combineReducers({
-  api
+  user
 });

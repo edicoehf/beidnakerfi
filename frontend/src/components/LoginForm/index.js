@@ -1,22 +1,26 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { login } from '../../services/userService'
+import { loginUser } from '../../actions/userAction';
 import './LoginForm.css'
 import Logo from '../../img/edico-logo.png'
+import { useSelector, useDispatch } from 'react-redux';
 
 const LoginForm = props => {
   const { register, handleSubmit, errors } = useForm();
+  const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
-    const users = await login(data);
-    console.log(users);
+    dispatch(await loginUser(data));
+
       // Add service layer call here
   }
-
+  const userInfo = useSelector((state) => state.user);
+  //console.log(userInfo)
   return (
     <div className='form'>
       <img src={Logo} alt='logo'/>
       <form onSubmit={handleSubmit(onSubmit)}>
+
         <input
           name="username"
           type="text"

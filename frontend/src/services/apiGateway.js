@@ -6,7 +6,7 @@ export const login =  async (userlogin) => {
         username: userlogin.username,
         password: userlogin.password,
     }).then((resp) => resp).catch(
-      (e) => /* eslint-disable */ console.log(e) /* eslint-enable */
+      (e) => console.log(e)
     )
     return query
 }
