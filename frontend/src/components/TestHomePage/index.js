@@ -1,21 +1,23 @@
 import React from 'react';
 import './LoginForm.css'
 
-import { useSelector, useDispatch } from 'react-redux';
-import * as service from '../../services'
-import { useRedirect } from 'hookrouter';
+import { useSelector} from 'react-redux';
+import { useAuth } from '../../context/auth';
 
-const LoginForm = props => {
-  const userInfo = useSelector((state) => state.user);
+const TestHomePage = props => {
 
-  const dispatch = useDispatch();
-  if(service.isEmpty(userInfo)) alert('hey thu matt ekki vera herna')
+  const { setAuthTokens } = useAuth();
+
+
+  const logOut = () => {
+    setAuthTokens();
+  }
 
   return (
     <div className='form'>
-      mamma inga
+       <button onClick={logOut}>LogOut</button>
     </div>
   );
 };
 
-export default LoginForm;
+export default TestHomePage;

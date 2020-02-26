@@ -1,23 +1,37 @@
-import React from 'react';
+// Dependencies
+import React, { useState} from 'react';
 import { useForm } from 'react-hook-form';
-import { loginUser } from '../../actions/userAction';
+import { useDispatch } from 'react-redux';
+import { Redirect } from "react-router-dom";
+
+//Source
 import './LoginForm.css'
-import Logo from '../../img/edico-logo.png'
-import { useSelector, useDispatch } from 'react-redux';
-import * as service from '../../services'
+import Logo from '../../img/edico-logo.png';
+import { loginUser } from '../../actions/userAction';
+import { useAuth } from "../../context/auth";
+
+//Service
+import * as api from '../../services/apiGateway';
 
 const LoginForm = props => {
   const { register, handleSubmit, errors } = useForm();
-  const userInfo = useSelector((state) => state.user);
+  const { setAuthTokens } = useAuth();
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   const dispatch = useDispatch();
-  if(service.isEmpty(userInfo)) alert('mamma inga')
   const onSubmit = async (data) => {
-  dispatch(await loginUser(data));
+    const loginInfo = await api.login(data)
+    console.log(loginInfo)
+    if(loginInfo.status === 200){
+      dispatch(await loginUser(loginInfo.data));
+      await setAuthTokens(loginInfo.data);
+      setLoggedIn(true);
+    }
+    else alert('Wrong login')
 
-
-
-      // Add service layer call here
+  }
+  if (isLoggedIn) {
+    return <Redirect to="/home" />;
   }
   return (
     <div className='form'>
