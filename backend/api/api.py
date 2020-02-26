@@ -49,10 +49,17 @@ class UserResource(ModelResource):
         return user.api_key.key
 
     def _user_group(self, user):
-        group_list = []
-        for group in user.groups.all():
-            group_list.append(group)
-        return group_list
+        groups = user.groups.all()
+        if groups:
+            if groups.count() > 1:
+                group_list = []
+                for group in user.groups.all():
+                    group_list.append(group)
+                return group_list
+            else:
+                return groups[0].name
+        else:
+            return None
 
     def prepend_urls(self):
         params = (self._meta.resource_name, trailing_slash())
