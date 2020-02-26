@@ -1,7 +1,7 @@
 // Api
-export const UPDATE_TOKEN = 'UPDATE_TOKEN';
+export const LOGIN_USER= 'LOGIN_USER';
 
 
 export default {
-  UPDATE_TOKEN
+  LOGIN_USER
 };
