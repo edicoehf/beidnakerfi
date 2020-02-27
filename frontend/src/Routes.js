@@ -2,11 +2,10 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 
-import { useSelector } from 'react-redux';
-
 // Source from us
-import LoginForm from './components/LoginForm';
-import TestHomePage from './components/TestHomePage';
+import LoginForm from './Components/LoginForm';
+import Sales from './pages/Sales';
+import TestHomePage from './Components/TestHomePage';
 import { AuthContext } from './context/auth';
 import PrivateRoute from './PrivateRoute';
 
@@ -22,6 +21,7 @@ const Routes = () => {
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <Router>
           <Route exact path='/' component={LoginForm} />
+          <Route path='/sales' component={Sales} /> 
           <PrivateRoute path='/home' component={TestHomePage} />
       </Router>
     </AuthContext.Provider>

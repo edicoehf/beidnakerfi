@@ -6,7 +6,6 @@ import { Redirect } from "react-router-dom";
 
 //Source
 import './LoginForm.css'
-import Logo from '../../img/edico-logo.png';
 import { loginUser } from '../../actions/userAction';
 import { useAuth } from "../../context/auth";
 
@@ -35,7 +34,7 @@ const LoginForm = props => {
   }
   return (
     <div className='form'>
-      <img src={Logo} alt='logo'/>
+      
       <form onSubmit={handleSubmit(onSubmit)}>
 
         <input

@@ -1,0 +1,21 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#salesGrid {
+    display: grid;
+    grid-template-areas:
+        "a b b"
+        "a b b";
+    height: 100vh;
+    
+}
+
+#test {
+    grid-area: a;
+}
+
+#test2 {
+    grid-area: b;
+}

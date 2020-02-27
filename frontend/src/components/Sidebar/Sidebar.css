@@ -1,0 +1,19 @@
+#logo {
+    justify-self: center;
+    margin-bottom: 20px;
+    
+}
+
+#sidebar {
+    text-align: center;
+    height: 100vh;
+    width: 100%;
+    justify-content: center;
+}
+
+#buttons {
+    display: grid;
+}
+
+#buttons > button {
+}
