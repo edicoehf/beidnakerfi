@@ -2,14 +2,17 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 
-import { useSelector } from 'react-redux';
 
 // Source from us
 import LoginForm from './components/LoginForm';
 import TestHomePage from './components/TestHomePage';
+import TestHomePage2 from './components/TestHomePage2';
+import TestHomePage3 from './components/TestHomePage3';
 import { AuthContext } from './context/auth';
 import PrivateRoute from './PrivateRoute';
 
+// Services
+import { checkGroups } from './services'
 
 const Routes = () => {
   const [authTokens, setAuthTokens] = useState(localStorage.getItem("tokens") || '');
@@ -22,7 +25,9 @@ const Routes = () => {
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <Router>
           <Route exact path='/' component={LoginForm} />
-          <PrivateRoute path='/home' component={TestHomePage} />
+          <PrivateRoute path='/home' component={TestHomePage} func={checkGroups} />
+          <PrivateRoute path='/home2' component={TestHomePage2} func={checkGroups} />
+          <PrivateRoute path='/home3' component={TestHomePage3} func={checkGroups} />
       </Router>
     </AuthContext.Provider>
   )
