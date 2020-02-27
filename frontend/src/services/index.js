@@ -1,11 +1,9 @@
-import { views } from '../config'
+
 export const isEmpty = (x) => x === '' || (!x && typeof (x) !== 'number')
   || (Object.entries(x).length === 0 && x.constructor === Object)
   || (x && x.length === 0);
 
-export const checkGroups = (path) => {
-  const { allowedGroups } = views[path]
-  console.log(allowedGroups)
+export const checkGroups = ({ allowedGroups }) => {
   let found = false;
   const userGroups = JSON.parse(localStorage.getItem('tokens')).groups;
   if (userGroups.constructor.name === "Array") {
