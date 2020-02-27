@@ -65,7 +65,6 @@ class UserResource(ModelResource):
         params = (self._meta.resource_name, trailing_slash())
         return [
             url(r"^(?P<resource_name>%s)/login%s$" % params, self.wrap_view('login'), name="api_login"),
-            url(r"^(?P<resource_name>%s)/register%s$" % params, self.wrap_view('register'), name="api_register")
         ]
 
     def login(self, request, **kwargs):
@@ -86,21 +85,6 @@ class UserResource(ModelResource):
         else:
             return self.create_response(request, {'success': False, 'reason': 'Incorrect username or password'}, HttpUnauthorized)
 
-    def register(self, request, **kwargs):
-        self.method_check(request, allowed=['post'])
-        data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
-
-        username = data.get('username', '')
-        email = data.get('email', '')
-        password = data.get('password', '')
-        org_id = data.get('org_id', '')
-
-        newuser = User.objects.create_user(username=username, email=email, password=password)
-        newuser._org_id = org_id
-        newuser.save()
-
-        return HttpResponse(username)
-
     def obj_create(self, bundle, request=None, **kwargs):
         try:
             username, email, password, org_id = bundle.data['username'], bundle.data['email'], bundle.data['password'], bundle.data['org_id']
@@ -118,73 +102,13 @@ class UserResource(ModelResource):
         except User.DoesNotExist:
             pass
 
-        newuser = User(username=username, email=email, password=password)
+        newuser = User(username=username, email=email)
+        newuser.set_password(password)
         newuser._org_id = org_id
         newuser.save()
 
         return bundle
-# DEPRECATED
-
-# class OrganizationResource(ModelResource):
-#     class Meta:
-#         queryset = Organization.objects.all()
-#         resource_name = 'Organization'
-#         filtering = {'name': ALL}
-#         authentication = ApiKeyAuthentication()
-
-# class BuyerResource(ModelResource):
-#     class Meta:
-#         queryset = Buyers.objects.all()
-#         resource_name = 'buyers'
-#         filtering = {'name': ALL}
-#         authentication = ApiKeyAuthentication()
-
-# class DepartmentResource(ModelResource):
-#     class Meta:
-#         queryset = Departments.objects.all()
-#         resource_name = 'departments'
-#         filtering = {'name': ALL}
-#         authentication = ApiKeyAuthentication()
-
-# class ChequesResource(ModelResource):
-#     class Meta:
-#         queryset = Cheques.objects.all()
-#         resource_name = 'cheques'
-#         filtering = {'name': ALL}
-#         authentication = ApiKeyAuthentication()
-#
-# class LoginResource(Resource):
-#     class Meta:
-#         resource_name = 'login'
-#         allowed_methods= ['post']
-
-#     def _api_key(self, user):
-#         return user.api_key.key
-
-#     def prepend_urls(self):
-#         params = (self._meta.resource_name, trailing_slash())
-#         return [
-#             url(r"^(?P<resource_name>%s)/login%s$" % params, self.wrap_view('login'), name="api_login")
-#         ]
-
-#     def login(self, request, **kwargs):
-#         self.method_check(request, allowed=['post'])
-#         data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
         
-#         username = data.get('username', '')
-#         password = data.get('password', '')
-
-#         user = authenticate(username=username, password=password)
-
-#         if user:
-#             if user.is_active:
-#                 login(request, user)
-#                 return self.create_response(request, {'success': True, 'api_key': self._api_key(user), 'username': username})
-#             else:
-#                 return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
-#         else:
-#             return self.create_response(request, {'success': False, 'reason': 'Incorrect username or password'}, HttpUnauthorized)
-
     # def logout(self, request, **kwargs):
     #     self.method_check(request, allowed=['get'])
     #     self.is_authenticated(request)
