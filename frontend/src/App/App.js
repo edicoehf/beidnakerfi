@@ -7,7 +7,7 @@ import { createStore } from 'redux';
 import Routes from '../Routes.js'
 
 // Service
-import reducers from '../reducers'
+import reducers from '../Reducers'
 
 function App() {
   return (

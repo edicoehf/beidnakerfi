@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 // Source from us
 import LoginForm from './Components/LoginForm';
-import Sales from './pages/Sales';
+import Sales from './Pages/Sales';
 import TestHomePage from './Components/TestHomePage';
-import { AuthContext } from './context/auth';
+import { AuthContext } from './Context/auth';
 import PrivateRoute from './PrivateRoute';
 
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import EdicoLogo from "../EdicoLogo";
+import EdicoLogo from "../EdicoLogo"
 import { useAuth } from "../../Context/auth";
 
 import "./Sidebar.css";

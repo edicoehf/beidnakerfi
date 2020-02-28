@@ -1,4 +1,4 @@
-import * as constants from '../constants';
+import * as constants from '../Constants';
 
 export const loginUser = async (userInfo) => ({ type: constants.LOGIN_USER, payload: userInfo  })
 
