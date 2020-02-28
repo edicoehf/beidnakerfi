@@ -2,9 +2,9 @@
 import React, {useState} from 'react';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 
-
 // Source from us
 import LoginForm from './components/LoginForm';
+import Sales from './pages/Sales';
 import TestHomePage from './components/TestHomePage';
 import TestHomePage2 from './components/TestHomePage2';
 import Unauth from './components/Unauth';
@@ -28,6 +28,7 @@ const Routes = () => {
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <Router>
           <Route exact path='/' component={LoginForm} />
+          <Route path='/sales' component={Sales} /> 
           <Route exact path='/createuser' component={UserForm} func={checkGroups}/>
           <PrivateRoute path='/home' component={TestHomePage} func={checkGroups} />
           <PrivateRoute path='/home2' component={TestHomePage2} func={checkGroups} />
