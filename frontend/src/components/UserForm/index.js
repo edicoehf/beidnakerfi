@@ -1,20 +1,14 @@
 // Dependencies
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Redirect } from "react-router-dom";
-
 //Source
 import './LoginForm.css'
-import Logo from '../../img/edico-logo.png';
-import { loginUser } from '../../actions/userAction';
-import { useAuth } from "../../context/auth";
 import { forms } from '../../config'
 
 //Service
-import * as api from '../../services/apiGateway';
 import { checkGroups } from '../../services';
 
-const LoginForm = props => {
+const UserForm = props => {
   const { register, handleSubmit, errors } = useForm();
 
 
@@ -34,9 +28,8 @@ const LoginForm = props => {
     <>
     { checkGroups(forms['SuperBuyer']) ?
       <div className='form'>
-        <img src={Logo} alt='logo'/>
-        <form onSubmit={handleSubmit(onSubmit)}>
 
+        <form onSubmit={handleSubmit(onSubmit)}>
           <input
             name="username"
             type="text"
@@ -57,7 +50,7 @@ const LoginForm = props => {
 
      {checkGroups(forms['SuperSeller']) ?
         <div className='form'>
-          <img src={Logo} alt='logo'/>
+
           <form onSubmit={handleSubmit(onSubmit)}>
 
             <input
@@ -96,4 +89,4 @@ const LoginForm = props => {
   );
 };
 
-export default LoginForm;
+export default UserForm;
