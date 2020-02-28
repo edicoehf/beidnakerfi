@@ -25,7 +25,10 @@ class Profile(models.Model):
 @receiver(signals.post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
      if created:
-        Profile.objects.create(user=instance, org_id=Organization.objects.get(id=instance._org_id))
+        if hasattr(instance, '_org_id'):
+            Profile.objects.create(user=instance, org_id=Organization.objects.get(id=instance._org_id))
+        else:
+            Profile.objects.create(user=instance, org_id=Organization.objects.get(id=1))
 
 @receiver(signals.post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
