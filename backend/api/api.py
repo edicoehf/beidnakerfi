@@ -1,6 +1,5 @@
 from django.conf.urls import url
-from tastypie.resources import ModelResource, Resource
-from tastypie.constants import ALL
+from tastypie.resources import ModelResource, Resource, ALL, ALL_WITH_RELATIONS
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -9,7 +8,7 @@ from tastypie.authentication import ApiKeyAuthentication
 from tastypie.utils import trailing_slash
 
 from tastypie import fields
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import DjangoAuthorization, Authorization
 from .exceptions import CustomBadRequest
 
 from django.db.models import signals
@@ -18,17 +17,22 @@ from django.db.models import signals
 
 from api.models import Organization, Department, Cheques, Profile
 
-class OrganizationResource(ModelResource):
-    class Meta:
-        queryset = Organization.objects.all()
-        resource_name = 'organizations'
-        filtering = {'name': ALL}
-        authentication = ApiKeyAuthentication()
-
 class DepartmentResource(ModelResource):
     class Meta:
         queryset = Department.objects.all()
         resource_name = 'departments'
+        filtering = {'name': ALL}
+        authentication = ApiKeyAuthentication()
+
+class OrganizationResource(ModelResource):
+    departments = fields.ToManyField(DepartmentResource, 'department_set',
+        related_name='departments', blank=True, null=True, 
+        use_in='detail', full=True)
+
+    class Meta:
+        queryset = Organization.objects.all()
+        allowed_methods = ['get']
+        resource_name = 'organizations'
         filtering = {'name': ALL}
         authentication = ApiKeyAuthentication()
 
@@ -45,8 +49,9 @@ class UserResource(ModelResource):
         queryset = User.objects.all().select_related('profile')
         resource_name = 'users'
         excludes = ['email', 'password', 'is_superuser']
-        authentication = ApiKeyAuthentication()
-        authorization = DjangoAuthorization()
+        # authentication = ApiKeyAuthentication()
+        # authorization = DjangoAuthorization()
+        authorization = Authorization()
 
     def _api_key(self, user):
         return user.api_key.key
@@ -108,7 +113,7 @@ class UserResource(ModelResource):
         newuser.save()
 
         return bundle
-        
+
     # def logout(self, request, **kwargs):
     #     self.method_check(request, allowed=['get'])
     #     self.is_authenticated(request)
