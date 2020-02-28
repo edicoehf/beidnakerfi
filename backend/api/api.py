@@ -70,6 +70,10 @@ class UserResource(ModelResource):
             return group_list
         else:
             return None
+        
+    def _user_org_id(self, user):
+        profile = Profile.objects.get(user=user)
+        return profile.org_id.id
 
     def prepend_urls(self):
         params = (self._meta.resource_name, trailing_slash())
@@ -89,7 +93,7 @@ class UserResource(ModelResource):
         if user:
             if user.is_active:
                 login(request, user)
-                return self.create_response(request, {'success': True, 'api_key': self._api_key(user), 'username': username, 'groups': self._user_group(user)})
+                return self.create_response(request, {'success': True, 'api_key': self._api_key(user), 'username': username, 'groups': self._user_group(user), 'org_id': self._user_org_id(user)})
             else:
                 return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
         else:
@@ -107,7 +111,6 @@ class UserResource(ModelResource):
        
         except KeyError as missing_key:
             raise CustomBadRequest(code="missing_key", message="Missing field {missing_key}".format(missing_key=missing_key))
-            # return self.create_response(request, {'success': False, 'reason': 'Missing field {missing_key}'.format(missing_key=missing_key)}, HttpBadRequest)
        
         except User.DoesNotExist:
             pass
