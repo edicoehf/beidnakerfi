@@ -2,7 +2,7 @@
 import React from 'react'
 
 //Components
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../components/Sidebar';
 
 //Style
 import './Sales.css'

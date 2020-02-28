@@ -1,5 +1,5 @@
 import React from 'react'
-import EdicoLogo from '../../Img/edico-logo.png';
+import EdicoLogo from '../../img/edico-logo.png';
 
 const logo = () =>  {
     return (

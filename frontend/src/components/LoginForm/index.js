@@ -6,8 +6,8 @@ import { Redirect } from "react-router-dom";
 
 //Source
 import "./LoginForm.css";
-import { loginUser } from "../../Actions/userAction";
-import { useAuth } from "../../Context/auth";
+import { loginUser } from "../../actions/userAction";
+import { useAuth } from "../../context/auth";
 
 //Service
 import * as api from "../../Services/apiGateway";

@@ -3,10 +3,10 @@ import React, {useState} from 'react';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 // Source from us
-import LoginForm from './Components/LoginForm';
-import Sales from './Pages/Sales';
-import TestHomePage from './Components/TestHomePage';
-import { AuthContext } from './Context/auth';
+import LoginForm from './components/LoginForm';
+import Sales from './pages/Sales';
+import TestHomePage from './components/TestHomePage';
+import { AuthContext } from './context/auth';
 import PrivateRoute from './PrivateRoute';
 
 

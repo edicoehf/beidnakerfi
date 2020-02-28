@@ -7,11 +7,11 @@ import { createStore } from 'redux';
 import Routes from '../Routes.js'
 
 // Service
-import reducers from '../Reducers'
+import Reducers from '../Reducers'
 
 function App() {
   return (
-    <Provider store={createStore(reducers)}>
+    <Provider store={createStore(Reducers)}>
       {
         <Routes />
       }
