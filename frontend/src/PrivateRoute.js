@@ -4,6 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 
 // Source
 import { useAuth } from './context/auth';
+import { views } from './config'
 
 const PrivateRoute = ({ component: Component, ...rest}) => {
   const { authTokens } = useAuth();
@@ -12,7 +13,7 @@ const PrivateRoute = ({ component: Component, ...rest}) => {
       {...rest}
       render={(props) =>
         authTokens ? (
-          <Component {...props} />
+          rest.func(views[rest.path]) ? <Component {...props} /> : <Redirect to='/401' />
         ) : (
           <Redirect to='/' />
         )

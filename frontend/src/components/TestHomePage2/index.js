@@ -3,12 +3,9 @@ import './LoginForm.css'
 
 import { useAuth } from '../../context/auth';
 
-
-const TestHomePage = props => {
+const TestHomePage2 = props => {
 
   const { setAuthTokens } = useAuth();
-
-
 
   const logOut = () => {
     setAuthTokens();
@@ -16,10 +13,10 @@ const TestHomePage = props => {
 
   return (
     <div className='form'>
-    <h1>fyrir alla konur og kalla</h1>
+    <h1>bara fyrir buyers</h1>
        <button onClick={logOut}>LogOut</button>
     </div>
   );
 };
 
-export default TestHomePage;
+export default TestHomePage2;
