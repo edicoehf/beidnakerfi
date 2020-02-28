@@ -52,12 +52,11 @@ class ProfileResource(ModelResource):
 class UserResource(ModelResource):
     profile = fields.ForeignKey(ProfileResource, 'profile', use_in='detail', full=True)
     class Meta:
-        allowed_methods = ['get', 'post']
-        queryset = User.objects.all().select_related('profile')
+        queryset = User.objects.all()
         resource_name = 'users'
         excludes = ['email', 'password', 'is_superuser']
         authentication = ApiKeyAuthentication()
-        authorization = DjangoAuthorization()
+        # authorization = DjangoAuthorization()
 
     def _api_key(self, user):
         return user.api_key.key
