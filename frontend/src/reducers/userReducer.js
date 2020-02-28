@@ -1,5 +1,5 @@
 // Models
-import * as constants from '../Constants';
+import * as constants from '../constants';
 
 export default function (state = [], action) {
   switch (action.type) {
