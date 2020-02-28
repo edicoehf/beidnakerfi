@@ -26,8 +26,7 @@ class DepartmentResource(ModelResource):
 
 class OrganizationResource(ModelResource):
     departments = fields.ToManyField(DepartmentResource, 'department_set',
-        related_name='departments', blank=True, null=True, 
-        use_in='detail', full=True)
+        related_name='departments', use_in='detail', full=True)
 
     class Meta:
         queryset = Organization.objects.all()
@@ -43,15 +42,22 @@ class ChequesResource(ModelResource):
         filtering = {'name': ALL}
         authentication = ApiKeyAuthentication()
 
+class ProfileResource(ModelResource):
+    organizations = fields.ForeignKey(OrganizationResource, 'org_id', use_in='detail', full=True)
+    class Meta:
+        queryset = Profile.objects.all()
+        resource_name = 'profiles'
+        authentication = ApiKeyAuthentication()
+
 class UserResource(ModelResource):
+    profile = fields.ForeignKey(ProfileResource, 'profile', use_in='detail', full=True)
     class Meta:
         allowed_methods = ['get', 'post']
         queryset = User.objects.all().select_related('profile')
         resource_name = 'users'
         excludes = ['email', 'password', 'is_superuser']
-        # authentication = ApiKeyAuthentication()
-        # authorization = DjangoAuthorization()
-        authorization = Authorization()
+        authentication = ApiKeyAuthentication()
+        authorization = DjangoAuthorization()
 
     def _api_key(self, user):
         return user.api_key.key
