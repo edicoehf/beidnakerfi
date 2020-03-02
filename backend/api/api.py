@@ -133,6 +133,14 @@ class UserResource(ModelResource):
         else:
             return self.create_response(request, {'success': False, 'reason': 'Incorrect username or password'}, HttpUnauthorized)
 
+    def obj_delete(self, bundle, **kwargs):
+        pk = kwargs['pk']
+        print(pk)
+        user = User.objects.get(id=pk)
+        user.is_active = False
+        user.save()
+        return bundle
+    
     def obj_create(self, bundle, request=None, **kwargs):
         try:
             username, email, password, org_id = bundle.data['username'], bundle.data['email'], bundle.data['password'], bundle.data['org_id']
