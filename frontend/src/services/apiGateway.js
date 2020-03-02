@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const APIKEY = 'emil:6bf8d753301d5948441cfc556d562c523508940b'
+//MUNA AÐ BREYTA ÞESSU!!!!!!
+const APIKEY = 'ApiKey emil:6bf8d753301d5948441cfc556d562c523508940b'
+
+
 /*
   USERS 
     [GET] / - GET ALL USERS                   DONE
@@ -82,7 +85,12 @@ export const createUser = async user => {
 
 export const disableUser = async id => {
   const query = await axios
-    .delete("http://localhost:8000/api/users/" + id)
+    .delete("http://localhost:8000/api/users/" + id,
+    {
+      headers: {
+        authorization: APIKEY
+      }
+    })
     .then( (resp, err) => {
       if(err){
         throw err;

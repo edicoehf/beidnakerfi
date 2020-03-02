@@ -88,9 +88,11 @@ class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
         resource_name = 'users'
+        list_allowed_methods = ['get', 'post']
+        detail_allowed_methods = ['get', 'post', 'patch', 'delete']
         excludes = ['email', 'password', 'is_superuser']
         authentication = ApiKeyAuthentication()
-        # authorization = DjangoAuthorization()
+        authorization = DjangoAuthorization()
 
     def _api_key(self, user):
         return user.api_key.key
