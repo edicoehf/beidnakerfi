@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 // Source from us
 import LoginForm from './components/LoginForm';
 import Main from './pages/Main';
-import Unauth from './components/Unauth';
+import Unauthorized from './components/Unauthorized';
 import Logout from './components/Logout';
 
 import { AuthContext } from './context/auth';
@@ -27,7 +27,7 @@ const Routes = () => {
       <Router>
           <Route exact path='/' component={LoginForm} />
           <PrivateRoute path='/main' component={Main} func={checkPrivileges} />
-          <Route exact path='/401' component={Unauth} />
+          <Route exact path='/401' component={Unauthorized} />
           <Route exact path='/logout' component={Logout}/>
       </Router>
     </AuthContext.Provider>
