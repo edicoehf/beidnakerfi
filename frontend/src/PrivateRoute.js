@@ -13,10 +13,8 @@ const PrivateRoute = ({ component: Component, ...rest}) => {
       {...rest}
       render={(props) =>
         authTokens ? (
-          rest.func(views[rest.path]) ? <Component {...props} /> : <Redirect to='/401' />
-        ) : (
-          <Redirect to='/' />
-        )
+          rest.func(views[rest.path]) ? <Component {...props} /> : <Redirect to='/' />
+        ) : <Redirect to='/' />   
       }
     />
   );

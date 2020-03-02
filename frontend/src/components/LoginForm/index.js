@@ -28,7 +28,7 @@ const LoginForm = () => {
 
   }
   if (isLoggedIn) {
-    return <Redirect to="/home" />;
+    return <Redirect to="/main" />;
   }
   return (
     <div className='form'>
