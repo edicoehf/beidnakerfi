@@ -3,7 +3,7 @@ from tastypie.resources import ModelResource, Resource, ALL, ALL_WITH_RELATIONS
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from tastypie.http import HttpUnauthorized, HttpForbidden, HttpNotFound, HttpBadRequest, HttpResponse, HttpCreated
+from tastypie.http import HttpUnauthorized, HttpForbidden, HttpNotFound, HttpBadRequest, HttpResponse, HttpCreated, HttpNotFound
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.utils import trailing_slash
 
@@ -17,12 +17,46 @@ from django.db.models import signals
 
 from api.models import Organization, Department, Cheques, Profile
 
+
 class DepartmentResource(ModelResource):
+    users = fields.ToManyField('api.api.UserResource', 'users', use_in='detail')
     class Meta:
         queryset = Department.objects.all()
         resource_name = 'departments'
         filtering = {'name': ALL}
         authentication = ApiKeyAuthentication()
+
+    def prepend_urls(self):
+        params = (self._meta.resource_name, trailing_slash())
+        return [
+            url(r"^(?P<resource_name>%s)/add_user%s$" % params, self.wrap_view('add_user'), name="add_user"),
+        ]
+
+    def add_user(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+        authentication = ApiKeyAuthentication()
+
+        data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        
+        user_id = data.get('user_id', '')
+        department_id = data.get('department_id', '')
+        print(user_id)
+        print(department_id)
+
+        user = User.objects.get(id=user_id)
+        department = Department.objects.get(id=department_id)
+
+        if user:
+            if user.is_active:
+                if department:
+                    user.departments.add(department)
+                    return self.create_response(request, {'success': True}, HttpCreated)
+                else:
+                    return self.create_response(request, {'success': False, 'reason': 'Incorrect department'}, HttpNotFound)
+            else:
+                return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
+        else:
+            return self.create_response(request, {'success': False, 'reason': 'Incorrect user'}, HttpNotFound)
 
 class OrganizationResource(ModelResource):
     departments = fields.ToManyField(DepartmentResource, 'department_set',
@@ -107,7 +141,7 @@ class UserResource(ModelResource):
                 raise CustomBadRequest(code="duplicate_exception", message="That email is already in use")
             
             if User.objects.filter(username=username):
-                raise CustomBadRequest(code="duplicate_exception", message="That email is already in use")
+                raise CustomBadRequest(code="duplicate_exception", message="That username is already in use")
        
         except KeyError as missing_key:
             raise CustomBadRequest(code="missing_key", message="Missing field {missing_key}".format(missing_key=missing_key))
@@ -134,4 +168,3 @@ class UserResource(ModelResource):
     #             'success': False, 
     #             'error_message': 'Not authenticated' 
     #         })
-
