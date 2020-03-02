@@ -1,9 +1,10 @@
 from django.conf.urls import url, include
 from tastypie.api import Api
-from api.api import UserResource, OrganizationResource, DepartmentResource, ChequesResource
+from api.api import ProfileResource, UserResource, OrganizationResource, DepartmentResource, ChequesResource
 
 
 ape = Api(api_name='api')
+ape.register(ProfileResource())
 ape.register(UserResource())
 ape.register(OrganizationResource())
 ape.register(DepartmentResource())
