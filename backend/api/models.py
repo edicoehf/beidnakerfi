@@ -38,7 +38,7 @@ class Department(models.Model):
     name = models.CharField(max_length=50)
     costsite = models.CharField(max_length=50)
     org_id = models.ForeignKey('Organization', on_delete=models.CASCADE)
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, related_name='departments')
     
     class Meta:
         db_table = 'department'
