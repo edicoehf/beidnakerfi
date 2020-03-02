@@ -11,7 +11,7 @@ const APIKEY = 'ApiKey emil:6bf8d753301d5948441cfc556d562c523508940b'
     [GET] /id - GET SPECIFIC USER             DONE
     [PATCH] /id - UPDATE SPECIFIC USER
     [PUT] /id - UPDATE OR CREATE NEW USER
-    [DELETE] /id - DELETE EXISTING USER
+    [DELETE] /id - DELETE EXISTING USER       DONE
     [POST] /login SEND LOGIN REQUEST          DONE
 */
 
@@ -61,8 +61,8 @@ export const getUser = async id => {
   console.log(query);
 };
 
-export const createUser = async user => {
-  const { username, password, email, organizationId } = user;
+export const createUser = async newUser => {
+  const { username, password, email, organizationId } = newUser;
 
   const query = await axios
     .post("http://localhost:8000/api/users/", {
@@ -102,7 +102,93 @@ export const disableUser = async id => {
     })
   console.log(query);
 }
+
 /*
   DEPARTMENTS
-    
+    [GET] / - GET ALL DEPARTMENTS                 DONE
+    [POST] / - CREATE NEW DEPARTMENT              DONE
+    [GET] /id - GET SPECIFIC DEPARTMENT           DONE
+    [PATCH] /id - UPDATE SPECIFIC DEPARTMENT
+    [PUT] /id - UPDATE OR CREATE NEW DEPARTMENT
+    [DELETE] /id - DELETE EXISTING USER           DONE
 */
+
+export const getDepartments = async () => {
+  const query = await axios
+    .get("http://localhost:8000/api/departments/", {
+      headers: {
+        authorization: APIKEY
+      }
+    })
+    .then((resp, err) => {
+      if (err) {
+        console.log(err);
+      }
+      return resp;
+    });
+  console.log(query);
+};
+
+export const getDepartment = async id => {
+  const query = await axios
+    .get("http://localhost:8000/api/departments/" + id, {
+      headers: {
+        authorization: APIKEY
+      }
+    })
+    .then((resp, err) => {
+      if (err) {
+        throw err;
+      }
+      return resp;
+    })
+    .catch(e => {
+      console.log(e.response);
+    });
+  console.log(query);
+};
+
+export const createDepartment = async newDepartment => {
+  const { costsite, name } = newDepartment;
+
+  const query = await axios
+    .post("http://localhost:8000/api/departments/", {
+        headers: {
+          authorization: APIKEY
+        },
+        costsite: costsite,
+        name: name,
+        
+        
+    })
+    .then((resp, err) => {
+      if (err) {
+        throw err;
+      }
+      return resp;
+    })
+    .catch(e => {
+      console.log(e.response);
+    });
+  console.log(query)
+};
+
+export const disableDepartment = async id => {
+  const query = await axios
+    .delete("http://localhost:8000/api/departments/" + id,
+    {
+      headers: {
+        authorization: APIKEY
+      }
+    })
+    .then( (resp, err) => {
+      if(err){
+        throw err;
+      }
+      return resp;
+    })
+    .catch(e => {
+      console.log(e.response);
+    })
+  console.log(query);
+}
