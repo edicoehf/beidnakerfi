@@ -1,14 +1,14 @@
 // Dependencies
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Redirect } from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 
-//Source
-import './LoginForm.css'
+// Source
+import './LoginForm.css';
 import Logo from '../../img/edico-logo.png';
-import { useAuth } from "../../context/auth";
+import { useAuth } from '../../context/auth';
 
-//Service
+// Service
 import * as api from '../../services/apiGateway';
 
 const LoginForm = () => {
@@ -18,24 +18,22 @@ const LoginForm = () => {
   const [isError, setError] = useState(false);
 
   const onSubmit = async (data) => {
-    const loginInfo = await api.login(data)
-    console.log(loginInfo)
-    if(loginInfo.status === 200){
+    const loginInfo = await api.login(data);
+    console.log(loginInfo);
+    if (loginInfo.status === 200) {
       await setAuthTokens(loginInfo.data);
       setLoggedIn(true);
-    } else { setError(true) }
-
-
-  }
+    } else { setError(true); }
+  };
   if (isLoggedIn) {
     return <Redirect to="/main" />;
   }
   return (
-    <div className='form'>
-      <img src={Logo} alt='logo'/>
+    <div className="form">
+      <img src={Logo} alt="logo" />
 
       <form onSubmit={handleSubmit(onSubmit)}>
-      {isError ? <span> Wrong username or password </span> : null}
+        {isError ? <span> Wrong username or password </span> : null}
         <input
           name="username"
           type="text"
@@ -50,7 +48,7 @@ const LoginForm = () => {
           placeholder="Lykilorð"
         />
         {errors.password && <span>This field is required</span> }
-        <button className='btn-style' type="submit">Skrá inn</button>
+        <button className="btn-style" type="submit">Skrá inn</button>
       </form>
 
     </div>

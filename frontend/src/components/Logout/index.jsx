@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../context/auth';
 
-const Unauth = props => {
+const Unauth = (props) => {
   const { setAuthTokens } = useAuth();
 
   setAuthTokens();

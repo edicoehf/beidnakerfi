@@ -1,12 +1,11 @@
-import React from "react";
-import "./LoginForm.css";
-import { useForm } from "react-hook-form";
+import React from 'react';
+import './LoginForm.css';
+import { useForm } from 'react-hook-form';
 
- const BuyerSuperUser = () => {
-
+const SellerSuperUser = () => {
   const { register, handleSubmit, errors } = useForm();
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     // const loginInfo = await api.login(data)
     // console.log(loginInfo)
     // if(loginInfo.status === 200){
@@ -19,7 +18,7 @@ import { useForm } from "react-hook-form";
 
   return (
     <div className="form">
-      <h1>BUYER</h1>
+      <h1>SELLER</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           name="password"
@@ -55,6 +54,6 @@ import { useForm } from "react-hook-form";
       </form>
     </div>
   );
-}
+};
 
-export default BuyerSuperUser;
+export default SellerSuperUser;
