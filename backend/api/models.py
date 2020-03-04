@@ -3,42 +3,52 @@ from django.contrib.auth.models import User
 
 from django.db.models import signals
 from tastypie.models import create_api_key
+from django.dispatch import receiver
 
 signals.post_save.connect(create_api_key, sender=User)
 
 # Create your models here.
-class Privileges(models.Model):
-    description = models.CharField(max_length=20)
-
-    class Meta:
-        db_table = 'privileges'
-
-class Buyers(models.Model):
+class Organization(models.Model):
     name = models.CharField(max_length=50)
-
+    buyer_seller = models.BooleanField()
+    
     class Meta:
-        db_table = 'buyers'
+        db_table = 'organization'
 
-class Departments(models.Model):
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    org_id = models.ForeignKey('Organization', on_delete=models.CASCADE)
+    
+    class Meta:
+        db_table = 'user'
+
+@receiver(signals.post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+     if created:
+        if hasattr(instance, '_org_id'):
+            Profile.objects.create(user=instance, org_id=Organization.objects.get(id=instance._org_id))
+        else:
+            Profile.objects.create(user=instance, org_id=Organization.objects.get(id=1))
+
+@receiver(signals.post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+class Department(models.Model):
     name = models.CharField(max_length=50)
     costsite = models.CharField(max_length=50)
-    bid = models.ForeignKey('Buyers', on_delete=models.CASCADE)
-
+    org_id = models.ForeignKey('Organization', on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name='departments')
+    
     class Meta:
-        db_table = 'departments'
-
-class Sellers(models.Model):
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        db_table = 'sellers'
+        db_table = 'department'
 
 class Cheques(models.Model):
     price = models.FloatField()
     description = models.CharField(max_length=200)
-    buid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='buid')
-    suid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='suid')
-    did = models.ForeignKey('Departments', on_delete=models.CASCADE)
+    status = models.CharField(max_length=20)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cheque_user_id')
+    dep_id = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='cheque_dep_id')
 
     class Meta:
         db_table = 'cheques'

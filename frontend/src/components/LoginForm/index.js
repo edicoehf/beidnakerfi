@@ -1,22 +1,41 @@
-import React from 'react';
+// Dependencies
+import React, { useState} from 'react';
 import { useForm } from 'react-hook-form';
-import { getUsers } from '../../services/userService'
+import { Redirect } from "react-router-dom";
+
+//Source
 import './LoginForm.css'
-import Logo from '../../img/edico-logo.png'
+import Logo from '../../img/edico-logo.png';
+import { useAuth } from "../../context/auth";
 
-const LoginForm = props => {
+//Service
+import * as api from '../../services/apiGateway';
+
+const LoginForm = () => {
   const { register, handleSubmit, errors } = useForm();
-  
-  const onSubmit = data => {
-    const users = getUsers();
-    console.log(users);
-      // Add service layer call here
-  }
+  const { setAuthTokens } = useAuth();
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isError, setError] = useState(false);
 
+  const onSubmit = async (data) => {
+    const loginInfo = await api.login(data)
+    console.log(loginInfo)
+    if(loginInfo.status === 200){
+      await setAuthTokens(loginInfo.data);
+      setLoggedIn(true);
+    } else { setError(true) }
+
+
+  }
+  if (isLoggedIn) {
+    return <Redirect to="/home" />;
+  }
   return (
     <div className='form'>
       <img src={Logo} alt='logo'/>
+
       <form onSubmit={handleSubmit(onSubmit)}>
+      {isError ? <span> Wrong username or password </span> : null}
         <input
           name="username"
           type="text"
@@ -33,6 +52,7 @@ const LoginForm = props => {
         {errors.password && <span>This field is required</span> }
         <button className='btn-style' type="submit">Skrá inn</button>
       </form>
+
     </div>
   );
 };
