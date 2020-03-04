@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 // Source from us
-import Routes from '../Routes.js';
+import Routes from '../Routes';
 
 // Service
 import Reducers from '../reducers';
