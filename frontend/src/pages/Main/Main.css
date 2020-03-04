@@ -3,19 +3,18 @@
     padding: 0;
 }
 
-#salesGrid {
+#mainGrid {
     display: grid;
     grid-template-areas:
-        "a b b"
-        "a b b";
+        "a b b b"
+        "a b b b";
     height: 100vh;
-    
 }
 
-#test {
+#sidebar {
     grid-area: a;
 }
 
-#test2 {
+#content {
     grid-area: b;
 }
