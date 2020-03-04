@@ -23,10 +23,7 @@ export const login = async (userlogin) => {
       password: userlogin.password,
     })
     .then((resp) => resp)
-    .catch((e) => {
-      console.log(e.response);
-      return e.response;
-    });
+    .catch((e) => e.response);
   return query;
 };
 
@@ -34,13 +31,9 @@ export const login = async (userlogin) => {
 export const getUsers = async () => {
   const query = await axios
     .get('http://localhost:8000/api/users/')
-    .then((resp, err) => {
-      if (err) {
-        console.log(err);
-      }
-      return resp;
-    });
-  console.log(query);
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
 };
 
 export const getUser = async (id) => {
@@ -49,16 +42,9 @@ export const getUser = async (id) => {
       method: 'DELETE',
 
     })
-    .then((resp, err) => {
-      if (err) {
-        throw err;
-      }
-      return resp;
-    })
-    .catch((e) => {
-      console.log(e.response);
-    });
-  console.log(query);
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
 };
 
 export const createUser = async (newUser) => {
@@ -73,16 +59,9 @@ export const createUser = async (newUser) => {
       email,
       org_id: organizationId,
     })
-    .then((resp, err) => {
-      if (err) {
-        throw err;
-      }
-      return resp;
-    })
-    .catch((e) => {
-      console.log(e.response);
-    });
-  console.log(query);
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
 };
 
 export const disableUser = async (id) => {
@@ -93,16 +72,9 @@ export const disableUser = async (id) => {
           authorization: APIKEY,
         },
       })
-    .then((resp, err) => {
-      if (err) {
-        throw err;
-      }
-      return resp;
-    })
-    .catch((e) => {
-      console.log(e.response);
-    });
-  console.log(query);
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
 };
 
 /*
@@ -122,13 +94,9 @@ export const getDepartments = async () => {
         authorization: APIKEY,
       },
     })
-    .then((resp, err) => {
-      if (err) {
-        console.log(err);
-      }
-      return resp;
-    });
-  console.log(query);
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
 };
 
 export const getDepartment = async (id) => {
@@ -138,16 +106,9 @@ export const getDepartment = async (id) => {
         authorization: APIKEY,
       },
     })
-    .then((resp, err) => {
-      if (err) {
-        throw err;
-      }
-      return resp;
-    })
-    .catch((e) => {
-      console.log(e.response);
-    });
-  console.log(query);
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
 };
 
 export const createDepartment = async (newDepartment) => {
@@ -163,16 +124,9 @@ export const createDepartment = async (newDepartment) => {
 
 
     })
-    .then((resp, err) => {
-      if (err) {
-        throw err;
-      }
-      return resp;
-    })
-    .catch((e) => {
-      console.log(e.response);
-    });
-  console.log(query);
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
 };
 
 export const disableDepartment = async (id) => {
@@ -183,14 +137,7 @@ export const disableDepartment = async (id) => {
           authorization: APIKEY,
         },
       })
-    .then((resp, err) => {
-      if (err) {
-        throw err;
-      }
-      return resp;
-    })
-    .catch((e) => {
-      console.log(e.response);
-    });
-  console.log(query);
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
 };
