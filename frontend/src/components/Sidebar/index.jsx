@@ -4,6 +4,12 @@ import EdicoLogo from '../EdicoLogo';
 import { useAuth } from '../../context/auth';
 import './Sidebar.css';
 
+import { sidebarButtons } from '../../config';
+import { checkPrivileges } from '../../services';
+import BasicSidebar from './BasicSidebar';
+import SuperSellerSidebar from './SuperSellerSidebar';
+import SuperBuyerSidebar from './SuperBuyerSidebar';
+
 const Sidebar = () => {
   const { setAuthTokens } = useAuth();
 
@@ -11,17 +17,13 @@ const Sidebar = () => {
     setAuthTokens();
   };
 
-  const handleClick = (e) => {
-    e.preventDefault();
-  };
-
   return (
     <div id="sidebar">
       <EdicoLogo />
       <div id="buttons">
-        <button className="btn-style sidebar-item" onClick={handleClick} type="submit">
-          Ný beiðni
-        </button>
+        { checkPrivileges(sidebarButtons.Basic) ? <BasicSidebar /> : null }
+        { checkPrivileges(sidebarButtons.SuperSeller) ? <SuperSellerSidebar /> : null }
+        { checkPrivileges(sidebarButtons.SuperBuyer) ? <SuperBuyerSidebar /> : null }
         <button id="logout" type="submit" className="btn-style sidebar-item" onClick={logOut}>
           Útskráning
         </button>

@@ -29,8 +29,14 @@ export const login = async (userlogin) => {
 
 
 export const getUsers = async () => {
+  // eslint-disable-next-line camelcase
+  const { org_id: orgId } = await JSON.parse(localStorage.getItem('tokens'));
   const query = await axios
-    .get('http://localhost:8000/api/users/')
+    .get(`http://localhost:8000/api/organizations/${orgId}/`, {
+      headers: {
+        authorization: APIKEY,
+      },
+    })
     .then((resp) => resp)
     .catch((e) => e.response);
   return query;

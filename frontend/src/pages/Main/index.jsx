@@ -1,22 +1,35 @@
 // Dependencies
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 // Components
 import Sidebar from '../../components/Sidebar';
 import CreateUser from '../../components/CreateUserForms';
+import ChequeList from '../../components/ChequeList';
+import ChequeForm from '../../components/ChequeForm';
+import EmployeeList from '../../components/EmployeeList';
 
 // Style
 import './Main.css';
+import CustomerList from '../../components/CustomerList';
 
-const index = () => (
-  <div id="mainGrid">
-    <div id="sidebar">
-      <Sidebar />
+const Main = () => {
+  const page = useSelector((state) => state.page);
+  return (
+    <div id="mainGrid">
+      <div id="sidebar">
+        <Sidebar />
+      </div>
+      <div id="content">
+        {page === 'Home' ? <ChequeList /> : null}
+        {page === 'CreateUser' ? <CreateUser /> : null}
+        {page === 'CreateCheque' ? <ChequeForm /> : null}
+        {page === 'ViewUsers' ? <EmployeeList /> : null}
+        {page === 'ViewCustomers' ? <CustomerList /> : null}
+      </div>
     </div>
-    <div id="content">
-      <CreateUser />
-    </div>
-  </div>
-);
+  );
+};
 
-export default index;
+
+export default Main;

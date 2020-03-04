@@ -1,7 +1,7 @@
 // Api
-export const LOGIN_USER = 'LOGIN_USER';
+export const SWITCH_PAGE = 'SWITCH_PAGE';
 
 
 export default {
-  LOGIN_USER,
+  SWITCH_PAGE,
 };

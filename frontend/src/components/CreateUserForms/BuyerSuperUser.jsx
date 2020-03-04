@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 const BuyerSuperUser = () => {
   const { register, handleSubmit, errors } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     // const loginInfo = await api.login(data)
     // console.log(loginInfo)
     // if(loginInfo.status === 200){

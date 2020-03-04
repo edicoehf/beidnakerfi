@@ -19,7 +19,6 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     const loginInfo = await api.login(data);
-    console.log(loginInfo);
     if (loginInfo.status === 200) {
       await setAuthTokens(loginInfo.data);
       setLoggedIn(true);
