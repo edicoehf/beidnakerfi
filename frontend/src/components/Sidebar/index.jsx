@@ -12,7 +12,8 @@ const Sidebar = () => {
     setAuthTokens();
   };
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault();
     const dept = {
       costsite: 'mamma',
       name: 'inga',
@@ -27,7 +28,7 @@ const Sidebar = () => {
         <button className="btn-style sidebar-item" onClick={handleClick} type="submit">
           Ný beiðni
         </button>
-        <button id="logout" className="btn-style sidebar-item" onClick={logOut}>
+        <button id="logout" type="submit" className="btn-style sidebar-item" onClick={logOut}>
           Útskráning
         </button>
       </div>
