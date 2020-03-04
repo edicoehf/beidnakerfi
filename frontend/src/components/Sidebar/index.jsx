@@ -2,7 +2,6 @@ import React from 'react';
 
 import EdicoLogo from '../EdicoLogo';
 import { useAuth } from '../../context/auth';
-import { createDepartment } from '../../services/apiGateway';
 import './Sidebar.css';
 
 const Sidebar = () => {
@@ -14,11 +13,6 @@ const Sidebar = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    const dept = {
-      costsite: 'mamma',
-      name: 'inga',
-    };
-    createDepartment(dept);
   };
 
   return (
