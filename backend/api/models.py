@@ -17,7 +17,7 @@ class Organization(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    org_id = models.ForeignKey('Organization', on_delete=models.CASCADE)
+    org_id = models.ForeignKey('Organization', null=True, on_delete=models.CASCADE)
     
     class Meta:
         db_table = 'user'
@@ -28,7 +28,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         if hasattr(instance, '_org_id'):
             Profile.objects.create(user=instance, org_id=Organization.objects.get(id=instance._org_id))
         else:
-            Profile.objects.create(user=instance, org_id=Organization.objects.get(id=1))
+            Profile.objects.create(user=instance, org_id=None)
 
 @receiver(signals.post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
