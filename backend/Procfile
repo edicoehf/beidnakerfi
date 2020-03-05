@@ -1,1 +1,1 @@
-web: gunicorn edicoBeidnakerfi.wsgi
+web: gunicorn uswgi.ini
