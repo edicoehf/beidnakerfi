@@ -4,17 +4,15 @@
 }
 
 #mainGrid {
-    display: grid;
-    grid-template-areas:
-        "a b b b"
-        "a b b b";
-    height: 100vh;
-}
-
-#sidebar {
-    grid-area: a;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
 }
 
 #content {
-    grid-area: b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-grow: 1;
 }
