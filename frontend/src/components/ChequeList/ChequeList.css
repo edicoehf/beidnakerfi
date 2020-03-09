@@ -1,0 +1,11 @@
+#cheque-table {
+  display: flex;
+  flex-flow: column wrap;
+  width: 100%;
+  border-style: dotted;
+}
+
+#cheque-table-header {
+  display: flex;
+  justify-content: space-between;
+}

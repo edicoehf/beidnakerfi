@@ -1,0 +1,14 @@
+#chequepage {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+}
+
+#chequeform {
+  width: 100%;
+}
+
+#chequelist {
+  width: 100%;
+}

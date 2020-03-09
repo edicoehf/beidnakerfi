@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 // Components
 import Sidebar from '../../components/Sidebar';
 import CreateUser from '../../components/CreateUserForms';
-import ChequeList from '../../components/ChequeList';
+import ChequePage from '../../components/ChequePage';
 import ChequeForm from '../../components/ChequeForm';
 import EmployeeList from '../../components/EmployeeList';
 
@@ -21,7 +21,7 @@ const Main = () => {
         <Sidebar />
       </div>
       <div id="content">
-        {page === 'Home' ? <ChequeList /> : null}
+        {page === 'Home' ? <ChequePage /> : null}
         {page === 'CreateUser' ? <CreateUser /> : null}
         {page === 'CreateCheque' ? <ChequeForm /> : null}
         {page === 'ViewUsers' ? <EmployeeList /> : null}
