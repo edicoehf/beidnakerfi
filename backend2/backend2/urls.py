@@ -1,3 +1,4 @@
+
 """backend2 URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -15,21 +16,25 @@ Including another URLconf
 """
 from django.urls import include, path
 from django.contrib import admin
-from rest_framework import routers
+from rest_framework_nested import routers
 from rest_framework.authtoken import views
 from api.views import UserViewSet, GroupViewSet, DepartmentViewSet, OrganizationViewSet
 from api.login import loginToken
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
+
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'departments', DepartmentViewSet)
 router.register(r'organizations', OrganizationViewSet)
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
+org_router = routers.NestedSimpleRouter(router, r'organizations', lookup='organization')
+org_router.register(r'departments', DepartmentViewSet, 'org_departments')
+org_router.register(r'users', UserViewSet, 'org_user')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/', include(org_router.urls)),
     path('api/login/', loginToken.as_view())
 ]

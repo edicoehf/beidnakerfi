@@ -4,7 +4,7 @@ from rest_framework import serializers
 from api.models import Organization, Department, UserProfile
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
@@ -19,7 +19,7 @@ class DepartmentListSerializer(serializers.ModelSerializer):
         model = Department
         fields = ['id', 'url', 'name', 'organization']
 
-class UserDetailSerializer(serializers.HyperlinkedModelSerializer):
+class UserDetailSerializer(serializers.ModelSerializer):
     organization = serializers.CharField(source='userprofile.organization.name')
     organizationID = serializers.IntegerField(source='userprofile.organization.id')
     departments = DepartmentListSerializer(source='department_user', many=True)
@@ -27,10 +27,19 @@ class UserDetailSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ['id', 'url', 'username', 'email', 'groups', 'organization', 'organizationID', 'departments']
 
-class UserListSerializer(serializers.HyperlinkedModelSerializer):
+class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'url', 'username', 'email', 'groups']
+
+    def create(self, validated_data):
+        print("kríeited")
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        UserProfile.objects.create(user=user, **validated_data)
+        return user
 
 class DepartmentDetailSerializer(serializers.ModelSerializer):
     users = UserListSerializer(many=True)

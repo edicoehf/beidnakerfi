@@ -19,14 +19,30 @@ class Department(models.Model):
     organization = models.ForeignKey(Organization, related_name="departments", on_delete=models.CASCADE)
     users = models.ManyToManyField(User, related_name="department_user")
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     print(dir(sender))
+#     print(sender)
+
+#     print(instance)
+#     print(dir(instance))
+#     try:
+#         if created:
+#             UserProfile.objects.get_or_create(user=instance, organization=instance.userprofile.organization)
+#         else:
+#             instance.userprofile.save()
+#     except:
+#         print("ERROR")
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
+        print(instance.userprofile.user)
         Token.objects.create(user=instance)
-        profile, created = UserProfile.objects.get_or_create(user=instance)
+        # profile, created = UserProfile.objects.get_or_create(user=instance, organization=instance.userprofile.organization)
         # >>> user = User.objects.get(username='ingi')
         # >>> ingi_department = user.userprofile.organization
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    organization = models.OneToOneField(Organization, on_delete=models.CASCADE)

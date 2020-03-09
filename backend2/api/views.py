@@ -1,24 +1,29 @@
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets, permissions
+from rest_framework import permissions
+from rest_framework.viewsets import ModelViewSet
 from .serializers import UserListSerializer, UserDetailSerializer, GroupSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer
 from .models import UserProfile, Department, Organization
 
+class UserViewSet(ModelViewSet):
+    def get_queryset(self):
+        if 'organization_pk' in self.kwargs:
+            return User.objects.filter(userprofile=self.kwargs['organization_pk'])
+        else:
+            return User.objects.all()
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     def get_serializer_class(self):
         if self.action == 'list':
             return UserListSerializer
         if self.action == 'retrieve':
             return UserDetailSerializer
+        else:
+            return UserListSerializer
 
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = User.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
 
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupViewSet(ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
@@ -27,7 +32,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class OrganizationViewSet(viewsets.ModelViewSet):
+class OrganizationViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return OrganizationListSerializer
@@ -38,7 +43,13 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class DepartmentViewSet(viewsets.ModelViewSet):
+class DepartmentViewSet(ModelViewSet):
+    def get_queryset(self):
+        if 'organization_pk' in self.kwargs:
+            return Department.objects.filter(organization=self.kwargs['organization_pk'])
+        else:
+            return Department.objects.all()
+
     def get_serializer_class(self):
         if self.action == 'list':
             return DepartmentListSerializer
@@ -46,4 +57,4 @@ class DepartmentViewSet(viewsets.ModelViewSet):
             return DepartmentDetailSerializer
 
     queryset = Department.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated] 
