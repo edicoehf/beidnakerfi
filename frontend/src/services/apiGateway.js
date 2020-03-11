@@ -1,18 +1,8 @@
 import axios from 'axios';
 
-require('dotenv').config()
+require('dotenv').config();
 
-let API_URL;
-
-if(process.env === 'production'){
-  API_URL = process.env.REACT_APP_API_URL
-} else {
-  API_URL =  'http://localhost:8000';
-}
-
-// MUNA AÐ BREYTA ÞESSU!!!!!!
-const APIKEY = process.env.REACT_APP_API_KEY;
-
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 /*
   USERS
