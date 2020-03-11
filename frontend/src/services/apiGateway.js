@@ -4,6 +4,9 @@ require('dotenv').config();
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
+const APIKEY = process.env.REACT_APP_API_KEY;
+
+
 /*
   USERS
     [GET] / - GET ALL USERS                   DONE
