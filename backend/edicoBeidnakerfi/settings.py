@@ -126,7 +126,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://beidnakerfi.herokuapp.com"
 ]
 
 TASTYPIE_DEFAULT_FORMATS = ['json']
