@@ -11,7 +11,7 @@ import StaffListContainer from '../../components/Containers/StaffListContainer';
 
 // Style
 import './Main.css';
-import CustomerList from '../../components/CustomerList';
+import CustomerList from '../../components/Lists/CustomerList';
 
 const Main = () => {
   const page = useSelector((state) => state.page);
