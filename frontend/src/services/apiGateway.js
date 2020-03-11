@@ -27,7 +27,6 @@ export const login = async (userlogin) => {
   return query;
 };
 
-
 export const getUsers = async () => {
   // eslint-disable-next-line camelcase
   const { org_id: orgId } = await JSON.parse(localStorage.getItem('tokens'));
