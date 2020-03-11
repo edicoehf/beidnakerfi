@@ -1,7 +1,7 @@
 from django.db import models
 
 # User
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser, BaseUserManager
 
 # Auth token
 from django.conf import settings
@@ -17,16 +17,23 @@ class Department(models.Model):
     name = models.CharField(("Department name"), max_length=50)
     costsite = models.CharField(("Costsite"), max_length=50)
     organization = models.ForeignKey(Organization, related_name="departments", on_delete=models.CASCADE)
-    users = models.ManyToManyField(User, related_name="department_user")
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="department_user")
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class User(AbstractUser):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.username
+
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 # @receiver(post_save, sender=User)
 # def create_user_profile(sender, instance, created, **kwargs):
 #     print(dir(sender))
 #     print(sender)
+
 
 #     print(instance)
 #     print(dir(instance))
