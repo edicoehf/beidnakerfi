@@ -1,7 +1,7 @@
-.btn-style { 
+.btn-style {
     background-color: #990000;
     color: white;
-    padding: 10px 25px;
+    padding-top: 10px;
     border-radius: 8px;
     font-size: 1em;
 }

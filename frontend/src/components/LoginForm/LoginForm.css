@@ -1,18 +1,28 @@
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 100vh;
+
+}
+
 .form {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    text-align: center;
-    width: 25em;
-    padding: 15% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 img {
+    display: flex;
     max-width: 150px;
     padding: 30px;
 }
-
-input[type=password], input[type=text] {
+.inputField{
+    display: flex;
     outline: 0;
     border-width: 0 0 2px;
     border-color: black;
@@ -23,7 +33,8 @@ input[type=password], input[type=text] {
     font-size: 1em;
 }
 
-.btn-style { 
+.btn-style {
+  display: flex;
     background-color: #990000;
     color: white;
     padding: 10px 25px;

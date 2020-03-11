@@ -28,12 +28,13 @@ const LoginForm = () => {
     return <Redirect to="/main" />;
   }
   return (
-    <div className="form">
+    <div className="loginContainer">
       <img src={Logo} alt="logo" />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         {isError ? <span> Wrong username or password </span> : null}
         <input
+          className="inputField"
           name="username"
           type="text"
           ref={register({ required: true })}
@@ -41,6 +42,7 @@ const LoginForm = () => {
         />
         {errors.username && <span>This field is required</span> }
         <input
+          className="inputField"
           name="password"
           type="password"
           ref={register({ required: true })}

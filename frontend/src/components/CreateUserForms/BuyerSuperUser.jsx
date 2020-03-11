@@ -1,5 +1,5 @@
 import React from 'react';
-import './LoginForm.css';
+import './CreateUser.css';
 import { useForm } from 'react-hook-form';
 
 const BuyerSuperUser = () => {
@@ -17,10 +17,11 @@ const BuyerSuperUser = () => {
   };
 
   return (
-    <div className="form">
-      <h1>BUYER</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="createUserContainer">
+      <h1 className="title">BUYER</h1>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <input
+          className="inputField"
           name="password"
           type="password"
           ref={register({ required: true })}
@@ -28,6 +29,7 @@ const BuyerSuperUser = () => {
         />
         {errors.password && <span>This field is required</span>}
         <input
+          className="inputField"
           name="username"
           type="text"
           ref={register({ required: true })}
@@ -35,6 +37,7 @@ const BuyerSuperUser = () => {
         />
         {errors.username && <span>This field is required</span>}
         <input
+          className="inputField"
           name="username"
           type="text"
           ref={register({ required: true })}
@@ -42,6 +45,7 @@ const BuyerSuperUser = () => {
         />
         {errors.username && <span>This field is required</span>}
         <input
+          className="inputField"
           name="username"
           type="text"
           ref={register({ required: true })}
@@ -49,7 +53,7 @@ const BuyerSuperUser = () => {
         />
         {errors.username && <span>This field is required</span>}
         <button className="btn-style" type="submit">
-          Skrá inn
+          Skrá starfsmann
         </button>
       </form>
     </div>

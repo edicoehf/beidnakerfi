@@ -24,7 +24,7 @@ const Sidebar = () => {
         { checkPrivileges(sidebarButtons.Basic) ? <BasicSidebar /> : null }
         { checkPrivileges(sidebarButtons.SuperSeller) ? <SuperSellerSidebar /> : null }
         { checkPrivileges(sidebarButtons.SuperBuyer) ? <SuperBuyerSidebar /> : null }
-        <button id="logout" type="submit" className="btn-style sidebar-item" onClick={logOut}>
+        <button id="logout" type="submit" className="btn-style button-item" onClick={logOut}>
           Útskráning
         </button>
       </div>
