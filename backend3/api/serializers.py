@@ -27,14 +27,6 @@ class UserListSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
-        # org, created = Organization.objects.get(id=validated_data['organization'])
-        # print(org)
-    #     print(org)
-    #     password = validated_data.pop('password')
-    #     user = User(**validated_data)
-    #     user.set_password(password)
-    #     user.save()
-    #     return user
 
 class DepartmentDetailSerializer(serializers.ModelSerializer):
     users = UserListSerializer(many=True)
