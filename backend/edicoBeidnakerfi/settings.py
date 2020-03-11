@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import django_heroku
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+environ.Env.read_env()
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -21,10 +28,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#^td05(pn7=z5im#*8p*vkc=mbpx5^ro4z_95__qt*eyvrk#vq'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -77,14 +84,7 @@ WSGI_APPLICATION = 'edicoBeidnakerfi.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lvxrktan',
-        'USER': 'lvxrktan',
-        'PASSWORD': 'RfqF9i7GqCx-i2EkNppyAwF-EBno_D2u',
-        'HOST': 'dumbo.db.elephantsql.com',
-        'PORT': '5432',
-    }
+    'default': env.db(),
 }
 
 # Password validation

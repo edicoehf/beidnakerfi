@@ -1,7 +1,17 @@
 import axios from 'axios';
 
+require('dotenv').config()
+
+let API_URL;
+
+if(process.env === 'production'){
+  API_URL = process.env.REACT_APP_API_URL
+} else {
+  API_URL =  'http://localhost:8000';
+}
+
 // MUNA AÐ BREYTA ÞESSU!!!!!!
-const APIKEY = 'ApiKey emil:6bf8d753301d5948441cfc556d562c523508940b';
+const APIKEY = process.env.REACT_APP_API_KEY;
 
 
 /*
@@ -18,7 +28,7 @@ const APIKEY = 'ApiKey emil:6bf8d753301d5948441cfc556d562c523508940b';
 
 export const login = async (userlogin) => {
   const query = await axios
-    .post('http://localhost:8000/api/users/login/', {
+    .post(`${API_URL}/api/users/login/`, {
       username: userlogin.username,
       password: userlogin.password,
     })
@@ -31,7 +41,7 @@ export const getUsers = async () => {
   // eslint-disable-next-line camelcase
   const { org_id: orgId } = await JSON.parse(localStorage.getItem('tokens'));
   const query = await axios
-    .get(`http://localhost:8000/api/organizations/${orgId}/`, {
+    .get(`${API_URL}/api/organizations/${orgId}/`, {
       headers: {
         authorization: APIKEY,
       },
@@ -43,7 +53,7 @@ export const getUsers = async () => {
 
 export const getUser = async (id) => {
   const query = await axios
-    .get(`http://localhost:8000/api/users/${id}`, {
+    .get(`${API_URL}/api/users/${id}`, {
       method: 'DELETE',
 
     })
@@ -58,7 +68,7 @@ export const createUser = async (newUser) => {
   } = newUser;
 
   const query = await axios
-    .post('http://localhost:8000/api/users/', {
+    .post(`${API_URL}/api/users/`, {
       username,
       password,
       email,
@@ -71,7 +81,7 @@ export const createUser = async (newUser) => {
 
 export const disableUser = async (id) => {
   const query = await axios
-    .delete(`http://localhost:8000/api/users/${id}`,
+    .delete(`${API_URL}/api/users/${id}`,
       {
         headers: {
           authorization: APIKEY,
@@ -94,7 +104,7 @@ export const disableUser = async (id) => {
 
 export const getDepartments = async () => {
   const query = await axios
-    .get('http://localhost:8000/api/departments/', {
+    .get(`${API_URL}/api/departments/`, {
       headers: {
         authorization: APIKEY,
       },
@@ -106,7 +116,7 @@ export const getDepartments = async () => {
 
 export const getDepartment = async (id) => {
   const query = await axios
-    .get(`http://localhost:8000/api/departments/${id}`, {
+    .get(`${API_URL}/api/departments/${id}`, {
       headers: {
         authorization: APIKEY,
       },
@@ -120,7 +130,7 @@ export const createDepartment = async (newDepartment) => {
   const { costsite, name } = newDepartment;
 
   const query = await axios
-    .post('http://localhost:8000/api/departments/', {
+    .post(`${API_URL}/api/departments/`, {
       headers: {
         authorization: APIKEY,
       },
@@ -136,7 +146,7 @@ export const createDepartment = async (newDepartment) => {
 
 export const disableDepartment = async (id) => {
   const query = await axios
-    .delete(`http://localhost:8000/api/departments/${id}`,
+    .delete(`${API_URL}/api/departments/${id}`,
       {
         headers: {
           authorization: APIKEY,
