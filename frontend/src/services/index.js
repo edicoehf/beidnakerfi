@@ -1,3 +1,5 @@
+import { sidebarButtons } from '../config';
+
 export const isEmpty = (x) => x === ''
   || (!x && typeof x !== 'number')
   || (Object.entries(x).length === 0 && x.constructor === Object)
@@ -19,3 +21,15 @@ export const checkPrivileges = ({ allowedGroups }) => {
   if (!found) return false;
   return true;
 };
+
+export const getSidebarInfo = () => {
+  if(checkPrivileges(sidebarButtons.Basic)) {
+    return sidebarButtons.basic.buttons;
+  }
+  else if(checkPrivileges(sidebarButtons.SuperSeller)) {
+    return sidebarButtons.SuperSeller;
+  }
+  else if(checkPrivileges(sidebarButtons.SuperBuyer)) {
+    return sidebarButtons.SuperBuyer;
+  }
+}

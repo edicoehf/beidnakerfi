@@ -6,66 +6,70 @@ export default function index() {
     <div className="listContainer">
       <h1> Allir Starfmenn </h1>
       <table className="cheque-table">
-        <tr>
-          <td>Fyrirtaeki</td>
-          <td>Kt</td>
-          <td>Mammamia</td>
-          <td>kill bill 2</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
+        <thead>
+          <tr>
+            <th>Nafn</th>
+            <th>kt</th>
+            <th>mammamia</th>
+            <th>ingi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+          <tr>
+            <td>Kemi ehf</td>
+            <td>tmp lykill</td>
+            <td>tmp costsite</td>
+            <td>tmp verkefni</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );
