@@ -1,0 +1,8 @@
+#ChequeListContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-self: flex-start;
+  align-items: center;
+  padding: 30px;
+}

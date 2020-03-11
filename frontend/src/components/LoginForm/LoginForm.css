@@ -1,17 +1,21 @@
-.formContainer {
+
+.loginContainer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex-grow: 1;
     height: 100vh;
-    width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-}
-.form {
-  display: flex;
-  max-width: 500px;
 
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 img {
     display: flex;
     max-width: 150px;
