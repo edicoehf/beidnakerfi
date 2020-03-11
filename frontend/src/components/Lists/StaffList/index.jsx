@@ -1,7 +1,7 @@
 import React from 'react';
 import '../Lists.css';
 
-export default function index() {
+const StaffList = () => {
   return (
     <div className="listContainer">
       <h1> Allir Starfmenn </h1>
@@ -74,3 +74,5 @@ export default function index() {
     </div>
   );
 }
+
+export default StaffList;

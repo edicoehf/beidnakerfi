@@ -12,15 +12,16 @@
 .NewChequeContainer {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  margin-top: 60px;
+  margin-bottom: 30px;
   width: 100%;
-  flex-direction: column;
 }
-#Container {
+.Container {
   display: flex;
   width: 100%;
   flex-direction: column;
-  align-self: flex-start;
-  align-items: center;
-  padding: 30px;
+  margin-top: 30px;
+  height: 100vh;
 }
