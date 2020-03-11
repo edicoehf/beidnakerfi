@@ -4,12 +4,12 @@ import { useForm } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
 
 // Source
-import './LoginForm.css';
-import Logo from '../../img/edico-logo.png';
-import { useAuth } from '../../context/auth';
+import EdicoLogo from '../../EdicoLogo';
+import '../Forms.css';
+import { useAuth } from '../../../context/auth';
 
 // Service
-import * as api from '../../services/apiGateway';
+import * as api from '../../../services/apiGateway';
 
 const LoginForm = () => {
   const { register, handleSubmit, errors } = useForm();
@@ -29,9 +29,9 @@ const LoginForm = () => {
   }
   return (
     <div className="loginContainer">
-      <img src={Logo} alt="logo" />
 
-      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <EdicoLogo />
+      <form className="loginForm" onSubmit={handleSubmit(onSubmit)}>
         {isError ? <span> Wrong username or password </span> : null}
         <input
           className="inputField"
@@ -49,7 +49,7 @@ const LoginForm = () => {
           placeholder="Lykilorð"
         />
         {errors.password && <span>This field is required</span> }
-        <button className="btn-style" type="submit">Skrá inn</button>
+        <button className="submitButton" type="submit">Skrá inn</button>
       </form>
 
     </div>

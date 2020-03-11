@@ -1,11 +1,11 @@
 import React from 'react';
-import './StaffListContainer.css';
+import '../Container.css';
 
-import StaffList from '../StaffList';
+import StaffList from '../../Lists/StaffList';
 
 const StaffListContainer = () => {
   return (
-    <div id="StaffListContainer">
+    <div id="Container">
       <StaffList />
     </div>
   )

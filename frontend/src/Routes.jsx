@@ -3,10 +3,9 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 // Source from us
-import LoginForm from './components/LoginForm';
+import LoginForm from './components/Forms/LoginForm';
 import Main from './pages/Main';
 import Unauthorized from './components/Unauthorized';
-import Logout from './components/Logout';
 
 import { AuthContext } from './context/auth';
 import PrivateRoute from './PrivateRoute';
@@ -28,7 +27,6 @@ const Routes = () => {
         <Route exact path="/" component={LoginForm} />
         <PrivateRoute path="/main" component={Main} func={checkPrivileges} />
         <Route exact path="/401" component={Unauthorized} />
-        <Route exact path="/logout" component={Logout} />
       </Router>
     </AuthContext.Provider>
   );

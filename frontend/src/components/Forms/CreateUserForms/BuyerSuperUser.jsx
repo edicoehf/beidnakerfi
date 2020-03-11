@@ -1,11 +1,11 @@
 import React from 'react';
-import './CreateUser.css';
+import '../Forms.css';
 import { useForm } from 'react-hook-form';
 
-const SellerSuperUser = () => {
+const BuyerSuperUser = () => {
   const { register, handleSubmit, errors } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     // const loginInfo = await api.login(data)
     // console.log(loginInfo)
     // if(loginInfo.status === 200){
@@ -17,8 +17,8 @@ const SellerSuperUser = () => {
   };
 
   return (
-    <div className="createUserContainer">
-      <h1>SELLER</h1>
+    <div className="forms">
+      <h1 className="title">BUYER</h1>
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <input
           className="inputField"
@@ -52,7 +52,7 @@ const SellerSuperUser = () => {
           placeholder="Notendanafn"
         />
         {errors.username && <span>This field is required</span>}
-        <button className="btn-style submitButton" type="submit">
+        <button className="submitButton" type="submit">
           Skrá starfsmann
         </button>
       </form>
@@ -60,4 +60,4 @@ const SellerSuperUser = () => {
   );
 };
 
-export default SellerSuperUser;
+export default BuyerSuperUser;

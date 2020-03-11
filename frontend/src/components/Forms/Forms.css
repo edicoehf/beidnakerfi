@@ -1,0 +1,66 @@
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 100vh;
+
+}
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+  min-width: 300px;
+  max-width: 500px;
+}
+.forms {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+}
+.submitButton {
+    background-color: #990000;
+    color: white;
+    border-radius: 8px;
+    font-size: 1em;
+    width: 30%;
+    height: 50px;
+    justify-content: center;
+
+}
+.inputField {
+  outline: 0;
+    border-width: 0 0 2px;
+    border-color: black;
+    padding: 12px 0px;
+    margin: 8px 0;
+    width: 100%;
+    margin: 2px;
+    box-sizing: border-box;
+    font-size: 1em;
+
+}
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  flex-grow: 0;
+}
+
+.form-group {
+  width: 100%;
+  display: flex;
+
+}
