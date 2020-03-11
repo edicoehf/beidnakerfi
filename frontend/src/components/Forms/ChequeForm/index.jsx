@@ -1,7 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import './ChequeForm.css';
-import ChequeList from '../ChequeList';
+import '../Forms.css';
 
 const ChequeForm = () => {
 
@@ -19,7 +18,7 @@ const ChequeForm = () => {
   };
 
   return (
-    <div className="formContainer">
+    <div className="forms">
       <h1>Ný beiðni</h1>
 
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -92,7 +91,7 @@ const ChequeForm = () => {
           />
           {errors.username && <span>This field is required</span>}
         </div>
-        <button className="btn-style" type="submit">
+        <button className="submitButton" type="submit">
           Skrá beiðni
         </button>
       </form>

@@ -2,10 +2,10 @@
 import React from 'react';
 
 // Source
-import { forms } from '../../config';
+import { forms } from '../../../config';
 
 // Service
-import { checkPrivileges } from '../../services';
+import { checkPrivileges } from '../../../services';
 
 // Components
 import SellerSuperUser from './SellerSuperUser';

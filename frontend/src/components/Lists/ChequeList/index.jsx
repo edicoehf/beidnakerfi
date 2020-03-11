@@ -1,16 +1,16 @@
 import React from 'react';
-import './StaffList.css';
+import '../Lists.css';
 
 export default function index() {
   return (
     <div className="listContainer">
-      <h1> Allir Starfmenn </h1>
+      <h1> View all cheques </h1>
       <table className="cheque-table">
         <tr>
-          <td>Nafn</td>
-          <td>Kt</td>
-          <td>Mammamia</td>
-          <td>kill bill 2</td>
+          <td>Söluaðili</td>
+          <td>Úttektaraðili</td>
+          <td>Kostnaður</td>
+          <td>Dagsetning</td>
         </tr>
         <tr>
           <td>Kemi ehf</td>

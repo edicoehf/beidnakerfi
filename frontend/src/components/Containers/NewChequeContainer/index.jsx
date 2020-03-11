@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import './NewChequeContainer.css';
-import ChequeList from '../ChequeList';
-import ChequeForm from '../ChequeForm';
+import '../Container.css';
+import ChequeList from '../../Lists/ChequeList';
+import ChequeForm from '../../Forms/ChequeForm';
 
 const NewChequeContainer = () => {
 

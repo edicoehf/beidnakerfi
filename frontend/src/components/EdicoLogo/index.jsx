@@ -1,10 +1,10 @@
 import React from 'react';
 import EdicoLogo from '../../img/edico-logo.png';
-
+import './Logo.css';
 const logo = () => (
-  <div>
-    <img src={EdicoLogo} alt="logo" />
-  </div>
+  <>
+    <img className="edicoLogo" src={EdicoLogo} alt="logo" />
+  </>
 );
 
 export default logo;

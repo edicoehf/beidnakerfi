@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 
 // Components
 import Sidebar from '../../components/Sidebar';
-import CreateUser from '../../components/CreateUserForms';
-import ChequeListContainer from '../../components/ChequeListContainer';
-import NewChequeContainer from '../../components/NewChequeContainer';
-import StaffListContainer from '../../components/StaffListContainer';
+import CreateUser from '../../components/Forms/CreateUserForms';
+import ChequeListContainer from '../../components/Containers/ChequeListContainer';
+import NewChequeContainer from '../../components/Containers/NewChequeContainer';
+import StaffListContainer from '../../components/Containers/StaffListContainer';
 
 // Style
 import './Main.css';

@@ -8,16 +8,16 @@ const SuperSellerSidebar = () => {
 
   return (
     <>
-      <button className="btn-style button-item" onClick={() => dispatch(switchPage('CreateUser'))} type="submit">
+      <button className="sidebarButton" onClick={() => dispatch(switchPage('CreateUser'))} type="submit">
         Skrá starfsmann
       </button>
-      <button className="btn-style button-item" onClick={() => dispatch(switchPage('Home'))} type="submit">
+      <button className="sidebarButton" onClick={() => dispatch(switchPage('Home'))} type="submit">
         Yfirlit beiðna
       </button>
-      <button className="btn-style button-item" onClick={() => dispatch(switchPage('ViewUsers'))} type="submit">
+      <button className="sidebarButton" onClick={() => dispatch(switchPage('ViewUsers'))} type="submit">
         Starfsmannalisti
       </button>
-      <button className="btn-style button-item" onClick={() => dispatch(switchPage('ViewCustomers'))} type="submit">
+      <button className="sidebarButton" onClick={() => dispatch(switchPage('ViewCustomers'))} type="submit">
         Viðskiptamannalisti
       </button>
     </>

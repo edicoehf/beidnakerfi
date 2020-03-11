@@ -7,7 +7,7 @@ const BasicSidebar = () => {
   const dispatch = useDispatch();
 
   return (
-      <button className="btn-style button-item" onClick={() => dispatch(switchPage('CreateCheque'))} type="submit">
+      <button className="sidebarButton" onClick={() => dispatch(switchPage('CreateCheque'))} type="submit">
         Ný beiðni
       </button>
   );

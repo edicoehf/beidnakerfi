@@ -1,11 +1,11 @@
 import React from 'react';
-import './ChequeList.css';
+import '../Container.css';
 
-import ChequeList from '../ChequeList';
+import ChequeList from '../../Lists/ChequeList';
 
 const ChequeListContainer = () => {
   return (
-    <div id="ChequeListContainer">
+    <div id="Container">
       <ChequeList />
     </div>
   )
