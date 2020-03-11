@@ -28,7 +28,7 @@ const LoginForm = () => {
     return <Redirect to="/main" />;
   }
   return (
-    <div className="formContainer">
+    <div className="loginContainer">
       <img src={Logo} alt="logo" />
 
       <form className="form" onSubmit={handleSubmit(onSubmit)}>

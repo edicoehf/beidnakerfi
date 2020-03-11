@@ -17,7 +17,7 @@ const SellerSuperUser = () => {
   };
 
   return (
-    <div className="formContainer">
+    <div className="createUserContainer">
       <h1>SELLER</h1>
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <input
