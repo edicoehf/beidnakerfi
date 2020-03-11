@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import './ChequeForm.css';
+import ChequeList from '../ChequeList';
 
 const ChequeForm = () => {
 
@@ -37,7 +38,7 @@ const ChequeForm = () => {
             className="inputField"
             name="key"
             type="text"
-            ref={register({ required: true })}  
+            ref={register({ required: true })}
             placeholder="Lykill"
             disabled={true}
           />
@@ -52,7 +53,7 @@ const ChequeForm = () => {
           />
           {errors.username && <span>This field is required</span>}
         </div>
-        
+
         <div className="form-group">
           <input
             className="inputField"
@@ -96,6 +97,7 @@ const ChequeForm = () => {
         </button>
       </form>
     </div>
+
   );
 }
 
