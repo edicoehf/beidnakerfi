@@ -6,8 +6,8 @@ Lokaverkefni gert af nemendum í Tölvunafræði við Háskólann í Reykjavík.
 
 Backend (Vantar að bæta við '/' endaupunkt svo badge'ið virki):  
 
-![Heroku](https://pyheroku-badge.herokuapp.com/?app=beidnakerfi-api&style=<STYLE>)
+![Heroku](https://pyheroku-badge-with-path.herokuapp.com/?app=beidnakerfi-api&path=/admin&style=flat)
 
 Frontend:
 
-![Heroku](https://pyheroku-badge.herokuapp.com/?app=beidnakerfi&style=<STYLE>)
+![Heroku](https://pyheroku-badge-with-path.herokuapp.com/?app=beidnakerfi&style=flat)
