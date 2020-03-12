@@ -3,7 +3,10 @@ from tastypie.resources import ModelResource, Resource, ALL, ALL_WITH_RELATIONS
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from tastypie.http import HttpUnauthorized, HttpForbidden, HttpNotFound, HttpBadRequest, HttpResponse, HttpCreated, HttpNotFound
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.http import JsonResponse
+
+from tastypie.http import HttpUnauthorized, HttpForbidden, HttpNotFound, HttpBadRequest, HttpResponse, HttpCreated, HttpNotFound, HttpGone, HttpMultipleChoices, HttpAccepted
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.utils import trailing_slash
 
@@ -13,18 +16,22 @@ from .exceptions import CustomBadRequest
 
 from django.db.models import signals
 
+import json
+
 # from api.models import Sellers, Departments, Buyers, Cheques
 
 from api.models import Organization, Department, Cheques, Profile
 
 
 class DepartmentResource(ModelResource):
-    users = fields.ToManyField('api.api.UserResource', 'users', use_in='detail')
+    users = fields.ToManyField('api.api.UserResource', 'users', use_in='detail',)
+    organization = fields.ForeignKey('api.api.OrganizationResource', 'org_id', use_in='detail')
     class Meta:
         queryset = Department.objects.all()
         resource_name = 'departments'
-        filtering = {'name': ALL}
+        filtering = {'org_id': ['exact'], 'organization': ['exact']}
         authentication = ApiKeyAuthentication()
+        # authorization = DjangoAuthorization()
 
     def prepend_urls(self):
         params = (self._meta.resource_name, trailing_slash())
@@ -40,8 +47,6 @@ class DepartmentResource(ModelResource):
         
         user_id = data.get('user_id', '')
         department_id = data.get('department_id', '')
-        print(user_id)
-        print(department_id)
 
         user = User.objects.get(id=user_id)
         department = Department.objects.get(id=department_id)
@@ -61,13 +66,32 @@ class DepartmentResource(ModelResource):
 class OrganizationResource(ModelResource):
     departments = fields.ToManyField(DepartmentResource, 'department_set',
         related_name='departments', use_in='detail', full=True)
+    # profiles = fields.ToManyField('api.api.ProfileResource', 'profiles', use_in='detail')
 
     class Meta:
         queryset = Organization.objects.all()
         allowed_methods = ['get']
         resource_name = 'organizations'
-        filtering = {'name': ALL}
         authentication = ApiKeyAuthentication()
+        # authorization = DjangoAuthorization()
+
+    def prepend_urls(self):
+        params = (self._meta.resource_name, trailing_slash())
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/users%s$" % params, self.wrap_view('get_users'), name="get_users"),
+            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/departments%s$" % params, self.wrap_view('get_departments'), name="api_get_departments"),
+        ]
+
+    def get_departments(self, request, **kwargs):
+        self.method_check(request, ['get'])
+        return DepartmentResource().get_list(request, organization=kwargs['pk'])
+    
+    def get_users(self, request, **kwargs):
+        self.method_check(request, ['get'])
+        profiles = ProfileResource().get_object_list(request).filter(org_id=kwargs['pk'])
+        print(profiles)
+        # return UserResource().get_list(request, )
+        return ProfileResource().get_list(request, organizations=kwargs['pk'])
 
 class ChequesResource(ModelResource):
     class Meta:
@@ -75,13 +99,27 @@ class ChequesResource(ModelResource):
         resource_name = 'cheques'
         filtering = {'name': ALL}
         authentication = ApiKeyAuthentication()
+        # authorization = DjangoAuthorization()
 
 class ProfileResource(ModelResource):
     organizations = fields.ForeignKey(OrganizationResource, 'org_id', use_in='detail', full=True)
     class Meta:
         queryset = Profile.objects.all()
         resource_name = 'profiles'
+        filtering = {'org_id': ['exact'], 'organizations': ['exact']}
         authentication = ApiKeyAuthentication()
+        # authorization = DjangoAuthorization()
+
+        def obj_get_list(self, bundle, **kwargs):
+
+            return self.get_object_list(bundle.request)
+
+    # def get_list(self, request, **kwargs):
+    #     resp = super(ProfileResource, self).get_list(request, **kwargs)
+
+    #     data = json.loads(resp.content)
+    #     print(data)
+    
 
 class UserResource(ModelResource):
     profile = fields.ForeignKey(ProfileResource, 'profile', use_in='detail', full=True)
@@ -137,10 +175,11 @@ class UserResource(ModelResource):
 
     def obj_delete(self, bundle, **kwargs):
         pk = kwargs['pk']
-        print(pk)
+
         user = User.objects.get(id=pk)
         user.is_active = False
         user.save()
+
         return bundle
     
     def obj_create(self, bundle, request=None, **kwargs):
