@@ -9,19 +9,11 @@
     flex-direction: row;
 }
 
-.NewChequeContainer {
+.container {
   display: flex;
+  width: 100%;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 60px;
-  margin-bottom: 30px;
-  width: 100%;
-}
-.Container {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
   margin-top: 30px;
   height: 100vh;
 }

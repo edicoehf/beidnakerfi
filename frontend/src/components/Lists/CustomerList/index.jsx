@@ -3,9 +3,7 @@ import '../Lists.css';
 
 const CustomerList = () => {
   return (
-    <div className="listContainer">
-      <h1> Allir Starfmenn </h1>
-      <table className="cheque-table">
+      <table className="table">
         <thead>
           <tr>
             <th>Fyrirtaeki</th>
@@ -71,7 +69,6 @@ const CustomerList = () => {
           </tr>
         </tbody>
       </table>
-    </div>
   );
 }
 export default CustomerList;

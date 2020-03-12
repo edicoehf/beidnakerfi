@@ -4,6 +4,8 @@ import React from 'react';
 // Components
 import Sidebar from '../../components/Sidebar';
 import ChequeList from '../../components/Lists/ChequeList';
+import SearchForm from '../../components/Forms/SearchForm';
+
 // Style
 import '../Pages.css';
 
@@ -13,7 +15,10 @@ const Home = () => {
       <div id="sidebar">
         <Sidebar />
       </div>
-      <ChequeList />
+      <div className='container'>
+        <SearchForm />
+        <ChequeList />
+      </div>
     </div>
   );
 };

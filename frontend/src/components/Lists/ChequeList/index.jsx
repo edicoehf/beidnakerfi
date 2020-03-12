@@ -3,9 +3,7 @@ import '../Lists.css';
 
 const ChequeList = () => {
   return (
-    <div className="listContainer">
-      <h1> View all cheques </h1>
-      <table className="cheque-table">
+      <table className="table">
         <thead>
           <tr>
             <th>Söluaðili</th>
@@ -71,7 +69,6 @@ const ChequeList = () => {
           </tr>
         </tbody>
       </table>
-    </div>
   );
 }
 export default ChequeList;

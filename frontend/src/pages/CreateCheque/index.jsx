@@ -14,7 +14,7 @@ const Main = () => {
       <div id="sidebar">
         <Sidebar />
       </div>
-      <div className="NewChequeContainer" >
+      <div className="container" >
         <ChequeForm />
         <ChequeList />
       </div>
