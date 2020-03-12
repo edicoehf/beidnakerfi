@@ -17,46 +17,43 @@ const BuyerSuperUser = () => {
   };
 
   return (
-    <div className="forms">
-      <h1 className="title">BUYER</h1>
-      <form className="form" onSubmit={handleSubmit(onSubmit)}>
-        <input
-          className="inputField"
-          name="password"
-          type="password"
-          ref={register({ required: true })}
-          placeholder="Lykilorð"
-        />
-        {errors.password && <span>This field is required</span>}
-        <input
-          className="inputField"
-          name="username"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Notendanafn"
-        />
-        {errors.username && <span>This field is required</span>}
-        <input
-          className="inputField"
-          name="username"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Notendanafn"
-        />
-        {errors.username && <span>This field is required</span>}
-        <input
-          className="inputField"
-          name="username"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Notendanafn"
-        />
-        {errors.username && <span>This field is required</span>}
-        <button className="submitButton" type="submit">
-          Skrá starfsmann
-        </button>
-      </form>
-    </div>
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <input
+        className="inputField"
+        name="password"
+        type="password"
+        ref={register({ required: true })}
+        placeholder="Lykilorð"
+      />
+      {errors.password && <span>This field is required</span>}
+      <input
+        className="inputField"
+        name="username"
+        type="text"
+        ref={register({ required: true })}
+        placeholder="Notendanafn"
+      />
+      {errors.username && <span>This field is required</span>}
+      <input
+        className="inputField"
+        name="username"
+        type="text"
+        ref={register({ required: true })}
+        placeholder="Notendanafn"
+      />
+      {errors.username && <span>This field is required</span>}
+      <input
+        className="inputField"
+        name="username"
+        type="text"
+        ref={register({ required: true })}
+        placeholder="Notendanafn"
+      />
+      {errors.username && <span>This field is required</span>}
+      <button className="submitButton" type="submit">
+        Skrá starfsmann
+      </button>
+    </form>
   );
 };
 

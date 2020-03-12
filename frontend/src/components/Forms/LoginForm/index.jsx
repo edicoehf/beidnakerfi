@@ -25,7 +25,7 @@ const LoginForm = () => {
     } else { setError(true); }
   };
   if (isLoggedIn) {
-    return <Redirect to="/main" />;
+    return <Redirect to="/home" />;
   }
   return (
     <div className="loginContainer">
