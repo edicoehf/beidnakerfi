@@ -14,9 +14,7 @@ import os
 import django_heroku
 import environ
 
-env = environ.Env(
-    DEBUG=(bool, False)
-)
+env = environ.Env()
 
 environ.Env.read_env()
 
