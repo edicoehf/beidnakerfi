@@ -21,7 +21,7 @@ const APIKEY = process.env.REACT_APP_API_KEY;
 
 export const login = async (userlogin) => {
   const query = await axios
-    .post(`${API_URL}/api/users/login/`, {
+    .post(`${API_URL}/api/login/`, {
       username: userlogin.username,
       password: userlogin.password,
     })
