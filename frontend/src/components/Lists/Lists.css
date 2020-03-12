@@ -1,24 +1,18 @@
-.listContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
-  width: 100%;
+.table{
   margin-top: 20px;
-}
-.cheque-table {
   display: flex;
   flex-direction: column;
   width: 98%;
-  border: 2px solid lightgray;
 }
 
-tr {
+tr{
   display: flex;
   flex-direction: row;
 }
-
-td {
+tbody {
+  border: 2px solid lightgray;
+}
+td, th {
   display: flex;
   padding: 7px 3px;
   height: 100%;
@@ -28,14 +22,15 @@ td {
 tr:nth-child(2n){
   background-color: lightgray;
 }
-tr:first-child{
+th, thead{
   background-color: #990000;
   font-size: 16px;
   color: white;
+  border: 2px solid #990000;
 }
-td:nth-child(-n+2) {
+td:nth-child(-n+2), th:nth-child(-n+2)  {
   flex: 4 1 0;
 }
-td:last-child {
+td:last-child, th:last-child  {
   flex: 1 1 0;
 }
