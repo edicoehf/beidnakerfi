@@ -2,7 +2,7 @@ import axios from 'axios';
 
 require('dotenv').config();
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const APIKEY = process.env.REACT_APP_API_KEY;
 
