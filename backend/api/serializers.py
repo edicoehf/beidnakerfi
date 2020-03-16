@@ -19,7 +19,6 @@ class UserListSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
     
     def create(self, validated_data):
-        print(validated_data)
         org_id = validated_data.pop('organization')
         org = Organization.objects.get(id=org_id['id'])
         password = validated_data.pop('password')

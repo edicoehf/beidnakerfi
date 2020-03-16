@@ -11,6 +11,8 @@ from .serializers import UserListSerializer, UserDetailSerializer, OrganizationL
 
 from .permissions import IsAdminUser, IsLoggedInUserOrAdmin
 
+from django.core.serializers import serialize
+
 class UserViewSet(ModelViewSet):
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
@@ -79,31 +81,13 @@ class DepartmentViewSet(ModelViewSet):
         try:
             user = User.objects.get(id=data['user'])
             department = Department.objects.get(id=pk)
+            
+            if department.users.filter(id=user.id, department_user=department).exists():
+                return Response({'success': False, 'error': 'User already registered to department'})
+
             department.users.add(user)
-            return Response({'success': True})
+
+            dep_serializer = self.get_serializer(department)
+            return Response({'success': True, 'department': dep_serializer.data})
         except User.DoesNotExist:
             return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
-
-    # def add_user(self, request, **kwargs):
-    #     self.method_check(request, allowed=['post'])
-    #     authentication = ApiKeyAuthentication()
-
-    #     data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        
-    #     user_id = data.get('user_id', '')
-    #     department_id = data.get('department_id', '')
-
-    #     user = User.objects.get(id=user_id)
-    #     department = Department.objects.get(id=department_id)
-
-    #     if user:
-    #         if user.is_active:
-    #             if department:
-    #                 user.departments.add(department)
-    #                 return self.create_response(request, {'success': True}, HttpCreated)
-    #             else:
-    #                 return self.create_response(request, {'success': False, 'reason': 'Incorrect department'}, HttpNotFound)
-    #         else:
-    #             return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
-    #     else:
-    #         return self.create_response(request, {'success': False, 'reason': 'Incorrect user'}, HttpNotFound)

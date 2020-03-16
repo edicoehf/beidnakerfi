@@ -3,14 +3,26 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 # from django.contrib.auth.models import User
 
+from .models import Department
+
 class loginToken(ObtainAuthToken):
     def _user_groups(self, user):
         groups = user.groups.all()
         if groups:
             group_list = []
-            for group in user.groups.all():
+            for group in groups:
                 group_list.append(group.name)
             return group_list
+        else:
+            return None
+
+    def _user_departments(self, user):
+        departments = Department.objects.filter(users=user)
+        if departments:
+            dep_list = []
+            for dep in departments:
+                dep_list.append(dep.id)
+            return dep_list
         else:
             return None
 
@@ -26,5 +38,6 @@ class loginToken(ObtainAuthToken):
             'token': token.key,
             'user': user.username,
             'org_id': user.organization.id,
+            'department_id': self._user_departments(user),
             'groups': self._user_groups(user)
         })
