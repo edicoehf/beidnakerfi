@@ -28,9 +28,6 @@ class UserViewSet(ModelViewSet):
         else:
             return UserListSerializer
 
-    queryset = User.objects.all()
-    # permission_classes = [permissions.IsAuthenticated]
-
     def get_permissions(self):
         permission_classes = []
         if self.action == 'create':
@@ -40,6 +37,17 @@ class UserViewSet(ModelViewSet):
         elif self.action == 'list' or self.action == 'destroy':
             permission_classes = [permissions.IsAuthenticated, IsAdminUser]
         return [permission() for permission in permission_classes]
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.is_active = False
+        user.save()
+        
+        user_serializer = self.get_serializer(user)
+        return Response({'success': True, 'message': 'User disabled', 'user': user_serializer.data}, status=status.HTTP_204_NO_CONTENT)
+    
+    queryset = User.objects.all()
+    # permission_classes = [permissions.IsAuthenticated]
 
 class OrganizationViewSet(ModelViewSet):
     def get_serializer_class(self):
