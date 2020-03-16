@@ -65,6 +65,10 @@ class DepartmentViewSet(ModelViewSet):
             return DepartmentListSerializer
         elif self.action == 'retrieve':
             return DepartmentDetailSerializer
+        elif self.request.method == 'POST':
+            return DepartmentDetailSerializer
+        elif self.request.method == 'DELETE':
+            return DepartmentDetailSerializer
         else:
             return DepartmentListSerializer
 
@@ -72,7 +76,7 @@ class DepartmentViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated] 
 
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['POST'])
     def add_user(self, request, pk):
         data = request.data
 
@@ -83,11 +87,32 @@ class DepartmentViewSet(ModelViewSet):
             department = Department.objects.get(id=pk)
             
             if department.users.filter(id=user.id, department_user=department).exists():
-                return Response({'success': False, 'error': 'User already registered to department'})
+               return Response({'success': False, 'error': 'User already registered to department'})
 
             department.users.add(user)
 
             dep_serializer = self.get_serializer(department)
             return Response({'success': True, 'department': dep_serializer.data})
+        except User.DoesNotExist:
+            return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+
+    @action(detail=True, methods=['delete'])
+    def remove_user(self, request, pk):
+        data = request.data
+
+        if 'user' not in data:
+            return Response({'success': False, 'error': 'Missing or incorrect data'}, status=status.HTTP_412_PRECONDITION_FAILED)
+        try:
+            user = User.objects.get(id=data['user'])
+            department = Department.objects.get(id=pk)
+
+            if not department.users.filter(id=user.id, department_user=department).exists():
+                return Response({'success': False, 'error': 'User not in department'})
+
+            department.users.remove(user)
+
+            dep_serializer = self.get_serializer(department)
+            return Response({'success': True, 'department': dep_serializer.data})
+
         except User.DoesNotExist:
             return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
