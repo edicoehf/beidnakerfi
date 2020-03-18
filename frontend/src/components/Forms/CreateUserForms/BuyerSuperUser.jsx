@@ -1,55 +1,68 @@
-import React from 'react';
-import '../Forms.css';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-const BuyerSuperUser = () => {
-  const { register, handleSubmit, errors } = useForm();
+import '../Forms.css';
 
-  const onSubmit = async () => {
-    // const loginInfo = await api.login(data)
-    // console.log(loginInfo)
-    // if(loginInfo.status === 200){
-    //   dispatch(await loginUser(loginInfo.data));
-    //   await setAuthTokens(loginInfo.data);
-    //   setLoggedIn(true);
-    // }
-    // else alert('Wrong login')
-  };
+import { getDepartments, createUser } from '../../../services/apiGateway';
+
+const BuyerSuperUser = () => {
+  const { register, handleSubmit } = useForm();
+  const [costSites, setCostSites] = useState([]);
+
+  useEffect(() => {
+    const fetchCostSites = async () => {
+      const result = await getDepartments();
+      setCostSites(result.data)
+    }
+
+    fetchCostSites();
+  }, []);
+
+  const onSubmit = async data => {
+    console.log(data)
+    const results = await createUser(data);
+  }
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
       <input
         className="inputField"
+        name="username"
+        type="text"
+        placeholder="Notendanafn"
+        required
+        ref={register}
+      />
+      <input
+        className="inputField"
         name="password"
-        type="password"
-        ref={register({ required: true })}
+        type="text"
         placeholder="Lykilorð"
+        required
+        ref={register}
       />
-      {errors.password && <span>This field is required</span>}
       <input
         className="inputField"
-        name="username"
-        type="text"
-        ref={register({ required: true })}
-        placeholder="Notendanafn"
+        name="email"
+        type="email"
+        placeholder="Netfang"
+        required
+        ref={register}
       />
-      {errors.username && <span>This field is required</span>}
-      <input
+      <select
         className="inputField"
-        name="username"
-        type="text"
-        ref={register({ required: true })}
-        placeholder="Notendanafn"
-      />
-      {errors.username && <span>This field is required</span>}
-      <input
-        className="inputField"
-        name="username"
-        type="text"
-        ref={register({ required: true })}
-        placeholder="Notendanafn"
-      />
-      {errors.username && <span>This field is required</span>}
+        placeholder="Kostnaðarstaður"
+        name="departmentId"
+        ref={register}
+      >
+        {
+          costSites.map(site => {
+            return (<option key={site.id} value={site.id}>
+              {site.name}
+            </option>)
+          })
+        }
+      </select>
       <button className="submitButton" type="submit">
         Skrá starfsmann
       </button>
