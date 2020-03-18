@@ -64,11 +64,13 @@ const addUserToDepartment = async (userId, deptId) => {
     })
     .then((resp) => resp)
     .catch((e) => e.response);
+
+  return query;
 }
 
 export const createUser = async (newUser) => {
 
-  const { username, password, email, departmentId } = newUser;
+  const { username, password, email, department } = newUser;
 
   const query = await axios
     .post(`${API_URL}/api/users/`, {
@@ -84,9 +86,12 @@ export const createUser = async (newUser) => {
     .then((resp) => resp)
     .catch((e) => e.response);
 
-  //departments/{id}/add_user/
-  const { id } = query.data;
-  addUserToDepartment(id, departmentId)
+  if (department) {
+    const { id } = query.data;
+    const newUser = await addUserToDepartment(id, department)
+    return newUser
+  }
+
   return query;
 };
 
