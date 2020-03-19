@@ -33,8 +33,14 @@ const StaffList = () => {
             return (
               <tr key={staff.id}>
                 <td>{staff.username}</td>
-                <td>Email koma her</td>
-                <td>Department koma hér</td>
+                <td>{staff.email}</td>
+                <td>
+                  {
+                    staff.departments.map(dept => {
+                      return dept.name
+                    }).join(', ')
+                  }
+                </td>
                 <td><button>Breyta user</button></td>
                 <td><button>Loka user</button></td>
               </tr>
