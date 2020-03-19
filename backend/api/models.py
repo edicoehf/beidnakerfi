@@ -16,7 +16,6 @@ class Organization(models.Model):
 
 class User(AbstractUser):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    #### REMOVE NULL=TRUE AFTER INITIAL LOGIN AND ORG CREATE ####
 
     def __str__(self):
         return self.username

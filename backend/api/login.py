@@ -4,6 +4,8 @@ from rest_framework.response import Response
 
 from .models import Department
 
+from .authentication import token_expire_handler, expire_time
+
 class loginToken(ObtainAuthToken):
     def _user_groups(self, user):
         groups = user.groups.all()
@@ -32,9 +34,12 @@ class loginToken(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
 
+        is_expired, token = token_expire_handler(token)
+
         return Response({
             'success': True,
             'token': token.key,
+            'expires_in': expire_time(token).seconds,
             'user': user.username,
             'org_id': user.organization.id,
             'department_id': self._user_departments(user),
