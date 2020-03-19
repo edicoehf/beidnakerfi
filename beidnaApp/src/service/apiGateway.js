@@ -4,6 +4,8 @@ const API_URL = 'http://localhost:8000';
 
 export const login = async (userlogin) => {
   console.log(userlogin.username)
+  console.log(userlogin.password)
+  console.log(API_URL)
   const query = await axios.post(`${API_URL}/api/login/`, {
       username: userlogin.username,
       password: userlogin.password,
