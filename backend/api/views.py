@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from .models import User, Department, Organization
 from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer
 
-from .permissions import IsAdminUser, IsLoggedInUserOrAdmin
+from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOrg
 
 from django.core.serializers import serialize
 
@@ -18,7 +18,8 @@ class UserViewSet(ModelViewSet):
         if 'organization_pk' in self.kwargs:
             return User.objects.filter(organization=self.kwargs['organization_pk'])
         else:
-            return User.objects.all()
+            organization = self.request.user.organization
+            return User.objects.filter(organization=organization)
     
     def get_serializer_class(self):
         if self.action == 'list':
@@ -30,12 +31,12 @@ class UserViewSet(ModelViewSet):
 
     def get_permissions(self):
         permission_classes = []
-        if self.action == 'create':
-            permission_classes = [permissions.IsAuthenticated, IsAdminUser]
-        elif self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update':
-            permission_classes = [permissions.IsAuthenticated, IsLoggedInUserOrAdmin]
-        elif self.action == 'list' or self.action == 'destroy':
-            permission_classes = [permissions.IsAuthenticated, IsAdminUser]
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [permissions.IsAuthenticated]
+        elif self.action == 'create' or self.action == 'destroy':
+            permission_classes = [permissions.IsAuthenticated, IsAdmin]
+        elif self.action == 'update' or self.action == 'partial_update':
+            permission_classes = [permissions.IsAuthenticated, IsSelfOrAdmin]
         return [permission() for permission in permission_classes]
 
     def destroy(self, request, *args, **kwargs):
@@ -58,15 +59,25 @@ class OrganizationViewSet(ModelViewSet):
         else:
             return OrganizationListSerializer
 
+    def get_permissions(self):
+        permission_classes = []
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [permissions.IsAuthenticated, Org_IsUserInOrg]
+        elif self.action == 'create' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
+            permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+        return [permission() for permission in permission_classes]
+
     queryset = Organization.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
 class DepartmentViewSet(ModelViewSet):
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
             return Department.objects.filter(organization=self.kwargs['organization_pk'])
         else:
-            return Department.objects.all()
+            organization = self.request.user.organization
+            return Department.objects.filter(organization=organization)
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -79,6 +90,15 @@ class DepartmentViewSet(ModelViewSet):
             return DepartmentDetailSerializer
         else:
             return DepartmentListSerializer
+    
+    def get_permissions(self):
+        permission_classes = []
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [permissions.IsAuthenticated, Dep_IsUserInOrg]
+        elif self.action == 'create' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
+            permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+        return [permission() for permission in permission_classes]
 
     queryset = Department.objects.all()
     permission_classes = [permissions.IsAuthenticated] 
