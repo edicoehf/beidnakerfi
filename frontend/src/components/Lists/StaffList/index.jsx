@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../Lists.css';
 import { getUsers } from '../../../services/apiGateway';
 
-const StaffList = () => {
+const StaffList = (props) => {
 
   const [staffList, setStaffList] = useState([]);
 
@@ -29,7 +29,9 @@ const StaffList = () => {
       </thead>
       <tbody>
         {
-          staffList.map(staff => {
+          staffList.filter(staff => {
+            return staff.username.includes(props.query)
+          }).map(staff => {
             return (
               <tr key={staff.id}>
                 <td>{staff.username}</td>

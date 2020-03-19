@@ -1,35 +1,22 @@
 import React from 'react';
 import '../Forms.css';
-import { useForm } from 'react-hook-form';
 
-const BuyerSuperUser = () => {
-  const { register, handleSubmit, errors } = useForm();
+const BuyerSuperUser = (props) => {
 
-  const onSubmit = async () => {
-    // const loginInfo = await api.login(data)
-    // console.log(loginInfo)
-    // if(loginInfo.status === 200){
-    //   dispatch(await loginUser(loginInfo.data));
-    //   await setAuthTokens(loginInfo.data);
-    //   setLoggedIn(true);
-    // }
-    // else alert('Wrong login')
+  const handleChange = (e) => {
+    props.setSearch(e.target.value)
   };
 
   return (
     <>
-      <form className="searchForm" onSubmit={handleSubmit(onSubmit)}>
+      <form className="searchForm" >
         <input
+          onChange={handleChange}
           className="inputField"
-          name="password"
-          type="password"
-          ref={register({ required: true })}
+          name="query"
+          type="text"
           placeholder="Leitarstrengur"
         />
-        {errors.password && <span>This field is required</span>}
-        <button className="submitButton" type="submit">
-          Leita
-        </button>
       </form>
     </>
   );
