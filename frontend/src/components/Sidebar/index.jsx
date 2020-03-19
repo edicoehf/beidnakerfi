@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import EdicoLogo from '../EdicoLogo';
 import { useAuth } from '../../context/auth';
@@ -17,7 +17,7 @@ const Sidebar = () => {
   };
   const changeColor = (path) => {
     buttons.forEach((x) => {
-      if(x.path === path)
+      if (x.path === path)
         x.pressed = true;
       else x.pressed = false;
     })
@@ -30,13 +30,13 @@ const Sidebar = () => {
         {
           buttons.map((x) =>
             <Link to={x.path} key={x.name}>
-              { x.pressed === true ? (
-              <button className="sidebarButton pushed" onClick={( ) => changeColor(x.path)} >
-                { x.name }
-              </button>
-            ) : (<button className="sidebarButton" onClick={( ) => changeColor(x.path)} >
-              { x.name }
-            </button> )}
+              {x.pressed === true ? (
+                <button className="sidebarButton pushed" onClick={() => changeColor(x.path)} >
+                  {x.name}
+                </button>
+              ) : (<button className="sidebarButton" onClick={() => changeColor(x.path)} >
+                {x.name}
+              </button>)}
             </Link>
           )
         }
