@@ -3,8 +3,13 @@ import axios from 'axios';
 require('dotenv').config();
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-const APIKEY = `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
-const ORG_ID = JSON.parse(localStorage.getItem('tokens')).org_id;
+
+const APIKEY = ''
+const ORG_ID = ''
+if (typeof localStorage.getItem('tokens') === 'undefined' && localStorage.getItem('tokens') === null) {
+  const APIKEY = `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
+  const ORG_ID = JSON.parse(localStorage.getItem('tokens')).org_id;
+}
 
 /*
   USERS
