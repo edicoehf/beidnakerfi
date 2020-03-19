@@ -12,11 +12,11 @@ class DepartmentListSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'organization']
 
 class UserListSerializer(serializers.ModelSerializer):
-    organization = serializers.IntegerField(source='organization.id')
+    # organization = serializers.IntegerField(source='organization.id')
     departments = DepartmentListSerializer(source='department_user', many=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'organization', 'password', 'email', 'departments']
+        fields = ['id', 'username', 'password', 'email', 'departments']
         extra_kwargs = {'password': {'write_only': True}}
     
     def create(self, validated_data):

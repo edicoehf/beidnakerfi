@@ -19,7 +19,7 @@ class UserViewSet(ModelViewSet):
             return User.objects.filter(organization=self.kwargs['organization_pk'])
         else:
             organization = self.request.user.organization
-            return User.objects.filter(organization=organization)
+            return User.objects.filter(organization=organization).prefetch_related('department_user')
     
     def get_serializer_class(self):
         if self.action == 'list':
