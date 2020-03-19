@@ -11,6 +11,8 @@ from .serializers import UserListSerializer, UserDetailSerializer, OrganizationL
 
 from .permissions import IsAdminUser, IsLoggedInUserOrAdmin
 
+from django.core.serializers import serialize
+
 class UserViewSet(ModelViewSet):
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
@@ -26,9 +28,6 @@ class UserViewSet(ModelViewSet):
         else:
             return UserListSerializer
 
-    queryset = User.objects.all()
-    # permission_classes = [permissions.IsAuthenticated]
-
     def get_permissions(self):
         permission_classes = []
         if self.action == 'create':
@@ -38,6 +37,17 @@ class UserViewSet(ModelViewSet):
         elif self.action == 'list' or self.action == 'destroy':
             permission_classes = [permissions.IsAuthenticated, IsAdminUser]
         return [permission() for permission in permission_classes]
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.is_active = False
+        user.save()
+        
+        user_serializer = self.get_serializer(user)
+        return Response({'success': True, 'message': 'User disabled', 'user': user_serializer.data}, status=status.HTTP_204_NO_CONTENT)
+    
+    queryset = User.objects.all()
+    # permission_classes = [permissions.IsAuthenticated]
 
 class OrganizationViewSet(ModelViewSet):
     def get_serializer_class(self):
@@ -63,6 +73,10 @@ class DepartmentViewSet(ModelViewSet):
             return DepartmentListSerializer
         elif self.action == 'retrieve':
             return DepartmentDetailSerializer
+        elif self.request.method == 'POST':
+            return DepartmentDetailSerializer
+        elif self.request.method == 'DELETE':
+            return DepartmentDetailSerializer
         else:
             return DepartmentListSerializer
 
@@ -70,7 +84,7 @@ class DepartmentViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated] 
 
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['POST'])
     def add_user(self, request, pk):
         data = request.data
 
@@ -79,31 +93,34 @@ class DepartmentViewSet(ModelViewSet):
         try:
             user = User.objects.get(id=data['user'])
             department = Department.objects.get(id=pk)
+            
+            if department.users.filter(id=user.id, department_user=department).exists():
+               return Response({'success': False, 'error': 'User already registered to department'})
+
             department.users.add(user)
-            return Response({'success': True})
+
+            dep_serializer = self.get_serializer(department)
+            return Response({'success': True, 'department': dep_serializer.data})
         except User.DoesNotExist:
             return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
 
-    # def add_user(self, request, **kwargs):
-    #     self.method_check(request, allowed=['post'])
-    #     authentication = ApiKeyAuthentication()
+    @action(detail=True, methods=['delete'])
+    def remove_user(self, request, pk):
+        data = request.data
 
-    #     data = self.deserialize(request, request.body, format=request.META.get('CONTENT_TYPE', 'application/json'))
-        
-    #     user_id = data.get('user_id', '')
-    #     department_id = data.get('department_id', '')
+        if 'user' not in data:
+            return Response({'success': False, 'error': 'Missing or incorrect data'}, status=status.HTTP_412_PRECONDITION_FAILED)
+        try:
+            user = User.objects.get(id=data['user'])
+            department = Department.objects.get(id=pk)
 
-    #     user = User.objects.get(id=user_id)
-    #     department = Department.objects.get(id=department_id)
+            if not department.users.filter(id=user.id, department_user=department).exists():
+                return Response({'success': False, 'error': 'User not in department'})
 
-    #     if user:
-    #         if user.is_active:
-    #             if department:
-    #                 user.departments.add(department)
-    #                 return self.create_response(request, {'success': True}, HttpCreated)
-    #             else:
-    #                 return self.create_response(request, {'success': False, 'reason': 'Incorrect department'}, HttpNotFound)
-    #         else:
-    #             return self.create_response(request, {'success': False, 'reason': 'disabled'}, HttpForbidden)
-    #     else:
-    #         return self.create_response(request, {'success': False, 'reason': 'Incorrect user'}, HttpNotFound)
+            department.users.remove(user)
+
+            dep_serializer = self.get_serializer(department)
+            return Response({'success': True, 'department': dep_serializer.data})
+
+        except User.DoesNotExist:
+            return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
