@@ -23,8 +23,7 @@ const BuyerSuperUser = () => {
   }, []);
 
   const onSubmit = async data => {
-    console.log(data);
-    const results = await createUser(data);
+    await createUser(data);
   }
 
   return (

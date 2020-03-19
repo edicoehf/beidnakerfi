@@ -4,11 +4,12 @@ require('dotenv').config();
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-const APIKEY = ''
-const ORG_ID = ''
-if (typeof localStorage.getItem('tokens') === 'undefined' && localStorage.getItem('tokens') === null) {
-  const APIKEY = `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
-  const ORG_ID = JSON.parse(localStorage.getItem('tokens')).org_id;
+let APIKEY = ''
+let ORG_ID = ''
+
+if (typeof localStorage.getItem('tokens') !== 'undefined' && localStorage.getItem('tokens') !== null) {
+  APIKEY = `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
+  ORG_ID = JSON.parse(localStorage.getItem('tokens')).org_id;
 }
 
 /*
@@ -35,9 +36,8 @@ export const login = async (userlogin) => {
 };
 
 export const getUsers = async () => {
-  // eslint-disable-next-line camelcase
   const query = await axios
-    .get(`${API_URL}/api/organizations/${ORG_ID}/`, {
+    .get(`${API_URL}/api/users/`, {
       headers: {
         authorization: APIKEY,
       },

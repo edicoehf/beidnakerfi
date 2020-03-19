@@ -1,72 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Lists.css';
+import { getUsers } from '../../../services/apiGateway';
 
 const StaffList = () => {
+
+  const [staffList, setStaffList] = useState([]);
+
+  useEffect(() => {
+    const getStaff = async () => {
+      const results = await getUsers();
+
+      setStaffList(results.data);
+    }
+
+    getStaff();
+  }, []);
+
   return (
     <table className="table">
       <thead>
         <tr>
-          <th>Nafn</th>
-          <th>kt</th>
-          <th>mammamia</th>
-          <th>ingi</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Departments</th>
+          <th> </th>
+          <th> </th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
-        <tr>
-          <td>Kemi ehf</td>
-          <td>tmp lykill</td>
-          <td>tmp costsite</td>
-          <td>tmp verkefni</td>
-        </tr>
+        {
+          staffList.map(staff => {
+            return (
+              <tr key={staff.id}>
+                <td>{staff.username}</td>
+                <td>Email koma her</td>
+                <td>Department koma hér</td>
+                <td><button>Breyta user</button></td>
+                <td><button>Loka user</button></td>
+              </tr>
+            )
+          })
+        }
       </tbody>
     </table>
   );
