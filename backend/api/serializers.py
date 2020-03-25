@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Organization, Department
+from .models import User, Organization, Department, Cheque
 
 class OrganizationListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,3 +46,14 @@ class OrganizationDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = ['id', 'url', 'name', 'departments']
+
+class ChequeListSerializer(serializers.ModelSerializer):
+    user = UserListSerializer()
+    department = DepartmentListSerializer()
+    class Meta:
+        model = Cheque
+        fields = ('id', 'price', 'user', 'department')
+
+class ChequeDetailSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer()
+    department = DepartmentDetailSerializer()

@@ -6,8 +6,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import User, Department, Organization
-from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer
+from .models import User, Department, Organization, Cheque
+from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer, ChequeListSerializer, ChequeDetailSerializer
 
 from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOrg
 
@@ -144,3 +144,6 @@ class DepartmentViewSet(ModelViewSet):
 
         except User.DoesNotExist:
             return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+
+class ChequeViewSet(ModelViewSet):
+    queryset = Cheque.objects.all()
