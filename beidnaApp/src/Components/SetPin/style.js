@@ -1,12 +1,13 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  loginContainer: {
-    flex: 2,
+  pinContainer: {
+    flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
   },
   inputField: {
+
     maxWidth: '80%',
     marginBottom: 10,
     backgroundColor: 'white',
@@ -14,12 +15,20 @@ export default StyleSheet.create({
   },
   inputText: {
     color: 'black',
+    fontSize: 15,
+  },
+  buttonGroup: {
+    paddingTop: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '80%',
   },
   button: {
     backgroundColor: '#8D8D8D',
-    minHeight: 60,
-    borderRadius: 10,
-    width: '80%',
+    minHeight: 80,
+    minWidth: 80,
+    borderRadius: 50,
+
   },
   buttonTitle: {
     color: 'white',

@@ -1,9 +1,13 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  container: {
+  logoContainer: {
     flex: 1,
-    paddingTop: 250,
     backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  edicoLogo: {
+    height: 150,
+    width: '90%',
   },
 });
