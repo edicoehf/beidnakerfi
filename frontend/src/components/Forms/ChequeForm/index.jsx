@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import '../Forms.css';
 
 const ChequeForm = () => {
-
   const { register, handleSubmit, errors } = useForm();
 
   const onSubmit = async () => {
@@ -26,7 +25,7 @@ const ChequeForm = () => {
           type="text"
           ref={register({ required: true })}
           placeholder="Söluaðili"
-          disabled={true}
+          disabled
         />
       </div>
       <div className="form-group">
@@ -36,7 +35,7 @@ const ChequeForm = () => {
           type="text"
           ref={register({ required: true })}
           placeholder="Lykill"
-          disabled={true}
+          disabled
         />
         {errors.password && <span>This field is required</span>}
         <input
@@ -45,7 +44,7 @@ const ChequeForm = () => {
           type="text"
           ref={register({ required: true })}
           placeholder="Kostnaðarstaður"
-          disabled={true}
+          disabled
         />
         {errors.username && <span>This field is required</span>}
       </div>
@@ -57,7 +56,7 @@ const ChequeForm = () => {
           type="text"
           ref={register({ required: true })}
           placeholder="Verkefni"
-          disabled={true}
+          disabled
         />
         {errors.username && <span>This field is required</span>}
         <input
@@ -66,7 +65,7 @@ const ChequeForm = () => {
           type="text"
           ref={register({ required: true })}
           placeholder="Verkþáttur"
-          disabled={true}
+          disabled
         />
       </div>
       <div className="form-group">
@@ -76,7 +75,7 @@ const ChequeForm = () => {
           type="text"
           ref={register({ required: true })}
           placeholder="Vinnustaður úttektaraðila"
-          disabled={true}
+          disabled
         />
         <input
           className="inputField"
@@ -84,7 +83,7 @@ const ChequeForm = () => {
           type="text"
           ref={register({ required: true })}
           placeholder="Dagsetning"
-          disabled={true}
+          disabled
         />
         {errors.username && <span>This field is required</span>}
       </div>
@@ -94,6 +93,6 @@ const ChequeForm = () => {
     </form>
 
   );
-}
+};
 
 export default ChequeForm;

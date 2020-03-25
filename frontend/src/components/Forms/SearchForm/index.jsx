@@ -1,15 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import '../Forms.css';
 
-const BuyerSuperUser = (props) => {
-
+const SearchForm = (props) => {
   const handleChange = (e) => {
-    props.setSearch(e.target.value)
+    props.setSearch(e.target.value);
   };
 
   return (
     <>
-      <form className="searchForm" >
+      <form className="searchForm">
         <input
           onChange={handleChange}
           className="inputField"
@@ -22,4 +22,8 @@ const BuyerSuperUser = (props) => {
   );
 };
 
-export default BuyerSuperUser;
+SearchForm.propTypes = {
+  setSearch: PropTypes.func.isRequired,
+};
+
+export default SearchForm;

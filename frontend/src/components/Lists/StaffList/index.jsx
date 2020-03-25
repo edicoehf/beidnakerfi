@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import '../Lists.css';
 import { getUsers } from '../../../services/apiGateway';
 import DisableUserButton from '../../DisableUserButton';
 
 const StaffList = (props) => {
-
   const [staffList, setStaffList] = useState([]);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const StaffList = (props) => {
       const results = await getUsers();
 
       setStaffList(results.data);
-    }
+    };
 
     getStaff();
   }, []);
@@ -30,29 +30,26 @@ const StaffList = (props) => {
       </thead>
       <tbody>
         {
-          staffList.filter(staff => {
-            return staff.username.includes(props.query)
-          }).map(staff => {
-            return (
-              <tr key={staff.id}>
-                <td>{staff.username}</td>
-                <td>{staff.email}</td>
-                <td>
-                  {
-                    staff.departments.map(dept => {
-                      return dept.name
-                    }).join(', ')
-                  }
-                </td>
-                <td><button>Breyta user</button></td>
-                <td><DisableUserButton /></td>
-              </tr>
-            )
-          })
+          staffList.filter((staff) => staff.username.includes(props.query)).map((staff) => (
+            <tr key={staff.id}>
+              <td>{staff.username}</td>
+              <td>{staff.email}</td>
+              <td>
+                {
+                  staff.departments.map((dept) => dept.name).join(', ')
+                }
+              </td>
+              <td><button type="button">Breyta user</button></td>
+              <td><DisableUserButton /></td>
+            </tr>
+          ))
         }
       </tbody>
     </table>
   );
-}
+};
 
+StaffList.propTypes = {
+  query: PropTypes.string.isRequired,
+};
 export default StaffList;
