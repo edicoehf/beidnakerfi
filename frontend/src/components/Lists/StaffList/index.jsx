@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../Lists.css';
 import { getUsers } from '../../../services/apiGateway';
+import DisableUserButton from '../../DisableUserButton';
 
 const StaffList = (props) => {
 
@@ -44,7 +45,7 @@ const StaffList = (props) => {
                   }
                 </td>
                 <td><button>Breyta user</button></td>
-                <td><button>Loka user</button></td>
+                <td><DisableUserButton /></td>
               </tr>
             )
           })
