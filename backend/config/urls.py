@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework.authtoken import views
 from rest_framework_nested import routers
 
-from api.views import UserViewSet, DepartmentViewSet, OrganizationViewSet
+from api.views import UserViewSet, DepartmentViewSet, OrganizationViewSet, ChequeViewSet
 from api.login import loginToken
 
 router = routers.SimpleRouter()
@@ -27,6 +27,7 @@ router = routers.SimpleRouter()
 router.register(r'users', UserViewSet)
 router.register(r'departments', DepartmentViewSet)
 router.register(r'organizations', OrganizationViewSet)
+router.register(r'cheques', ChequeViewSet)
 
 org_router = routers.NestedSimpleRouter(router, r'organizations', lookup='organization')
 org_router.register(r'departments', DepartmentViewSet, 'org_departments')
