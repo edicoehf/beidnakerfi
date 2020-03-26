@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, ScrollView } from 'react-native';
-import {
-  Input, Button, Overlay, Text, Avatar,
-} from 'react-native-elements';
+import { View } from 'react-native';
+import { Input, Button, Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 
 import EdicoLogo from '../../Views/EdicoLogo';
+
 
 // Styles
 import styles from './style';
@@ -15,25 +14,32 @@ import * as api from '../../service/apiGateway.js'
 const SetPin = () => {
   const [user, setUser] = useState('');
   const { navigate } = useNavigation();
+  // first pin is not saved so i put false as a starting parameter
+  const [firstPin, setFirstPin] = useState(false);
 
   const handleClick = async (input) => {
       if(user.length <= 6){
         setUser(user+input);
-        console.log(user)
       }
 
   };
   const vipeOne = async () => {
         setUser(user.substring(0, user.length-1));
-        console.log(user)
   };
   const submit = async () => {
-        console.log(user)
+    if(user.length === 6 )
+      if(firstPin === false){
+        setFirstPin(user);
+        setUser('');
+      } else {
+        console.log(firstPin === user)
+      }
+
   };
 
   return (
     <View style={styles.pinContainer}>
-      <Text>Veldu þér 6 stafa pin</Text>
+      { !firstPin ? (<Text>Veldu þér 6 stafa pin</Text>) : (<Text>Staðfestu pin</Text>)}
       <Input
         containerStyle={styles.inputField}
         inputStyle={styles.inputText}

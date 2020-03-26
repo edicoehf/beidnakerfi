@@ -8,9 +8,9 @@ import Landing from  '../Views/Landing'
 
 const StackNavigator = createStackNavigator(
   {
+    Landing,
     SetPin,
     Login,
-    Landing,
   },
   {
     defaultNavigationOptions: {

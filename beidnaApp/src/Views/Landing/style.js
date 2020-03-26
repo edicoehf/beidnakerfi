@@ -5,27 +5,14 @@ export default StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     color: 'black',
-    backgroundColor: 'yellow',
+    backgroundColor: 'white',
+    justifyContent: 'flex-start',
   },
-  header: {
-    fontSize: 30,
-    color: 'black',
-  },
-  inputField: {
-    width: '50%',
-  },
-  button: {
-    backgroundColor: 'red',
-    minHeight: 80,
-  },
-  buttonTitle: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 32,
-  },
-  body: {
+  content: {
     flex: 1,
-    paddingVertical: 20,
-    color: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    minHeight: 80,
   },
 });
