@@ -4,9 +4,9 @@ require('dotenv').config();
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-const getKey = () => `token ${localStorage.getItem('tokens').token}`;
+const getKey = () => `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
 
-const getOrgId = () => localStorage.getItem('tokens').org_id;
+const getOrgId = () => JSON.parse(localStorage.getItem('tokens')).org_id;
 /*
   USERS
     [GET] / - GET ALL USERS                   DONE
@@ -54,12 +54,13 @@ export const getUser = async (id) => {
 };
 
 const addUserToDepartment = async (userId, deptId) => {
+  const APIKEY = getKey();
   const query = await axios
     .post(`${API_URL}/api/departments/${deptId}/add_user/`, {
       user: userId,
     }, {
       headers: {
-        authorization: getKey(),
+        authorization: APIKEY,
       },
     })
     .then((resp) => resp)
@@ -72,16 +73,18 @@ export const createUser = async (newUser) => {
   const {
     username, password, email, department,
   } = newUser;
+  const OrgID = getOrgId();
+  const APIKEY = getKey();
 
   const query = await axios
     .post(`${API_URL}/api/users/`, {
       username,
       password,
       email,
-      organization: getOrgId(),
+      organization: OrgID,
     }, {
       headers: {
-        authorization: getKey(),
+        authorization: APIKEY,
       },
     })
     .then((resp) => resp)
@@ -98,11 +101,12 @@ export const createUser = async (newUser) => {
 
 
 export const disableUser = async (id) => {
+  const APIKEY = getKey();
   const query = await axios
     .delete(`${API_URL}/api/users/${id}/`,
       {
         headers: {
-          authorization: getKey(),
+          authorization: APIKEY,
         },
       })
     .then((resp) => resp)
@@ -121,10 +125,13 @@ export const disableUser = async (id) => {
 */
 
 export const getDepartments = async () => {
+  const OrgID = getOrgId();
+  const APIKEY = getKey();
+
   const query = await axios
-    .get(`${API_URL}/api/organizations/${getOrgId()}/departments/`, {
+    .get(`${API_URL}/api/organizations/${OrgID}/departments/`, {
       headers: {
-        authorization: getKey(),
+        authorization: APIKEY,
       },
     })
     .then((resp) => resp)
@@ -133,10 +140,11 @@ export const getDepartments = async () => {
 };
 
 export const getDepartment = async (id) => {
+  const APIKEY = getKey();
   const query = await axios
     .get(`${API_URL}/api/departments/${id}/`, {
       headers: {
-        authorization: getKey(),
+        authorization: APIKEY,
       },
     })
     .then((resp) => resp)
@@ -146,11 +154,12 @@ export const getDepartment = async (id) => {
 
 export const createDepartment = async (newDepartment) => {
   const { costsite, name } = newDepartment;
+  const APIKEY = getKey();
 
   const query = await axios
     .post(`${API_URL}/api/departments/`, {
       headers: {
-        authorization: getKey(),
+        authorization: APIKEY,
       },
       costsite,
       name,
@@ -163,11 +172,12 @@ export const createDepartment = async (newDepartment) => {
 };
 
 export const disableDepartment = async (id) => {
+  const APIKEY = getKey();
   const query = await axios
     .delete(`${API_URL}/api/departments/${id}/`,
       {
         headers: {
-          authorization: getKey(),
+          authorization: APIKEY,
         },
       })
     .then((resp) => resp)
