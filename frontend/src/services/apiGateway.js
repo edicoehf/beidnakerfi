@@ -4,8 +4,8 @@ require('dotenv').config();
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-let APIKEY = ''
-let ORG_ID = ''
+let APIKEY = '';
+let ORG_ID = '';
 
 if (typeof localStorage.getItem('tokens') !== 'undefined' && localStorage.getItem('tokens') !== null) {
   APIKEY = `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
@@ -61,40 +61,41 @@ export const getUser = async (id) => {
 const addUserToDepartment = async (userId, deptId) => {
   const query = await axios
     .post(`${API_URL}/api/departments/${deptId}/add_user/`, {
-      user: userId
+      user: userId,
     }, {
       headers: {
-        authorization: APIKEY
-      }
+        authorization: APIKEY,
+      },
     })
     .then((resp) => resp)
     .catch((e) => e.response);
 
   return query;
-}
+};
 
 export const createUser = async (newUser) => {
-
-  const { username, password, email, department } = newUser;
+  const {
+    username, password, email, department,
+  } = newUser;
 
   const query = await axios
     .post(`${API_URL}/api/users/`, {
       username,
       password,
       email,
-      organization: ORG_ID
+      organization: ORG_ID,
     }, {
       headers: {
-        authorization: APIKEY
-      }
+        authorization: APIKEY,
+      },
     })
     .then((resp) => resp)
     .catch((e) => e.response);
 
   if (department) {
     const { id } = query.data;
-    const newUser = await addUserToDepartment(id, department)
-    return newUser
+    const userAddedToDepartment = await addUserToDepartment(id, department);
+    return userAddedToDepartment;
   }
 
   return query;

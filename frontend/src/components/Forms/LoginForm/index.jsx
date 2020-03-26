@@ -40,7 +40,7 @@ const LoginForm = () => {
           ref={register({ required: true })}
           placeholder="Notendanafn"
         />
-        {errors.username && <span>This field is required</span> }
+        {errors.username && <span>This field is required</span>}
         <input
           className="inputField"
           name="password"
@@ -48,7 +48,7 @@ const LoginForm = () => {
           ref={register({ required: true })}
           placeholder="Lykilorð"
         />
-        {errors.password && <span>This field is required</span> }
+        {errors.password && <span>This field is required</span>}
         <button className="submitButton" type="submit">Skrá inn</button>
       </form>
 

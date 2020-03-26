@@ -22,14 +22,15 @@ export const checkPrivileges = ({ allowedGroups }) => {
   return true;
 };
 
+// eslint-disable-next-line consistent-return
 export const getSidebarInfo = () => {
-  if(checkPrivileges(sidebarButtons.Basic)) {
+  if (checkPrivileges(sidebarButtons.Basic)) {
     return sidebarButtons.basic.buttons;
   }
-  else if(checkPrivileges(sidebarButtons.SuperSeller)) {
+  if (checkPrivileges(sidebarButtons.SuperSeller)) {
     return sidebarButtons.SuperSeller;
   }
-  else if(checkPrivileges(sidebarButtons.SuperBuyer)) {
+  if (checkPrivileges(sidebarButtons.SuperBuyer)) {
     return sidebarButtons.SuperBuyer;
   }
-}
+};

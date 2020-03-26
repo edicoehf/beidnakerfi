@@ -13,26 +13,28 @@ export const forms = {
 export const sidebarButtons = {
   Basic: {
     allowedGroups: ['BUYER_USER'],
-    buttons : [{ name: 'Ný beiðni', path:'/createcheque', pressed:true }]
-        },
+    buttons: [{ name: 'Ný beiðni', path: '/createcheque', pressed: true }],
+  },
   SuperBuyer: {
     allowedGroups: ['BUYER_SUPER_USER'],
-    buttons : [
-      { name: 'Ný beiðni', path:'/createcheque', pressed:false },
-      { name: 'Skrá starfsmann', path:'/createuser', pressed:false },
-      { name: 'Yfirlit beiðna', path:'/home', pressed:true },
-      { name: 'Starfsmannalisti', path:'/viewusers', pressed:false },
-      { name: 'Viðskiptamannalisti', path:'/viewcustomers', pressed:false },
+    buttons: [
+      { name: 'Ný beiðni', path: '/createcheque', pressed: false },
+      { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
+      { name: 'Yfirlit beiðna', path: '/home', pressed: true },
+      { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },
+      { name: 'Viðskiptamannalisti', path: '/viewcustomers', pressed: false },
 
-  ] },
+    ],
+  },
   SuperSeller: {
     allowedGroups: ['SELLER_SUPER_USER'],
-    buttons : [
-      { name: 'Ný beiðni', path:'/createcheque', pressed:false },
-      { name: 'Skrá starfsmann', path:'/createuser', pressed:false },
-      { name: 'Yfirlit beiðna', path:'/home', pressed:true },
-      { name: 'Starfsmannalisti', path:'/viewusers', pressed:false },
-      { name: 'Viðskiptamannalisti', path:'/viewcustomers', pressed:false },
+    buttons: [
+      { name: 'Ný beiðni', path: '/createcheque', pressed: false },
+      { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
+      { name: 'Yfirlit beiðna', path: '/home', pressed: true },
+      { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },
+      { name: 'Viðskiptamannalisti', path: '/viewcustomers', pressed: false },
 
-  ] },
-}
+    ],
+  },
+};

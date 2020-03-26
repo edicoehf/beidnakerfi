@@ -9,15 +9,14 @@ import SearchForm from '../../components/Forms/SearchForm';
 import '../Pages.css';
 
 const Main = () => {
-
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   return (
     <div id="mainGrid">
       <div id="sidebar">
         <Sidebar />
       </div>
-      <div className='container'>
+      <div className="container">
         <SearchForm setSearch={setSearch} />
         <StaffList query={search} />
       </div>

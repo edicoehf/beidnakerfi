@@ -16,15 +16,15 @@ const BuyerSuperUser = () => {
   useEffect(() => {
     const fetchCostSites = async () => {
       const result = await getDepartments();
-      setCostSites(result.data)
-    }
+      setCostSites(result.data);
+    };
 
     fetchCostSites();
   }, []);
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     await createUser(data);
-  }
+  };
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -53,18 +53,18 @@ const BuyerSuperUser = () => {
         ref={register}
       />
       {
-        (checkPrivileges(forms.SuperBuyer) ?
-          <select className="inputField" ref={register} name="department">
-            {
-              costSites.map(site => {
-                return (
+        (checkPrivileges(forms.SuperBuyer)
+          ? (
+            <select className="inputField" ref={register} name="department">
+              {
+                costSites.map((site) => (
                   <option key={site.id} value={site.id}>
                     {site.name}
                   </option>
-                )
-              })
-            }
-          </select> : null)
+                ))
+              }
+            </select>
+          ) : null)
       }
       <button className="submitButton" type="submit">
         Skrá starfsmann
