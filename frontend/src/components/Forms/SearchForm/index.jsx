@@ -22,8 +22,12 @@ const SearchForm = (props) => {
   );
 };
 
+SearchForm.defaultProps = {
+  setSearch: () => {},
+};
+
 SearchForm.propTypes = {
-  setSearch: PropTypes.func.isRequired,
+  setSearch: PropTypes.func,
 };
 
 export default SearchForm;

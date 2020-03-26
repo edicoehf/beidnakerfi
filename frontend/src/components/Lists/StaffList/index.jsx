@@ -10,13 +10,12 @@ const StaffList = (props) => {
   useEffect(() => {
     const getStaff = async () => {
       const results = await getUsers();
-
+      console.log(results);
       setStaffList(results.data);
     };
 
     getStaff();
   }, []);
-
   return (
     <table className="table">
       <thead>
@@ -40,7 +39,7 @@ const StaffList = (props) => {
                 }
               </td>
               <td><button type="button">Breyta user</button></td>
-              <td><DisableUserButton /></td>
+              <td><DisableUserButton userId={staff.id} /></td>
             </tr>
           ))
         }
