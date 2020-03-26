@@ -13,6 +13,8 @@ from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOr
 
 from django.core.serializers import serialize
 
+from django.forms.models import model_to_dict
+
 class UserViewSet(ModelViewSet):
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
@@ -41,6 +43,10 @@ class UserViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         user = self.get_object()
+        if not user.is_active:
+            user_serializer = self.get_serializer(user)
+            return Response({'success': True, 'message': 'User already disabled', 'user': user_serializer.data}, status=status.HTTP_304_NOT_MODIFIED)
+
         user.is_active = False
         user.save()
         
@@ -49,6 +55,20 @@ class UserViewSet(ModelViewSet):
     
     queryset = User.objects.all()
     # permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=True, methods=['POST'])
+    def activate(self, request, pk):
+        user = self.get_object()
+        if user.is_active:
+            user_serializer = self.get_serializer(user)
+            return Response({'success': True, 'message': 'User already active', 'user': user_serializer.data}, status=status.HTTP_304_NOT_MODIFIED)
+
+        user.is_active = True
+        user.save()
+        
+        user_serializer = self.get_serializer(user)
+        return Response({'success': True, 'message': 'User activated', 'user': user_serializer.data}, status=status.HTTP_200_OK)
+
 
 class OrganizationViewSet(ModelViewSet):
     def get_serializer_class(self):
@@ -115,7 +135,7 @@ class DepartmentViewSet(ModelViewSet):
             department = Department.objects.get(id=pk)
             
             if department.users.filter(id=user.id, department_user=department).exists():
-               return Response({'success': False, 'error': 'User already registered to department'})
+               return Response({'success': False, 'error': 'User already registered to department'}, status=status.HTTP_403_FORBIDDEN)
 
             department.users.add(user)
 
@@ -144,6 +164,35 @@ class DepartmentViewSet(ModelViewSet):
 
         except User.DoesNotExist:
             return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+        except Department.DoesNotExist:
+            return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
 
 class ChequeViewSet(ModelViewSet):
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ChequeListSerializer
+        if self.action == 'retrieve':
+            return ChequeDetailSerializer
+        else:
+            return ChequeListSerializer
+
     queryset = Cheque.objects.all()
+    permission_classes = [permissions.IsAuthenticated] 
+
+    # def create(self, request, *args, **kwargs):
+    #     data = request.data
+    #     try:
+    #         user = User.objects.get(id=data['user'])
+    #         department = Department.objects.get(id=data['department'])
+
+    #         if not department.users.filter(id=user.id, department_user=department).exists():
+    #             return Response({'success': False, 'error': 'User not in department'}, status=status.HTTP_403_FORBIDDEN)
+
+    #         data['user'] = model_to_dict(user)
+    #         data['department'] = model_to_dict(department)
+    #         return super(ChequeViewSet, self).create(request, *args, **kwargs)
+
+    #     except User.DoesNotExist:
+    #         return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+    #     except Department.DoesNotExist:
+    #         return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_412_PRECONDITION_FAILED)

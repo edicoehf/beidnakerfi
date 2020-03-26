@@ -11,6 +11,11 @@ class DepartmentListSerializer(serializers.ModelSerializer):
         model = Department
         fields = ['id', 'name', 'organization']
 
+class UserBasicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
+
 class UserListSerializer(serializers.ModelSerializer):
     organization = serializers.IntegerField(source='organization.id', write_only=True)
     departments = DepartmentListSerializer(source='department_user', many=True, required=False, read_only=True)
@@ -48,12 +53,40 @@ class OrganizationDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'url', 'name', 'departments']
 
 class ChequeListSerializer(serializers.ModelSerializer):
-    user = UserListSerializer()
+    user = UserBasicSerializer(read_only=True)
+    department = DepartmentListSerializer(read_only=True)
+
+    user_id =  serializers.IntegerField(source='user.id', write_only=True)
+    dep_id = serializers.IntegerField(source='department.id', write_only=True)
+    class Meta:
+        model = Cheque
+        fields = ('id', 'status', 'description', 'price', 'user', 'department', 'user_id', 'dep_id')
+
+    def create(self, validated_data):
+        try:
+            user_id = validated_data.pop('user')
+            user = User.objects.get(id=user_id['id'])
+            dep_id = validated_data.pop('department')
+            department = Department.objects.get(id=dep_id['id'])
+
+            if not department.users.filter(id=user.id, department_user=department).exists():
+                raise serializers.ValidationError("User not in department")
+
+            cheque = Cheque(**validated_data, user=user, department=department)
+            cheque.save()
+            return cheque
+            # return super(ChequeViewSet, self).create(request, *args, **kwargs)
+
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User does not exist")
+            # return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+        except Department.DoesNotExist:
+            raise serializers.ValidationError("Department does not exist")
+            # return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+
+class ChequeDetailSerializer(serializers.ModelSerializer):
+    user = UserBasicSerializer()
     department = DepartmentListSerializer()
     class Meta:
         model = Cheque
-        fields = ('id', 'price', 'user', 'department')
-
-class ChequeDetailSerializer(serializers.ModelSerializer):
-    user = UserDetailSerializer()
-    department = DepartmentDetailSerializer()
+        fields = ['id', 'status', 'description', 'price', 'user', 'department', 'created', 'modified']

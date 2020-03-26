@@ -17,7 +17,7 @@ class Organization(models.Model):
 
 class User(AbstractUser):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    superuser = models.BooleanField(("Super User"))
+    #superuser = models.BooleanField(("Super User"))
 
     def __str__(self):
         return self.username
@@ -57,6 +57,9 @@ class Cheque(models.Model):
     # https://stackoverflow.com/questions/1737017/django-auto-now-and-auto-now-add
     created = models.DateTimeField(("Cheque created"), editable=False)
     modified = models.DateTimeField(("Last modified"))
+
+    def __str__(self):
+        return "{}: {}".format(self.id, self.description)
 
     def save(self, *args, **kwargs):
         if not self.id:
