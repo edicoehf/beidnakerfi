@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import User, Organization, Department, Cheque
+from .models import User, Organization, Department, Cheque, Client
+
+from .code_generate import unique_code
 
 class OrganizationListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,12 +57,14 @@ class OrganizationDetailSerializer(serializers.ModelSerializer):
 class ChequeListSerializer(serializers.ModelSerializer):
     user = UserBasicSerializer(read_only=True)
     department = DepartmentListSerializer(read_only=True)
+    seller = OrganizationListSerializer(read_only=True)
 
     user_id =  serializers.IntegerField(source='user.id', write_only=True)
     dep_id = serializers.IntegerField(source='department.id', write_only=True)
     class Meta:
         model = Cheque
-        fields = ('id', 'status', 'description', 'price', 'user', 'department', 'user_id', 'dep_id')
+        fields = ('code', 'status', 'description', 'price', 'user', 'department', 'seller', 'user_id', 'dep_id')
+        extra_kwargs = {'code': {'read_only': True}, 'description': {'read_only': True}, 'price': {'read_only': True}}
 
     def create(self, validated_data):
         try:
@@ -72,14 +76,16 @@ class ChequeListSerializer(serializers.ModelSerializer):
             if not department.users.filter(id=user.id, department_user=department).exists():
                 raise serializers.ValidationError("User not in department")
 
-            cheque = Cheque(**validated_data, user=user, department=department)
+            code = unique_code()
+
+            cheque = Cheque(**validated_data, code=code, user=user, department=department, price=0, description="")
             cheque.save()
             return cheque
-            # return super(ChequeViewSet, self).create(request, *args, **kwargs)
 
         except User.DoesNotExist:
             raise serializers.ValidationError("User does not exist")
             # return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+
         except Department.DoesNotExist:
             raise serializers.ValidationError("Department does not exist")
             # return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
@@ -87,6 +93,36 @@ class ChequeListSerializer(serializers.ModelSerializer):
 class ChequeDetailSerializer(serializers.ModelSerializer):
     user = UserBasicSerializer()
     department = DepartmentListSerializer()
+    seller = OrganizationListSerializer()
     class Meta:
         model = Cheque
-        fields = ['id', 'status', 'description', 'price', 'user', 'department', 'created', 'modified']
+        fields = ['code', 'status', 'description', 'price', 'user', 'department', 'seller', 'created', 'modified']
+
+class ChequeActionSerializer(serializers.ModelSerializer):
+    user = UserBasicSerializer()
+    department = DepartmentListSerializer()
+    
+    class Meta:
+        model = Cheque
+        fields = ['code', 'status', 'description', 'price', 'user', 'department', 'seller', 'created', 'modified']
+
+class ClientSerializer(serializers.ModelSerializer):
+    buyer = OrganizationListSerializer()
+    seller = OrganizationListSerializer()
+    class Meta:
+        model = Client
+        fields = ['buyer', 'seller']
+
+class ClientActionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ['buyer', 'seller']
+
+    def create(self, validated_data):
+        seller = validated_data.get('seller')
+
+        if not seller.is_seller:
+            raise serializers.ValidationError("Seller organization is not seller")
+
+        return super().create(validated_data)
+        

@@ -22,7 +22,7 @@ class loginToken(ObtainAuthToken):
         if departments:
             dep_list = []
             for dep in departments:
-                dep_list.append(dep.id)
+                dep_list.append((dep.id, dep.name))
             return dep_list
         else:
             return None
@@ -42,6 +42,6 @@ class loginToken(ObtainAuthToken):
             'expires_in': expire_time(token).seconds,
             'user': user.username,
             'org_id': user.organization.id,
-            'department_id': self._user_departments(user),
+            'departments': self._user_departments(user),
             'groups': self._user_groups(user)
         })

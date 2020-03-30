@@ -6,14 +6,10 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import User, Department, Organization, Cheque
-from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer, ChequeListSerializer, ChequeDetailSerializer
+from .models import User, Department, Organization, Cheque, Client
+from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer, ChequeListSerializer, ChequeDetailSerializer, ChequeActionSerializer, ClientSerializer, ClientActionSerializer
 
 from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOrg
-
-from django.core.serializers import serialize
-
-from django.forms.models import model_to_dict
 
 class UserViewSet(ModelViewSet):
     def get_queryset(self):
@@ -171,28 +167,39 @@ class ChequeViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return ChequeListSerializer
-        if self.action == 'retrieve':
+        elif self.action == 'retrieve':
             return ChequeDetailSerializer
+        elif self.action == 'partial_update':
+            return ChequeActionSerializer
         else:
             return ChequeListSerializer
 
+    lookup_field = 'code'
     queryset = Cheque.objects.all()
-    permission_classes = [permissions.IsAuthenticated] 
+    permission_classes = [permissions.IsAuthenticated]
 
-    # def create(self, request, *args, **kwargs):
-    #     data = request.data
-    #     try:
-    #         user = User.objects.get(id=data['user'])
-    #         department = Department.objects.get(id=data['department'])
+    def partial_update(self, request, *args, **kwargs):
+        cheque = self.get_object()
+        seller = Organization.objects.get(pk=request.data['seller'])
 
-    #         if not department.users.filter(id=user.id, department_user=department).exists():
-    #             return Response({'success': False, 'error': 'User not in department'}, status=status.HTTP_403_FORBIDDEN)
+        if not seller.is_seller:
+            return Response({'success': False, 'error': 'Organization is not seller'})
 
-    #         data['user'] = model_to_dict(user)
-    #         data['department'] = model_to_dict(department)
-    #         return super(ChequeViewSet, self).create(request, *args, **kwargs)
+        if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
+            return Response({'success': False, 'error': 'Seller not in Buyer client list'})
 
-    #     except User.DoesNotExist:
-    #         return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
-    #     except Department.DoesNotExist:
-    #         return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+        request.data['status'] = 2
+        return super().partial_update(request, *args, **kwargs)
+
+class ClientViewSet(ModelViewSet):
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return ClientSerializer
+        elif self.action == 'create':
+            return ClientActionSerializer
+        else:
+            return ClientSerializer
+        return ClientSerializer
+
+    queryset = Client.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
