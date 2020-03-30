@@ -15,6 +15,13 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+class Client(models.Model):
+    buyer = models.ForeignKey(Organization, related_name="client_buyer", on_delete=models.CASCADE)
+    seller = models.ForeignKey(Organization, related_name="client_seller", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}: {}".format(self.buyer, self.seller)
+
 class User(AbstractUser):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     #superuser = models.BooleanField(("Super User"))
@@ -38,20 +45,24 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class Cheque(models.Model):
     # Constants for choice integers defined to avoid magic number usage
-    CREATED = 0
-    PENDING = 1
-    DONE = 2
+    CANCELLED = 0
+    CREATED = 1
+    PENDING = 2
+    DONE = 3
     STATUS_CHOICES = (
+        (CANCELLED, 'Cancelled'),
         (CREATED, 'Created'),
         (PENDING, 'Pending'),
         (DONE, 'Done')
     )
     status = models.IntegerField(("Status"), choices=STATUS_CHOICES, default=CREATED)
 
+    code = models.CharField(("Cheque code"), unique=True, max_length=20)
     description = models.CharField(("Placeholder for cheque information fields"), max_length=200)
     price = models.FloatField(("Price"))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="cheque_user", on_delete=models.CASCADE)
     department = models.ForeignKey(Department, related_name="cheque_department", on_delete=models.CASCADE)
+    seller = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
 
     # Alternate solution to auto_now and auto_now_add due to update errors
     # https://stackoverflow.com/questions/1737017/django-auto-now-and-auto-now-add

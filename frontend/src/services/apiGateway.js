@@ -4,14 +4,9 @@ require('dotenv').config();
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-let APIKEY = '';
-let ORG_ID = '';
+const getKey = () => `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
 
-if (typeof localStorage.getItem('tokens') !== 'undefined' && localStorage.getItem('tokens') !== null) {
-  APIKEY = `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
-  ORG_ID = JSON.parse(localStorage.getItem('tokens')).org_id;
-}
-
+const getOrgId = () => JSON.parse(localStorage.getItem('tokens')).org_id;
 /*
   USERS
     [GET] / - GET ALL USERS                   DONE
@@ -39,7 +34,7 @@ export const getUsers = async () => {
   const query = await axios
     .get(`${API_URL}/api/users/`, {
       headers: {
-        authorization: APIKEY,
+        authorization: getKey(),
       },
     })
     .then((resp) => resp)
@@ -59,6 +54,7 @@ export const getUser = async (id) => {
 };
 
 const addUserToDepartment = async (userId, deptId) => {
+  const APIKEY = getKey();
   const query = await axios
     .post(`${API_URL}/api/departments/${deptId}/add_user/`, {
       user: userId,
@@ -77,13 +73,15 @@ export const createUser = async (newUser) => {
   const {
     username, password, email, department,
   } = newUser;
+  const OrgID = getOrgId();
+  const APIKEY = getKey();
 
   const query = await axios
     .post(`${API_URL}/api/users/`, {
       username,
       password,
       email,
-      organization: ORG_ID,
+      organization: OrgID,
     }, {
       headers: {
         authorization: APIKEY,
@@ -103,6 +101,7 @@ export const createUser = async (newUser) => {
 
 
 export const disableUser = async (id) => {
+  const APIKEY = getKey();
   const query = await axios
     .delete(`${API_URL}/api/users/${id}/`,
       {
@@ -126,8 +125,11 @@ export const disableUser = async (id) => {
 */
 
 export const getDepartments = async () => {
+  const OrgID = getOrgId();
+  const APIKEY = getKey();
+
   const query = await axios
-    .get(`${API_URL}/api/organizations/${ORG_ID}/departments/`, {
+    .get(`${API_URL}/api/organizations/${OrgID}/departments/`, {
       headers: {
         authorization: APIKEY,
       },
@@ -138,6 +140,7 @@ export const getDepartments = async () => {
 };
 
 export const getDepartment = async (id) => {
+  const APIKEY = getKey();
   const query = await axios
     .get(`${API_URL}/api/departments/${id}/`, {
       headers: {
@@ -151,6 +154,7 @@ export const getDepartment = async (id) => {
 
 export const createDepartment = async (newDepartment) => {
   const { costsite, name } = newDepartment;
+  const APIKEY = getKey();
 
   const query = await axios
     .post(`${API_URL}/api/departments/`, {
@@ -168,6 +172,7 @@ export const createDepartment = async (newDepartment) => {
 };
 
 export const disableDepartment = async (id) => {
+  const APIKEY = getKey();
   const query = await axios
     .delete(`${API_URL}/api/departments/${id}/`,
       {

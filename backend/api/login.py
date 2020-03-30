@@ -43,6 +43,6 @@ class loginToken(ObtainAuthToken):
             'id': user.id,
             'user': user.username,
             'org_id': user.organization.id,
-            'department_id': self._user_departments(user),
+            'departments': self._user_departments(user),
             'groups': self._user_groups(user)
         })
