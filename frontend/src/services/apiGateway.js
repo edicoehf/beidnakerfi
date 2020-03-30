@@ -44,7 +44,7 @@ export const getUsers = async () => {
 
 export const getUser = async (id) => {
   const query = await axios
-    .get(`${API_URL}/api/users/${id}`, {
+    .get(`${API_URL}/api/users/${id}/`, {
       method: 'GET',
 
     })

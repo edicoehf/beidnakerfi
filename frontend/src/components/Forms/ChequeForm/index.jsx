@@ -20,10 +20,20 @@ const ChequeForm = () => {
   };
 
   const getChequeData = async (chequeId) => {
-    console.log(chequeId);
-    setValue('costsite', 'tmp costsite');
-    // const chequeData = await getCheque(chequeId);
-    // console.log(chequeData);
+    const chequeData = await getCheque(chequeId);
+    console.log(chequeData);
+    const {
+      department, user, description, price, created,
+    } = chequeData.data;
+
+
+    setValue([
+      { costSite: department.name },
+      { itemDescription: description },
+      { itemPrice: price },
+      { buyerName: user.username },
+      { createdDate: created },
+    ]);
   };
 
   return (
@@ -38,7 +48,7 @@ const ChequeForm = () => {
           placeholder="Lykill"
           onChange={(e) => {
             const { value } = e.target;
-            if (value.length === 12) {
+            if (value.length === 20) {
               getChequeData(value);
             }
           }}
@@ -46,7 +56,7 @@ const ChequeForm = () => {
 
         <input
           className="inputField"
-          name="costsite"
+          name="costSite"
           type="text"
           ref={register({ required: true })}
           placeholder="Kostnaðarstaður"
@@ -57,7 +67,7 @@ const ChequeForm = () => {
       <div className="form-group">
         <input
           className="inputField"
-          name="description"
+          name="itemDescription"
           type="text"
           ref={register({ required: true })}
           placeholder="Verkefni"
@@ -65,7 +75,7 @@ const ChequeForm = () => {
         />
         <input
           className="inputField"
-          name="username"
+          name="itemPrice"
           type="text"
           ref={register({ required: true })}
           placeholder="Verkþáttur"
@@ -75,7 +85,7 @@ const ChequeForm = () => {
       <div className="form-group">
         <input
           className="inputField"
-          name="buyer-workplace"
+          name="buyerName"
           type="text"
           ref={register({ required: true })}
           placeholder="Vinnustaður úttektaraðila"
@@ -83,7 +93,7 @@ const ChequeForm = () => {
         />
         <input
           className="inputField"
-          name="date"
+          name="createdDate"
           type="text"
           ref={register({ required: true })}
           placeholder="Tími og dagsetning stofnunar"
