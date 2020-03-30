@@ -184,3 +184,18 @@ export const disableDepartment = async (id) => {
     .catch((e) => e.response);
   return query;
 };
+
+
+export const getCheque = async (id) => {
+  const APIKEY = getKey();
+  const query = await axios
+    .get(`${API_URL}/api/cheques/${id}/`,
+      {
+        headers: {
+          authorization: APIKEY,
+        },
+      })
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
+};

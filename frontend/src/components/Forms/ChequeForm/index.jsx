@@ -1,9 +1,12 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../Forms.css';
+import { getCheque } from '../../../services/apiGateway';
 
 const ChequeForm = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register, handleSubmit, errors, setValue,
+  } = useForm();
 
   const onSubmit = async () => {
     // const loginInfo = await api.login(data)
@@ -16,28 +19,31 @@ const ChequeForm = () => {
     // else alert('Wrong login')
   };
 
+  const getChequeData = async (chequeId) => {
+    console.log(chequeId);
+    setValue('costsite', 'tmp costsite');
+    // const chequeData = await getCheque(chequeId);
+    // console.log(chequeData);
+  };
+
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
-      <div className="form-group">
-        <input
-          className="inputField "
-          name="seller"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Söluaðili"
-          disabled
-        />
-      </div>
+      {errors.key && <span>{errors.key.message}</span>}
       <div className="form-group">
         <input
           className="inputField"
           name="key"
           type="text"
-          ref={register({ required: true })}
+          ref={register({ required: 'Invalid key', maxLength: 12, minLength: 12 })}
           placeholder="Lykill"
-          disabled
+          onChange={(e) => {
+            const { value } = e.target;
+            if (value.length === 12) {
+              getChequeData(value);
+            }
+          }}
         />
-        {errors.password && <span>This field is required</span>}
+
         <input
           className="inputField"
           name="costsite"
@@ -46,19 +52,17 @@ const ChequeForm = () => {
           placeholder="Kostnaðarstaður"
           disabled
         />
-        {errors.username && <span>This field is required</span>}
       </div>
 
       <div className="form-group">
         <input
           className="inputField"
-          name="username"
+          name="description"
           type="text"
           ref={register({ required: true })}
           placeholder="Verkefni"
           disabled
         />
-        {errors.username && <span>This field is required</span>}
         <input
           className="inputField"
           name="username"
@@ -71,7 +75,7 @@ const ChequeForm = () => {
       <div className="form-group">
         <input
           className="inputField"
-          name="username"
+          name="buyer-workplace"
           type="text"
           ref={register({ required: true })}
           placeholder="Vinnustaður úttektaraðila"
@@ -79,13 +83,12 @@ const ChequeForm = () => {
         />
         <input
           className="inputField"
-          name="username"
+          name="date"
           type="text"
           ref={register({ required: true })}
-          placeholder="Dagsetning"
+          placeholder="Tími og dagsetning stofnunar"
           disabled
         />
-        {errors.username && <span>This field is required</span>}
       </div>
       <button className="submitButton" type="submit">
         Skrá beiðni
