@@ -34,9 +34,17 @@ org_router = routers.NestedSimpleRouter(router, r'organizations', lookup='organi
 org_router.register(r'departments', DepartmentViewSet, 'org_departments')
 org_router.register(r'users', UserViewSet, 'org_user')
 
+dep_router = routers.NestedSimpleRouter(router, r'departments', lookup='department')
+dep_router.register(r'cheques', ChequeViewSet, 'dep_cheques')
+
+user_router = routers.NestedSimpleRouter(router, r'users', lookup='user')
+user_router.register(r'cheques', ChequeViewSet, 'user_cheques')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/', include(org_router.urls)),
+    path('api/', include(dep_router.urls)),
+    path('api/', include(user_router.urls)),
     path('api/login/', loginToken.as_view())
 ]

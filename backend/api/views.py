@@ -12,6 +12,8 @@ from .serializers import UserListSerializer, UserDetailSerializer, OrganizationL
 from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOrg
 
 class UserViewSet(ModelViewSet):
+    queryset = User.objects.all()
+
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
             return User.objects.filter(organization=self.kwargs['organization_pk'])
@@ -48,9 +50,6 @@ class UserViewSet(ModelViewSet):
         
         user_serializer = self.get_serializer(user)
         return Response({'success': True, 'message': 'User disabled', 'user': user_serializer.data}, status=status.HTTP_204_NO_CONTENT)
-    
-    queryset = User.objects.all()
-    # permission_classes = [permissions.IsAuthenticated]
 
     @action(detail=True, methods=['POST'])
     def activate(self, request, pk):
@@ -67,6 +66,8 @@ class UserViewSet(ModelViewSet):
 
 
 class OrganizationViewSet(ModelViewSet):
+    queryset = Organization.objects.all()
+
     def get_serializer_class(self):
         if self.action == 'list':
             return OrganizationListSerializer
@@ -84,10 +85,9 @@ class OrganizationViewSet(ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
-    queryset = Organization.objects.all()
-    # permission_classes = [permissions.IsAuthenticated]
-
 class DepartmentViewSet(ModelViewSet):
+    queryset = Department.objects.all()
+
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
             return Department.objects.filter(organization=self.kwargs['organization_pk'])
@@ -115,10 +115,6 @@ class DepartmentViewSet(ModelViewSet):
             permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
         return [permission() for permission in permission_classes]
-
-    queryset = Department.objects.all()
-    permission_classes = [permissions.IsAuthenticated] 
-
 
     @action(detail=True, methods=['POST'])
     def add_user(self, request, pk):
@@ -164,6 +160,18 @@ class DepartmentViewSet(ModelViewSet):
             return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
 
 class ChequeViewSet(ModelViewSet):
+    lookup_field = 'code'
+    queryset = Cheque.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        if 'department_pk' in self.kwargs:
+            return Cheque.objects.filter(department=self.kwargs['department_pk']).select_related('user', 'department', 'seller')
+        elif 'user_pk' in self.kwargs:
+            return Cheque.objects.filter(user=self.kwargs['user_pk']).select_related('user', 'department', 'seller')
+        else:
+            return Cheque.objects.all().select_related('user', 'department', 'seller')
+
     def get_serializer_class(self):
         if self.action == 'list':
             return ChequeListSerializer
@@ -174,13 +182,9 @@ class ChequeViewSet(ModelViewSet):
         else:
             return ChequeListSerializer
 
-    lookup_field = 'code'
-    queryset = Cheque.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-
     def partial_update(self, request, *args, **kwargs):
         cheque = self.get_object()
-        seller = Organization.objects.get(pk=request.data['seller'])
+        seller = Organization.objects.get(pk=request.user.organization.id)
 
         if not seller.is_seller:
             return Response({'success': False, 'error': 'Organization is not seller'})
@@ -191,7 +195,24 @@ class ChequeViewSet(ModelViewSet):
         request.data['status'] = 2
         return super().partial_update(request, *args, **kwargs)
 
+    # Prints # of database queries for debugging optimization
+    # def dispatch(self, *args, **kwargs):
+    #     response = super().dispatch(*args, **kwargs)
+    #     from django.db import connection
+    #     print('# of Queries: {}'.format(len(connection.queries)))
+    #     return response
+
 class ClientViewSet(ModelViewSet):
+    queryset = Client.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        organization = self.request.user.organization
+        if organization.is_seller:
+            return Client.objects.filter(seller=organization).select_related('buyer', 'seller')
+        else:
+            return Client.objects.filter(buyer=organization).select_related('seller', 'buyer')
+
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
             return ClientSerializer
@@ -200,6 +221,3 @@ class ClientViewSet(ModelViewSet):
         else:
             return ClientSerializer
         return ClientSerializer
-
-    queryset = Client.objects.all()
-    permission_classes = [permissions.IsAuthenticated]

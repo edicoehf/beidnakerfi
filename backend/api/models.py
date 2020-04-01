@@ -44,7 +44,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 class Cheque(models.Model):
-    # Constants for choice integers defined to avoid magic number usage
+    # Constants for choice integers to avoid magic number usage
     CANCELLED = 0
     CREATED = 1
     PENDING = 2
@@ -62,7 +62,7 @@ class Cheque(models.Model):
     price = models.FloatField(("Price"))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="cheque_user", on_delete=models.CASCADE)
     department = models.ForeignKey(Department, related_name="cheque_department", on_delete=models.CASCADE)
-    seller = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
+    seller = models.ForeignKey(Organization, related_name="cheque_organization", on_delete=models.CASCADE, null=True)
 
     # Alternate solution to auto_now and auto_now_add due to update errors
     # https://stackoverflow.com/questions/1737017/django-auto-now-and-auto-now-add
