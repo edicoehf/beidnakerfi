@@ -13,7 +13,6 @@ const getOrgId = () => JSON.parse(localStorage.getItem('tokens')).org_id;
     [POST] / - CREATE NEW USER                DONE
     [GET] /id - GET SPECIFIC USER             DONE
     [PATCH] /id - UPDATE SPECIFIC USER
-    [PUT] /id - UPDATE OR CREATE NEW USER
     [DELETE] /id - DELETE EXISTING USER       DONE
     [POST] /login SEND LOGIN REQUEST          DONE
 */
@@ -120,7 +119,6 @@ export const disableUser = async (id) => {
     [POST] / - CREATE NEW DEPARTMENT              DONE
     [GET] /id - GET SPECIFIC DEPARTMENT           DONE
     [PATCH] /id - UPDATE SPECIFIC DEPARTMENT
-    [PUT] /id - UPDATE OR CREATE NEW DEPARTMENT
     [DELETE] /id - DELETE EXISTING USER           DONE
 */
 
@@ -158,13 +156,12 @@ export const createDepartment = async (newDepartment) => {
 
   const query = await axios
     .post(`${API_URL}/api/departments/`, {
+      costsite,
+      name,
+    }, {
       headers: {
         authorization: APIKEY,
       },
-      costsite,
-      name,
-
-
     })
     .then((resp) => resp)
     .catch((e) => e.response);
@@ -185,7 +182,6 @@ export const disableDepartment = async (id) => {
   return query;
 };
 
-
 export const getCheque = async (id) => {
   const APIKEY = getKey();
   const query = await axios
@@ -195,7 +191,32 @@ export const getCheque = async (id) => {
           authorization: APIKEY,
         },
       })
+    .then((resp) => {
+      const { created } = resp.data;
+      const createdDate = new Date(created);
+
+      const newData = { ...resp.data, created: createdDate.toLocaleString('en-GB') };
+
+      return newData;
+    })
+    .catch((e) => e.response.data);
+  return query;
+};
+
+export const updateCheque = async (cheque) => {
+  const APIKEY = getKey();
+  const { itemDescription, itemPrice, key } = cheque;
+  const query = await axios
+    .patch(`${API_URL}/api/cheques/${key}/`,
+      {
+        description: itemDescription,
+        price: itemPrice,
+      }, {
+        headers: {
+          authorization: APIKEY,
+        },
+      })
     .then((resp) => resp)
     .catch((e) => e.response);
-  return query;
+  console.log(query);
 };

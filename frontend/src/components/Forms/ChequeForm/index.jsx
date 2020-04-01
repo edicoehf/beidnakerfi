@@ -1,39 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../Forms.css';
-import { getCheque } from '../../../services/apiGateway';
+import { getCheque, updateCheque } from '../../../services/apiGateway';
 
 const ChequeForm = () => {
   const {
-    register, handleSubmit, errors, setValue,
+    register, handleSubmit, errors, setValue, setError, clearError,
   } = useForm();
 
-  const onSubmit = async () => {
-    // const loginInfo = await api.login(data)
-    // console.log(loginInfo)
-    // if(loginInfo.status === 200){
-    //   dispatch(await loginUser(loginInfo.data));
-    //   await setAuthTokens(loginInfo.data);
-    //   setLoggedIn(true);
-    // }
-    // else alert('Wrong login')
+  const [chequeStatus, setChequeStatus] = useState(0);
+
+  const onSubmit = async (data) => {
+    if (chequeStatus === 2) {
+      setError('key', 'inUse', 'Beiðni er nú þegar í notkun');
+    } else if (chequeStatus === 1) {
+      clearError('key');
+      const { itemDescription, key, itemPrice } = data;
+      await updateCheque({ itemDescription, key, itemPrice });
+    }
   };
 
   const getChequeData = async (chequeId) => {
     const chequeData = await getCheque(chequeId);
-    console.log(chequeData);
-    const {
-      department, user, description, price, created,
-    } = chequeData.data;
+    if ('detail' in chequeData) {
+      setError('key', 'invalidKey', 'Beiðni er ekki til');
+    } else {
+      clearError('key');
+      const {
+        department, user, created, status,
+      } = chequeData;
 
 
-    setValue([
-      { costSite: department.name },
-      { itemDescription: description },
-      { itemPrice: price },
-      { buyerName: user.username },
-      { createdDate: created },
-    ]);
+      setValue([
+        { costSite: department.name },
+        { buyerName: user.username },
+        { createdDate: created },
+      ]);
+
+      setChequeStatus(status);
+    }
   };
 
   return (
@@ -44,7 +49,7 @@ const ChequeForm = () => {
           className="inputField"
           name="key"
           type="text"
-          ref={register({ required: 'Invalid key', maxLength: 12, minLength: 12 })}
+          ref={register({ required: true, maxLength: 20, minLength: 20 })}
           placeholder="Lykill"
           onChange={(e) => {
             const { value } = e.target;
@@ -70,16 +75,15 @@ const ChequeForm = () => {
           name="itemDescription"
           type="text"
           ref={register({ required: true })}
-          placeholder="Verkefni"
-          disabled
+          placeholder="Lýsing"
         />
         <input
           className="inputField"
           name="itemPrice"
           type="text"
           ref={register({ required: true })}
-          placeholder="Verkþáttur"
-          disabled
+          placeholder="Verð"
+
         />
       </div>
       <div className="form-group">
