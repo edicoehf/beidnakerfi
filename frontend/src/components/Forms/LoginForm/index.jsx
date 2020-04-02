@@ -9,7 +9,7 @@ import '../Forms.css';
 import { useAuth } from '../../../context/auth';
 
 // Service
-import * as api from '../../../services/apiGateway';
+import { login } from '../../../services/apiGateway';
 
 const LoginForm = () => {
   const { register, handleSubmit, errors } = useForm();
@@ -18,7 +18,7 @@ const LoginForm = () => {
   const [isError, setError] = useState(false);
 
   const onSubmit = async (data) => {
-    const loginInfo = await api.login(data);
+    const loginInfo = await login(data);
     if (loginInfo.status === 200) {
       await setAuthTokens(loginInfo.data);
       setLoggedIn(true);

@@ -1,77 +1,95 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../Forms.css';
+import { getCheque, updateCheque } from '../../../services/apiGateway';
 
 const ChequeForm = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register, handleSubmit, errors, setValue, setError, clearError,
+  } = useForm();
 
-  const onSubmit = async () => {
-    // const loginInfo = await api.login(data)
-    // console.log(loginInfo)
-    // if(loginInfo.status === 200){
-    //   dispatch(await loginUser(loginInfo.data));
-    //   await setAuthTokens(loginInfo.data);
-    //   setLoggedIn(true);
-    // }
-    // else alert('Wrong login')
+  const [chequeStatus, setChequeStatus] = useState(0);
+
+  const onSubmit = async (data) => {
+    if (chequeStatus === 2) {
+      setError('key', 'inUse', 'Beiðni er nú þegar í notkun');
+    } else if (chequeStatus === 1) {
+      clearError('key');
+      const { itemDescription, key, itemPrice } = data;
+      await updateCheque({ itemDescription, key, itemPrice });
+    }
+  };
+
+  const getChequeData = async (chequeId) => {
+    const chequeData = await getCheque(chequeId);
+    if ('detail' in chequeData) {
+      setError('key', 'invalidKey', 'Beiðni er ekki til');
+    } else {
+      clearError('key');
+      const {
+        department, user, created, status,
+      } = chequeData;
+
+
+      setValue([
+        { costSite: department.name },
+        { buyerName: user.username },
+        { createdDate: created },
+      ]);
+
+      setChequeStatus(status);
+    }
   };
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
-      <div className="form-group">
-        <input
-          className="inputField "
-          name="seller"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Söluaðili"
-          disabled
-        />
-      </div>
+      {errors.key && <span>{errors.key.message}</span>}
       <div className="form-group">
         <input
           className="inputField"
           name="key"
           type="text"
-          ref={register({ required: true })}
+          ref={register({ required: true, maxLength: 20, minLength: 20 })}
           placeholder="Lykill"
-          disabled
+          onChange={(e) => {
+            const { value } = e.target;
+            if (value.length === 20) {
+              getChequeData(value);
+            }
+          }}
         />
-        {errors.password && <span>This field is required</span>}
+
         <input
           className="inputField"
-          name="costsite"
+          name="costSite"
           type="text"
           ref={register({ required: true })}
           placeholder="Kostnaðarstaður"
           disabled
         />
-        {errors.username && <span>This field is required</span>}
       </div>
 
       <div className="form-group">
         <input
           className="inputField"
-          name="username"
+          name="itemDescription"
           type="text"
           ref={register({ required: true })}
-          placeholder="Verkefni"
-          disabled
+          placeholder="Lýsing"
         />
-        {errors.username && <span>This field is required</span>}
         <input
           className="inputField"
-          name="username"
+          name="itemPrice"
           type="text"
           ref={register({ required: true })}
-          placeholder="Verkþáttur"
-          disabled
+          placeholder="Verð"
+
         />
       </div>
       <div className="form-group">
         <input
           className="inputField"
-          name="username"
+          name="buyerName"
           type="text"
           ref={register({ required: true })}
           placeholder="Vinnustaður úttektaraðila"
@@ -79,13 +97,12 @@ const ChequeForm = () => {
         />
         <input
           className="inputField"
-          name="username"
+          name="createdDate"
           type="text"
           ref={register({ required: true })}
-          placeholder="Dagsetning"
+          placeholder="Tími og dagsetning stofnunar"
           disabled
         />
-        {errors.username && <span>This field is required</span>}
       </div>
       <button className="submitButton" type="submit">
         Skrá beiðni
