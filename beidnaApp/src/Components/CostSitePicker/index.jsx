@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Picker } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
+import { useSelector } from 'react-redux';
 
-import EdicoLogo from '../../Views/EdicoLogo';
 
 
 // Styles
@@ -12,9 +12,13 @@ import styles from './style';
 import * as api from '../../service/apiGateway.js'
 
 const CostSitePicker = () => {
-  const tempCostSites = [{name:'Heima hja emil', id: 1}, {name:'Heima hja inga', id: 2}, {name:'Heima hja arnori', id: 3}]
-  const [ selectedValue, setSelectedValue] = useState( tempCostSites[0].name)
-
+  const { navigate } = useNavigation();
+  const { userInfo } = useSelector((state) => state.userInfo);
+  const handleNewCheque = async () => {
+    const newCheque = await api.generateCheque(userInfo.token, userInfo.id, selectedValue.id);
+    navigate('NewCheque', { costsite: selectedValue, cheque: newCheque })
+  }
+  const [ selectedValue, setSelectedValue] = useState(userInfo.departments[0]);
   return (
     <View style={styles.container}>
       <Text>Veldu Kostnaðarstað</Text>
@@ -25,13 +29,13 @@ const CostSitePicker = () => {
         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
       >
       {
-        tempCostSites.map((x) => (
-          <Picker.Item key={x.id} label={x.name} value={x.name}  />
+        userInfo.departments.map((x) => (
+          <Picker.Item key={x.id} label={x.name} value={x} />
         ))
       }
 
       </Picker>
-      <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title='Opna beiðni' onPress={async () => await handleClick('0')} />
+      <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title='Opna beiðni' onPress={handleNewCheque} />
     </View>
   );
 };
