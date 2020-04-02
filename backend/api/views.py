@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from rest_framework import permissions, status
 from rest_framework.viewsets import ModelViewSet
@@ -169,6 +169,8 @@ class ChequeViewSet(ModelViewSet):
             return Cheque.objects.filter(department=self.kwargs['department_pk']).select_related('user', 'department', 'seller')
         elif 'user_pk' in self.kwargs:
             return Cheque.objects.filter(user=self.kwargs['user_pk']).select_related('user', 'department', 'seller')
+        elif 'organization_pk' in self.kwargs:
+            return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller')
         else:
             return Cheque.objects.all().select_related('user', 'department', 'seller')
 
@@ -187,10 +189,10 @@ class ChequeViewSet(ModelViewSet):
         seller = Organization.objects.get(pk=request.user.organization.id)
 
         if not seller.is_seller:
-            return Response({'success': False, 'error': 'Organization is not seller'})
+            return Response({'success': False, 'error': 'Organization is not seller'}, status=status.HTTP_403_FORBIDDEN)
 
         if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
-            return Response({'success': False, 'error': 'Seller not in Buyer client list'})
+            return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_403_FORBIDDEN)
 
         request.data['status'] = 2
         return super().partial_update(request, *args, **kwargs)
