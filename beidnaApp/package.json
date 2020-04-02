@@ -14,7 +14,7 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
-    "react-native-barcode-builder": "^1.0.5",
+    "react-native-barcode-builder": "^2.0.0",
     "react-native-elements": "^1.2.7",
     "react-native-fontawesome": "^7.0.0",
     "react-native-gesture-handler": "^1.6.0",
