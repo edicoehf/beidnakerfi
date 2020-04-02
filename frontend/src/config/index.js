@@ -18,7 +18,6 @@ export const sidebarButtons = {
   SuperBuyer: {
     allowedGroups: ['BUYER_SUPER_USER'],
     buttons: [
-      { name: 'Ný beiðni', path: '/createcheque', pressed: false },
       { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
       { name: 'Yfirlit beiðna', path: '/home', pressed: true },
       { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },

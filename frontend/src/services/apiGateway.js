@@ -220,3 +220,18 @@ export const updateCheque = async (cheque) => {
     .catch((e) => e.response);
   console.log(query);
 };
+
+export const getCheques = async () => {
+  const APIKEY = getKey();
+  const query = await axios
+    .get(`${API_URL}/api/cheques/`,
+      {
+        headers: {
+          authorization: APIKEY,
+        },
+      })
+    .then((resp) => resp.data)
+    .catch((e) => e.response);
+
+  return query;
+};
