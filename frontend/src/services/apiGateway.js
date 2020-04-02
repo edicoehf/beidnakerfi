@@ -171,7 +171,7 @@ export const createDepartment = async (newDepartment) => {
 export const disableDepartment = async (id) => {
   const APIKEY = getKey();
   const query = await axios
-    .delete(`${API_URL}/api/departments/${id}/`,
+    .delete(`${API_URL}/api/departments/${id}/`, {},
       {
         headers: {
           authorization: APIKEY,
@@ -182,6 +182,11 @@ export const disableDepartment = async (id) => {
   return query;
 };
 
+const convertDate = (dateString) => {
+  const date = new Date(dateString);
+
+  return date.toLocaleString('en-GB');
+};
 export const getCheque = async (id) => {
   const APIKEY = getKey();
   const query = await axios
@@ -193,9 +198,9 @@ export const getCheque = async (id) => {
       })
     .then((resp) => {
       const { created } = resp.data;
-      const createdDate = new Date(created);
+      const readableDate = convertDate(created);
 
-      const newData = { ...resp.data, created: createdDate.toLocaleString('en-GB') };
+      const newData = { ...resp.data, created: readableDate };
 
       return newData;
     })
@@ -218,13 +223,30 @@ export const updateCheque = async (cheque) => {
       })
     .then((resp) => resp)
     .catch((e) => e.response);
-  console.log(query);
+  return query;
 };
 
-export const getCheques = async () => {
+export const getChequesByOrgId = async () => {
   const APIKEY = getKey();
+  const orgId = getOrgId();
   const query = await axios
-    .get(`${API_URL}/api/cheques/`,
+    .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
+      {
+        headers: {
+          authorization: APIKEY,
+        },
+      })
+    .then((resp) => resp.data)
+    .catch((e) => e.response);
+
+  return query;
+};
+
+export const getChequesByDepartmentId = async () => {
+  const APIKEY = getKey();
+  const orgId = getOrgId();
+  const query = await axios
+    .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
       {
         headers: {
           authorization: APIKEY,
