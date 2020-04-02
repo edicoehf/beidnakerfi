@@ -13,3 +13,20 @@ export const login = async (userlogin) => {
     .catch((e) => e.response);
   return query;
 };
+
+export const generateCheque = async (apiKey, userId, depId) => {
+  const query = await axios
+    .post(`${API_URL}/api/cheques/`, {
+      user_id: userId,
+      dep_id: depId
+
+    }, {
+      headers: {
+        authorization: `Token ${apiKey}`
+      }
+    })
+    .then((resp) => resp)
+    .catch((e) => e.response);
+
+  return query.data;
+}

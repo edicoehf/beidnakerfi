@@ -8,7 +8,8 @@ import CostSitePicker from '../../Components/CostSitePicker';
 // Styles
 import styles from './style';
 
-const Landing = () => (
+const Landing = () => {
+return (
   <View style={styles.container}>
     <TopNavigator />
     <View style={styles.content}>
@@ -16,5 +17,5 @@ const Landing = () => (
     </View>
   </View>
   );
-
+}
 export default Landing;

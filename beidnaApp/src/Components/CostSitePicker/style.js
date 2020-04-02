@@ -20,5 +20,4 @@ export default StyleSheet.create({
     borderRadius: 10,
     width: '80%',
   },
-
 });

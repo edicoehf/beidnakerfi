@@ -11,14 +11,14 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  hamburger: {
+  left: {
     backgroundColor: 'white',
     alignSelf: 'flex-start',
     height:70,
     borderRadius: 50,
     width:70,
   },
-  logout: {
+  right: {
     backgroundColor: 'white',
     alignSelf: 'flex-end',
     height:70,
