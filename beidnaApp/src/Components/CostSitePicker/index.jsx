@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Picker } from 'react-native';
-import { Button, Text } from 'react-native-elements';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
+import { Button, Text, Overlay } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import { useSelector } from 'react-redux';
 
@@ -14,27 +14,59 @@ import * as api from '../../service/apiGateway.js'
 const CostSitePicker = () => {
   const { navigate } = useNavigation();
   const { userInfo } = useSelector((state) => state.userInfo);
+  const [isVisible, setVisable] = useState(false);
   const handleNewCheque = async () => {
     const newCheque = await api.generateCheque(userInfo.token, userInfo.id, selectedValue.id);
     navigate('NewCheque', { costsite: selectedValue, cheque: newCheque })
   }
   const [ selectedValue, setSelectedValue] = useState(userInfo.departments[0]);
+  console.log(selectedValue)
   return (
     <View style={styles.container}>
       <Text>Veldu Kostnaðarstað</Text>
-      <Picker
-        selectedValue={selectedValue}
-        style={styles.dropdown}
-        mode='dialog'
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+      <TouchableOpacity
+        onPress={() => {
+          setVisable(true);
+        }}
       >
+        <View style={styles.defaultPick}>
+          <Text style={styles.costsiteText}>{selectedValue.name}</Text>
+          <Text style={styles.downArrow}>-></Text>
+        </View>
+      </TouchableOpacity>
+      <Overlay
+        overlayStyle={styles.overlay}
+        isVisible={isVisible}
+        onBackdropPress={() => setVisable(false)}
+        borderRadius={25}
+      >
+      <ScrollView>
       {
         userInfo.departments.map((x) => (
-          <Picker.Item key={x.id} label={x.name} value={x} />
+          <TouchableOpacity
+            key={x.id}
+            style={styles.costsitePicker}
+            onPress={() => {
+              setSelectedValue(x);
+              setVisable(false);
+            }}
+          >
+          <View style={styles.listItem}>
+            {
+              x.id === selectedValue.id ? (
+                <Text style={styles.costsiteText, styles.selected}>{x.name}</Text>
+              ) : (
+                <Text style={styles.costsiteText}>{x.name}</Text>
+              )
+            }
+
+          </View>
+          </TouchableOpacity>
+
         ))
       }
-
-      </Picker>
+        </ScrollView>
+      </Overlay>
       <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title='Opna beiðni' onPress={handleNewCheque} />
     </View>
   );

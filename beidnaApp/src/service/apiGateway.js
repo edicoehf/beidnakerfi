@@ -30,3 +30,15 @@ export const generateCheque = async (apiKey, userId, depId) => {
 
   return query.data;
 }
+export const deleteCheque = async (apiKey, chequePK) => {
+  const query = await axios
+    .delete(`${API_URL}/api/cheques/${chequePK}/`, {
+      headers: {
+        authorization: `Token ${apiKey}`
+      }
+    })
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  console.log(query)
+  return query.data;
+}

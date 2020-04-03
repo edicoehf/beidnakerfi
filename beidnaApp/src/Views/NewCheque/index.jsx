@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Picker } from 'react-native';
+import { View, Picker, BackHandler } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import Barcode from 'react-native-barcode-builder';
@@ -18,6 +18,10 @@ import * as api from '../../service/apiGateway.js'
 
 const NewCheque = () => {
   const { state: { params : { costsite, cheque }} } = useNavigation();
+  const { userInfo } = useSelector((state) => state.userInfo);
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    api.deleteCheque(userInfo.token, cheque.code);
+  });
   return (
     <>
     <View style={styles.container}>
