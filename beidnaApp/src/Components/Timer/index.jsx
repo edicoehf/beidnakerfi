@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Input, Button, Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
+import { useSelector } from 'react-redux';
 
 import EdicoLogo from '../../Views/EdicoLogo';
 
@@ -12,9 +13,10 @@ import styles from './style';
 import * as api from '../../service/apiGateway.js'
 
 const Timer = () => {
-  const [time, setTime] = useState(300);
+  const [time, setTime] = useState(15);
   const [started, setStarted] = useState(false);
-
+  const { state: { params : { cheque }} } = useNavigation();
+  const { userInfo } = useSelector((state) => state.userInfo);
   const { navigate } = useNavigation();
 
   useEffect(() => {
@@ -24,6 +26,7 @@ const Timer = () => {
       setTime(tmpTime);
     }, 1000);
     } else {
+      api.deleteCheque(userInfo.token, cheque.code)
       navigate('Landing')
     }
   }, [time]);
