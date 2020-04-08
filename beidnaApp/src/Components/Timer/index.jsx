@@ -18,14 +18,17 @@ const Timer = () => {
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    if(time > 0){
-      setTimeout(() => {
-      const tmpTime = (time => time - 1);
-      setTime(tmpTime);
-    }, 1000);
-    } else {
-      navigate('Landing')
-    }
+
+      var timer = setTimeout(() => {
+        if(time > 0){
+          const tmpTime = (time => time - 1);
+          setTime(tmpTime);
+        } else {
+          navigate('Landing')
+        }
+      }, 1000);
+
+    return () => clearTimeout(timer);
   }, [time]);
   return (
     <View style={styles.container}>
