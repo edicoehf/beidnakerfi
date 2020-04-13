@@ -8,6 +8,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
+# EMAIL API
+import requests
+import json
+
 class Organization(models.Model):
     name = models.CharField(("Organization name"), max_length=50, unique=True)
     is_seller = models.BooleanField(("Seller?"))
@@ -77,3 +81,26 @@ class Cheque(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Cheque, self).save(*args, **kwargs)
+
+@receiver(post_save, sender=Cheque)
+def email_init(sender, instance, created=False, **kwargs):
+    if created:
+        title = "Beiðni skráð - {0}".format(instance.code)
+        body = "Nýskráning beiðnar tókst.\nEkki vera spamfilteraður pls\nID: {0}".format(instance.code)
+
+        response = send_email(instance.user.email, title, body)
+        # print(response.text)
+        # print(response.status_code)
+
+
+def send_email(email_recipient, title, body):
+    server = settings.MAIL_URL
+    auth = ("api", settings.MAIL_KEY)
+    data = {
+        "from": "Ingi Pingi <ingitho@gmail.com>",
+        "to": email_recipient,
+        "subject": title,
+        "text": body
+    }
+    
+    return requests.post(server, auth=auth, data=data)
