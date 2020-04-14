@@ -7,15 +7,13 @@ import { useSelector } from 'react-redux';
 
 import TopNavigator from '../../Views/TopNavigator';
 
-
-
-
 // Styles
 import styles from './style';
 // service
 import * as api from '../../service/apiGateway.js'
 
 const UserDetails = () => {
+
   return (
 
     <View style={styles.container}>

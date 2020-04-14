@@ -43,20 +43,20 @@ class UserViewSet(ModelViewSet):
         user = self.get_object()
         if not user.is_active:
             user_serializer = self.get_serializer(user)
-            return Response({'success': True, 'message': 'User already disabled', 'user': user_serializer.data}, status=status.HTTP_304_NOT_MODIFIED)
+            return Response({'success': True, 'message': 'User already disabled', 'user': user_serializer.data}, status=status.HTTP_400_BAD_REQUEST)
 
         user.is_active = False
         user.save()
         
         user_serializer = self.get_serializer(user)
-        return Response({'success': True, 'message': 'User disabled', 'user': user_serializer.data}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'success': True, 'message': 'User disabled', 'user': user_serializer.data}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['POST'])
     def activate(self, request, pk):
         user = self.get_object()
         if user.is_active:
             user_serializer = self.get_serializer(user)
-            return Response({'success': True, 'message': 'User already active', 'user': user_serializer.data}, status=status.HTTP_304_NOT_MODIFIED)
+            return Response({'success': True, 'message': 'User already active', 'user': user_serializer.data}, status=status.HTTP_400_BAD_REQUEST)
 
         user.is_active = True
         user.save()
@@ -127,14 +127,14 @@ class DepartmentViewSet(ModelViewSet):
             department = Department.objects.get(id=pk)
             
             if department.users.filter(id=user.id, department_user=department).exists():
-               return Response({'success': False, 'error': 'User already registered to department'}, status=status.HTTP_403_FORBIDDEN)
+               return Response({'success': False, 'error': 'User already registered to department'}, status=status.HTTP_400_BAD_REQUEST)
 
             department.users.add(user)
 
             dep_serializer = self.get_serializer(department)
             return Response({'success': True, 'department': dep_serializer.data})
         except User.DoesNotExist:
-            return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+            return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['delete'])
     def remove_user(self, request, pk):
@@ -155,9 +155,9 @@ class DepartmentViewSet(ModelViewSet):
             return Response({'success': True, 'department': dep_serializer.data})
 
         except User.DoesNotExist:
-            return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+            return Response({'success': False, 'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
         except Department.DoesNotExist:
-            return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
+            return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ChequeViewSet(ModelViewSet):
     lookup_field = 'code'
@@ -189,13 +189,38 @@ class ChequeViewSet(ModelViewSet):
         seller = Organization.objects.get(pk=request.user.organization.id)
 
         if not seller.is_seller:
-            return Response({'success': False, 'error': 'Organization is not seller'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'success': False, 'error': 'Organization is not seller'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
-            return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
 
         request.data['status'] = 2
         return super().partial_update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        cheque = self.get_object()
+        user = request.user
+
+        # Cheque delete if user is owner and cheque not confirmed by seller
+        # Cheque cancel if user is in seller organization and cheque pending
+        if not cheque.seller or not user.organization.is_seller:
+            if cheque.status <= 1:
+                if cheque.user == user:
+                    return super().destroy(request, *args, **kwargs)
+                else:
+                    return Response({'success': False, 'message': 'User not owner of cheque'}, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({'success': False, 'message': 'Cheque already confirmed by seller. Seller must cancel for delete'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if cheque.status == 2:
+                if cheque.seller == user.organization:
+                    cheque.status = 0
+                    cheque.save()
+                    return Response({'success': True, 'message': 'Cheque cancelled'}, status=status.HTTP_200_OK)
+                else:
+                    return Response({'success': False, 'message': 'Seller organization not owner of cheque'}, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({'success': False, 'message': 'Unable to cancel. Cheque not pending'}, status=status.HTTP_400_BAD_REQUEST)
 
     # Prints # of database queries for debugging optimization
     # def dispatch(self, *args, **kwargs):

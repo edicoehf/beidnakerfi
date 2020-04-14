@@ -7,11 +7,8 @@ import Barcode from 'react-native-barcode-builder';
 import TopNavigator from '../../Views/TopNavigator';
 import Timer from '../../Components/Timer';
 
-
-
 // Styles
 import styles from './style';
-
 
 const NewCheque = () => {
   const { state: { params : { costsite, cheque }} } = useNavigation();
