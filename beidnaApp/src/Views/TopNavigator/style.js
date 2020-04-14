@@ -14,19 +14,18 @@ export default StyleSheet.create({
   left: {
     backgroundColor: 'white',
     alignSelf: 'flex-start',
-    height:70,
+    height: 70,
     borderRadius: 50,
-    width:70,
+    width: 70,
   },
   right: {
     backgroundColor: 'white',
     alignSelf: 'flex-end',
-    height:70,
+    height: 70,
     borderRadius: 50,
-    width:70,
+    width: 70,
   },
   buttonTitle: {
     color: '#8D8D8D',
-  }
-
+  },
 });

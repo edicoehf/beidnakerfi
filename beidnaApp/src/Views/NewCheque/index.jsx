@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { View, Picker } from 'react-native';
-import { Button, Text } from 'react-native-elements';
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import Barcode from 'react-native-barcode-builder';
-import { useSelector } from 'react-redux';
 
-import EdicoLogo from '../../Views/EdicoLogo';
 import TopNavigator from '../../Views/TopNavigator';
 import Timer from '../../Components/Timer';
 
@@ -13,8 +11,7 @@ import Timer from '../../Components/Timer';
 
 // Styles
 import styles from './style';
-// service
-import * as api from '../../service/apiGateway.js'
+
 
 const NewCheque = () => {
   const { state: { params : { costsite, cheque }} } = useNavigation();

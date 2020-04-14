@@ -10,7 +10,7 @@ export default StyleSheet.create({
 
   },
   timeText: {
-    fontSize:80,
+    fontSize: 80,
   },
   timebox: {
     borderRadius: 15,
@@ -19,7 +19,6 @@ export default StyleSheet.create({
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
-
-  }
+  },
 
 });

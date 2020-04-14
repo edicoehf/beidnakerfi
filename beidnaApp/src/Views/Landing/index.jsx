@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Text, Button } from 'react-native-elements';
 
 import TopNavigator from '../TopNavigator';
 import CostSitePicker from '../../Components/CostSitePicker';

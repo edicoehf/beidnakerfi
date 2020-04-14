@@ -4,7 +4,7 @@ export default StyleSheet.create({
   pinContainer: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop:220,
+    paddingTop: 220,
     alignItems: 'center',
   },
   inputField: {

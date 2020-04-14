@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Input, Button, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
-
-import EdicoLogo from '../../Views/EdicoLogo';
-
 
 // Styles
 import styles from './style';
-// service
-import * as api from '../../service/apiGateway.js'
 
 const Timer = () => {
   const [time, setTime] = useState(300);

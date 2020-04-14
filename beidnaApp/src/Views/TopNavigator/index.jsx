@@ -10,11 +10,11 @@ import { setUserInfo } from '../../actions/userAction';
 import styles from './style';
 
 const TopNavigator = () => {
-  const logout = async () => {
-    //dispatch(await setUserInfo(''));
-    navigate('Login')
-  }
   const dispatch = useDispatch();
+  const logout = async () => {
+    navigate('Login')
+    dispatch(await setUserInfo(''));
+  }
   const { state: { routeName }, goBack, navigate } = useNavigation();
   return (
     <View style={styles.container}>
