@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import '../Lists.css';
 import { getChequesByDepartmentId, getChequesByOrgId } from '../../../services/apiGateway';
 
 
-const ChequeList = () => {
+const ChequeList = (props) => {
   const [cheques, setCheques] = useState([]);
 
 
@@ -32,7 +33,7 @@ const ChequeList = () => {
       </thead>
       <tbody>
         {
-          cheques.map((cheque) => {
+          cheques.filter((cheque) => cheque.code.includes(props.query)).map((cheque) => {
             const {
               code, price, status, description, created,
             } = cheque;
@@ -60,4 +61,9 @@ const ChequeList = () => {
     </table>
   );
 };
+
+ChequeList.propTypes = {
+  query: PropTypes.string.isRequired,
+};
+
 export default ChequeList;
