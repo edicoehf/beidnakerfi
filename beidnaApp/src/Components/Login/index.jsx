@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, ScrollView } from 'react-native';
-import {
-  Input, Button, Overlay, Text, Avatar,
-} from 'react-native-elements';
+import { View } from 'react-native';
+import { Input, Button, Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import { useDispatch } from 'react-redux';
 
@@ -13,7 +11,7 @@ import { setUserInfo } from '../../actions/userAction';
 // Styles
 import styles from './style';
 // service
-import * as api from '../../service/apiGateway.js'
+import * as api from '../../service/apiGateway';
 
 const Login = () => {
   const [user, setUser] = useState({ username: '', password: '' });
@@ -36,29 +34,29 @@ const Login = () => {
 
   return (
     <>
-    <EdicoLogo />
-    <View style={styles.loginContainer}>
-      {isError ? <Text> Wrong username or password </Text> : null}
-      <Input
-        containerStyle={styles.inputField}
-        inputStyle={styles.inputText}
-        autoFocus
-        required
-        value={user.username}
-        placeholder="Notendanafn.."
-        onChangeText={(username) => setUser({ ...user, username })}
-      />
-      <Input
-        containerStyle={styles.inputField}
-        inputStyle={styles.inputText}
-        value={user.password}
-        required
-        secureTextEntry={true}
-        placeholder="Lykilord.."
-        onChangeText={(password) => setUser({ ...user, password })}
-      />
-      <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title='Innskrá' onPress={() => handleAdd()} />
-    </View>
+      <EdicoLogo />
+      <View style={styles.loginContainer}>
+        {isError ? <Text> Wrong username or password </Text> : null}
+        <Input
+          containerStyle={styles.inputField}
+          inputStyle={styles.inputText}
+          autoFocus
+          required
+          value={user.username}
+          placeholder="Notendanafn.."
+          onChangeText={(username) => setUser({ ...user, username })}
+        />
+        <Input
+          containerStyle={styles.inputField}
+          inputStyle={styles.inputText}
+          value={user.password}
+          required
+          secureTextEntry
+          placeholder="Lykilord.."
+          onChangeText={(password) => setUser({ ...user, password })}
+        />
+        <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="Innskrá" onPress={() => handleAdd()} />
+      </View>
     </>
   );
 };

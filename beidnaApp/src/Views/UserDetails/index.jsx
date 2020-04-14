@@ -1,28 +1,38 @@
-import React, { useState } from 'react';
-import { View, Picker } from 'react-native';
-import { Button, Text } from 'react-native-elements';
-import { useNavigation } from 'react-navigation-hooks';
-import Barcode from 'react-native-barcode-builder';
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 
-import TopNavigator from '../../Views/TopNavigator';
+import TopNavigator from '../TopNavigator';
 
 // Styles
 import styles from './style';
-// service
-import * as api from '../../service/apiGateway.js'
 
 const UserDetails = () => {
-
+  const { userInfo } = useSelector((state) => state.userInfo);
   return (
-
     <View style={styles.container}>
       <TopNavigator />
       <View style={styles.content}>
+        <Text>
+          Nafn:
+          {userInfo.user}
+        </Text>
+        <Text>
+          org id:
+          {userInfo.org_id}
+        </Text>
+        <Text>Deildir: </Text>
+        {
+          userInfo ? (
+            userInfo.departments.map((x) => (
+              <Text key={x.id}>{x.name}</Text>
+            ))
+          ) : null
 
+        }
       </View>
     </View>
-    <Timer/>
   );
 };
-export default NewCheque;
+export default UserDetails;

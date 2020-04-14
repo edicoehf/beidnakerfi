@@ -5,6 +5,7 @@ import Login from '../Components/Login';
 import SetPin from '../Components/SetPin';
 import Landing from '../Views/Landing';
 import NewCheque from '../Views/NewCheque';
+import UserDetails from '../Views/UserDetails';
 
 const StackNavigator = createStackNavigator(
   {
@@ -12,6 +13,7 @@ const StackNavigator = createStackNavigator(
     Landing,
     SetPin,
     NewCheque,
+    UserDetails,
   },
   {
     defaultNavigationOptions: {
