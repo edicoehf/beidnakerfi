@@ -50,4 +50,5 @@ const StaffList = (props) => {
 StaffList.propTypes = {
   query: PropTypes.string.isRequired,
 };
+
 export default StaffList;
