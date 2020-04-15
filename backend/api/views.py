@@ -15,7 +15,8 @@ from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOr
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     search_fields = [ 'username', 'email', 'departments__name' ]
-    filter_backends = (filters.SearchFilter,)
+    ordering_fields = [ 'username', 'email', 'departments__name']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
@@ -90,8 +91,9 @@ class OrganizationViewSet(ModelViewSet):
 
 class DepartmentViewSet(ModelViewSet):
     queryset = Department.objects.all()
-    search_fields = ['name', 'costsite']
-    filter_backends = (filters.SearchFilter,)
+    search_fields = [ 'name', 'costsite' ]
+    ordering_fields = [ 'name', 'costsite' ]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
@@ -169,13 +171,10 @@ class ChequeViewSet(ModelViewSet):
     lookup_field = 'code'
     permission_classes = [permissions.IsAuthenticated]
     search_fields = [ 'code', 'description', 'created', 'user__username', 'department__name', 'department__costsite']
-    filter_backends = (filters.SearchFilter,)
+    ordering_fields = [ 'code', 'price', 'description', 'created', 'user_username', 'department_name' ]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
-        # search filtering e.g. api/cheques?code=123456789
-        # user = self.request.query_params.get('user', None)
-        # print("User: ", user)
-
         # variable_pk used to filter for nested relations
         if 'department_pk' in self.kwargs:
             return Cheque.objects.filter(department=self.kwargs['department_pk']).select_related('user', 'department', 'seller')
@@ -245,8 +244,9 @@ class ClientViewSet(ModelViewSet):
     queryset = Client.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
-    search_fields = ['buyer__name', 'seller__name']
-    filter_backends = (filters.SearchFilter,)
+    search_fields = [ 'buyer__name', 'seller__name ']
+    ordering_fields = [ 'buyer__name', 'seller_name' ]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
         organization = self.request.user.organization
