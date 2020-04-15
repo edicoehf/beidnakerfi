@@ -88,7 +88,8 @@ def email_init(sender, instance, created=False, **kwargs):
         title = "Beiðni skráð - {0}".format(instance.code)
         body = "Nýskráning beiðnar tókst.\nEkki vera spamfilteraður pls\nID: {0}".format(instance.code)
 
-        response = send_email(instance.user.email, title, body)
+        # UNCOMMENT TO ENABLE EMAIL
+        # response = send_email(instance.user.email, title, body)
         # print(response.text)
         # print(response.status_code)
 

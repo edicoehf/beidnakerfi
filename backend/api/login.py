@@ -39,7 +39,7 @@ class loginToken(ObtainAuthToken):
         return Response({
             'success': True,
             'token': token.key,
-            'expires_in': expire_time(token).seconds,
+            'expires_in': expire_time(token),
             'id': user.id,
             'user': user.username,
             'org_id': user.organization.id,

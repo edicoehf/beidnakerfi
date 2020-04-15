@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from rest_framework import permissions, status
+from rest_framework import permissions, status, filters
 from rest_framework.viewsets import ModelViewSet
 
 from rest_framework.decorators import action
@@ -11,8 +11,11 @@ from .serializers import UserListSerializer, UserDetailSerializer, OrganizationL
 
 from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOrg
 
+
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
+    search_fields = [ 'username', 'email', 'departments__name' ]
+    filter_backends = (filters.SearchFilter,)
 
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
@@ -87,6 +90,8 @@ class OrganizationViewSet(ModelViewSet):
 
 class DepartmentViewSet(ModelViewSet):
     queryset = Department.objects.all()
+    search_fields = ['name', 'costsite']
+    filter_backends = (filters.SearchFilter,)
 
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
@@ -160,11 +165,18 @@ class DepartmentViewSet(ModelViewSet):
             return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_412_PRECONDITION_FAILED)
 
 class ChequeViewSet(ModelViewSet):
-    lookup_field = 'code'
     queryset = Cheque.objects.all()
+    lookup_field = 'code'
     permission_classes = [permissions.IsAuthenticated]
+    search_fields = [ 'code', 'description', 'created', 'user__username', 'department__name', 'department__costsite']
+    filter_backends = (filters.SearchFilter,)
 
     def get_queryset(self):
+        # search filtering e.g. api/cheques?code=123456789
+        # user = self.request.query_params.get('user', None)
+        # print("User: ", user)
+
+        # variable_pk used to filter for nested relations
         if 'department_pk' in self.kwargs:
             return Cheque.objects.filter(department=self.kwargs['department_pk']).select_related('user', 'department', 'seller')
         elif 'user_pk' in self.kwargs:
@@ -207,6 +219,9 @@ class ChequeViewSet(ModelViewSet):
 class ClientViewSet(ModelViewSet):
     queryset = Client.objects.all()
     permission_classes = [permissions.IsAuthenticated]
+
+    search_fields = ['buyer__name', 'seller__name']
+    filter_backends = (filters.SearchFilter,)
 
     def get_queryset(self):
         organization = self.request.user.organization
