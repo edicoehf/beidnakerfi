@@ -1,3 +1,5 @@
+# https://medium.com/@yerkebulan199/django-rest-framework-drf-token-authentication-with-expires-in-a05c1d2b7e05
+
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
@@ -9,6 +11,7 @@ from django.conf import settings
 def expire_time(token):
     time_elapsed = timezone.now() - token.created
     timer = timedelta(seconds = settings.TOKEN_EXPIRY_TIME) - time_elapsed
+
     return timer
 
 def is_token_expired(token):
