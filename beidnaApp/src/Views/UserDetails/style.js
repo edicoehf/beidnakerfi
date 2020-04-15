@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { appPrimaryColor, appTextColor } from '../../styles/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     textAlign: 'center',
-    color: 'black',
-    backgroundColor: 'white',
+    backgroundColor: appPrimaryColor,
     justifyContent: 'flex-start',
 
   },
@@ -13,7 +13,8 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
+    color: appTextColor,
+    backgroundColor: appPrimaryColor,
     minHeight: 80,
 
   },

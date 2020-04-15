@@ -17,8 +17,8 @@ const NewCheque = () => {
       <View style={styles.container}>
         <TopNavigator />
         <View style={styles.content}>
-          <Text>Ný beiðni fyrir</Text>
-          <Text>{ costsite.name }</Text>
+          <Text>Ný beiðni fyrir:</Text>
+          <Text style={styles.costsite}>{ costsite.name }</Text>
           <Barcode value={cheque.code} text={cheque.code} format="CODE128" />
         </View>
       </View>

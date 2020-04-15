@@ -1,28 +1,37 @@
 import { StyleSheet } from 'react-native';
+import {
+  appPrimaryColor, appButtonColor, appButtonTextColor, appTextColor,
+} from '../../styles/colors';
 
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 60,
+    backgroundColor: appPrimaryColor,
+  },
   loginContainer: {
-    flex: 2,
-    backgroundColor: 'white',
+    flex: 1,
+    backgroundColor: appPrimaryColor,
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   inputField: {
     maxWidth: '80%',
     marginBottom: 10,
-    backgroundColor: 'white',
+    backgroundColor: appPrimaryColor,
     borderRadius: 10,
   },
   inputText: {
-    color: 'black',
+    color: appTextColor,
   },
   button: {
-    backgroundColor: '#8D8D8D',
-    minHeight: 60,
+    backgroundColor: appButtonColor,
+    minHeight: 80,
     borderRadius: 10,
-    width: '80%',
+    width: '100%',
   },
   buttonTitle: {
-    color: 'white',
+    color: appButtonTextColor,
     fontWeight: 'bold',
     fontSize: 32,
   },

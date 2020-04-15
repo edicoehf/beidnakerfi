@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { appPrimaryColor, appSecondaryColor } from '../../styles/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: appPrimaryColor,
     justifyContent: 'space-around',
     alignItems: 'center',
 
@@ -16,7 +17,7 @@ export default StyleSheet.create({
     borderRadius: 15,
     width: '40%',
     height: '40%',
-    backgroundColor: 'red',
+    backgroundColor: appSecondaryColor,
     justifyContent: 'center',
     alignItems: 'center',
   },

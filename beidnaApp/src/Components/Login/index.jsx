@@ -27,20 +27,20 @@ const Login = () => {
       // Cleaning out fields so info doesnt show after logout
       setUser({ username: '', password: '' });
       navigate('Landing');
+      setError(false);
       // show error text if username or password fail.
     } else { setError(true); }
   };
 
-
   return (
-    <>
+    <View style={styles.container}>
       <EdicoLogo />
       <View style={styles.loginContainer}>
-        {isError ? <Text> Wrong username or password </Text> : null}
+        {isError ? <Text> Rangt lykilorð </Text> : null}
         <Input
           containerStyle={styles.inputField}
           inputStyle={styles.inputText}
-          autoFocus
+          autoCapitalize="none"
           required
           value={user.username}
           placeholder="Notendanafn.."
@@ -55,9 +55,11 @@ const Login = () => {
           placeholder="Lykilord.."
           onChangeText={(password) => setUser({ ...user, password })}
         />
-        <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="Innskrá" onPress={() => handleAdd()} />
+        <View>
+          <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="Innskrá" onPress={() => handleAdd()} />
+        </View>
       </View>
-    </>
+    </View>
   );
 };
 export default Login;
