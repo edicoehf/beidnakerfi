@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
-import { Button, Text, Overlay } from 'react-native-elements';
+import { Button, Text, Overlay, Icon } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import { useSelector } from 'react-redux';
 
@@ -32,7 +32,9 @@ const CostSitePicker = () => {
       <TouchableOpacity onPress={() => setVisable(true)}>
         <View style={styles.defaultPick}>
           <Text style={styles.costsiteText}>{selectedValue.name}</Text>
-          <Text style={styles.downArrow}>icon or</Text>
+          <View style={styles.downArrow}>
+            <Icon name='arrow-drop-down' />
+          </View>
         </View>
       </TouchableOpacity>
       <Overlay
@@ -56,7 +58,12 @@ const CostSitePicker = () => {
                   <View style={styles.listItem}>
                     {
                       x.id === selectedValue.id ? (
-                        <Text style={(styles.costsiteText, styles.selected)}>{x.name}</Text>
+                        <>
+                          <Text style={styles.costsiteText}>{x.name}</Text>
+                          <View style={styles.downArrow}>
+                            <Icon name='radio-button-checked' />
+                          </View>
+                        </>
                       ) : (
                         <Text style={styles.costsiteText}>{x.name}</Text>
                       )

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Icon, Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -36,12 +36,18 @@ const TopNavigator = () => {
     <View style={styles.container}>
       {
         routeName === 'Landing' ? (
-          <Button buttonStyle={styles.left} titleStyle={styles.buttonTitle} title="User" onPress={() => navigate('UserDetails')} />
+          <View style={styles.left}>
+            <Icon name="person" onPress={() => navigate('UserDetails')}/>
+          </View>
         ) : (
-          <Button buttonStyle={styles.left} titleStyle={styles.buttonTitle} title="back" onPress={() => back()} />
+          <View style={styles.left}>
+            <Icon name="arrow-back" onPress={() => back()} />
+          </View>
         )
       }
-      <Button buttonStyle={styles.right} titleStyle={styles.buttonTitle} title="out" onPress={async () => logout()} />
+      <View style={styles.right}>
+        <Icon name="door-closed" onPress={async () => logout() }/>
+      </View>
     </View>
   );
 };

@@ -14,6 +14,8 @@ export default StyleSheet.create({
   left: {
     backgroundColor: 'white',
     alignSelf: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 70,
     borderRadius: 50,
     width: 70,
@@ -21,11 +23,10 @@ export default StyleSheet.create({
   right: {
     backgroundColor: 'white',
     alignSelf: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 70,
     borderRadius: 50,
     width: 70,
-  },
-  buttonTitle: {
-    color: '#8D8D8D',
   },
 });

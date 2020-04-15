@@ -12,8 +12,9 @@ export default StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     backgroundColor: 'white',
     minHeight: 80,
+
   },
 });
