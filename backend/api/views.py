@@ -15,7 +15,7 @@ from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOr
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     search_fields = [ 'username', 'email', 'departments__name' ]
-    ordering_fields = [ 'username', 'email', 'departments__name']
+    ordering_fields = [ 'username', 'email', 'departments']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
@@ -171,7 +171,7 @@ class ChequeViewSet(ModelViewSet):
     lookup_field = 'code'
     permission_classes = [permissions.IsAuthenticated]
     search_fields = [ 'code', 'description', 'created', 'user__username', 'department__name', 'department__costsite']
-    ordering_fields = [ 'code', 'price', 'description', 'created', 'user_username', 'department_name' ]
+    ordering_fields = [ 'code', 'price', 'description', 'created', 'user', 'department' ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
@@ -245,7 +245,7 @@ class ClientViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     search_fields = [ 'buyer__name', 'seller__name ']
-    ordering_fields = [ 'buyer__name', 'seller_name' ]
+    ordering_fields = [ 'buyer', 'seller' ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
