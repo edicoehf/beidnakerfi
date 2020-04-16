@@ -3,16 +3,15 @@ import { appPrimaryColor, appTextColor } from '../../styles/colors';
 
 export default StyleSheet.create({
   logoContainer: {
-    paddingTop: 40,
     backgroundColor: appPrimaryColor,
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    height: 290,
+    height: 250,
   },
   edicoLogo: {
-    height: 150,
-    width: '90%',
+    height: 125,
+    width: '70%',
   },
   logoText: {
     fontSize: 20,

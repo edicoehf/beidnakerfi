@@ -6,11 +6,11 @@ import {
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    paddingTop: 70,
     backgroundColor: appPrimaryColor,
   },
   loginContainer: {
-    flex: 1,
+    flex: 2,
     backgroundColor: appPrimaryColor,
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -26,6 +26,7 @@ export default StyleSheet.create({
   },
   button: {
     backgroundColor: appButtonColor,
+    marginTop: 15,
     minHeight: 80,
     borderRadius: 10,
     width: '100%',
@@ -34,6 +35,23 @@ export default StyleSheet.create({
     color: appButtonTextColor,
     fontWeight: 'bold',
     fontSize: 32,
+  },
+  overlay: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: 120,
+  },
+  closeModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingRight: 10,
+    paddingTop: 10,
+  },
+  modalText: {
+    flex: 4,
+    paddingTop: 10,
+    justifyContent: 'flex-start',
   },
 
 });

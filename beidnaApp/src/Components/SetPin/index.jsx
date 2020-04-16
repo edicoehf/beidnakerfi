@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Input, Button, Text } from 'react-native-elements';
+import {
+  Input, Button, Text, Icon,
+} from 'react-native-elements';
 
 // Styles
 import styles from './style';
@@ -57,9 +59,13 @@ const SetPin = () => {
         <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="9" onPress={async () => handleClick('9')} />
       </View>
       <View style={styles.buttonGroup}>
-        <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="<=" onPress={async () => vipeOne()} />
+        <View style={styles.button}>
+          <Icon name="backspace" iconStyle={styles.icon} onPress={vipeOne} />
+        </View>
         <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="0" onPress={async () => handleClick('0')} />
-        <Button buttonStyle={styles.button} titleStyle={styles.buttonTitle} title="go" onPress={async () => submit()} />
+        <View style={styles.button}>
+          <Icon name="check" iconStyle={styles.icon} onPress={submit} />
+        </View>
       </View>
     </View>
   );

@@ -32,12 +32,18 @@ export default StyleSheet.create({
     minHeight: 80,
     minWidth: 80,
     borderRadius: 50,
-
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonTitle: {
     color: appButtonTextColor,
     fontWeight: 'bold',
     fontSize: 32,
+  },
+  icon: {
+    color: appButtonTextColor,
+    fontWeight: 'bold',
+    fontSize: 28,
   },
 
 });
