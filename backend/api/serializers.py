@@ -11,7 +11,7 @@ class OrganizationListSerializer(serializers.ModelSerializer):
 class DepartmentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = ['id', 'name', 'organization']
+        fields = ['id', 'name', 'costsite', 'organization']
 
 class UserBasicSerializer(serializers.ModelSerializer):
     class Meta:
