@@ -8,12 +8,9 @@ import styles from './style';
 // Components
 import AppContainer from '../routes';
 
-const AppWrapper = () => {
-
-  return (
-    <View style={styles.container}>
-      <AppContainer />
-    </View>
-  );
-};
+const AppWrapper = () => (
+  <View style={styles.container}>
+    <AppContainer />
+  </View>
+);
 export default AppWrapper;

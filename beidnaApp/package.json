@@ -5,32 +5,40 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "lint": "eslint *.jsx **/*.jsx"
   },
   "dependencies": {
-    "@react-native-community/masked-view": "^0.1.7",
+    "@react-native-community/masked-view": "0.1.6",
     "axios": "^0.19.2",
-    "expo": "~36.0.0",
-    "react": "~16.9.0",
-    "react-dom": "~16.9.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "expo": "^37.0.0",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
     "react-native-barcode-builder": "^2.0.0",
     "react-native-elements": "^1.2.7",
     "react-native-fontawesome": "^7.0.0",
-    "react-native-gesture-handler": "^1.6.0",
+    "react-native-gesture-handler": "~1.6.0",
     "react-native-navigation": "^6.3.1",
-    "react-native-safe-area-context": "^0.7.3",
-    "react-native-screens": "^2.3.0",
-    "react-native-web": "~0.11.7",
+    "react-native-safe-area-context": "0.7.3",
+    "react-native-screens": "~2.2.0",
+    "react-native-web": "^0.11.7",
     "react-navigation": "^4.2.2",
     "react-navigation-hooks": "^1.1.0",
     "react-navigation-stack": "^2.2.3",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "uuid-js": "^0.7.5"
   },
   "devDependencies": {
-    "babel-preset-expo": "~8.0.0",
-    "@babel/core": "^7.0.0"
+    "@babel/core": "^7.0.0",
+    "babel-eslint": "^10.1.0",
+    "babel-preset-expo": "^8.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0"
   },
   "private": true
 }

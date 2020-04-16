@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { appPrimaryColor } from '../../styles/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     maxHeight: 70,
-    backgroundColor: 'white',
+    backgroundColor: appPrimaryColor,
     flexDirection: 'row',
     paddingRight: 3,
     paddingLeft: 3,
@@ -12,21 +13,21 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   left: {
-    backgroundColor: 'white',
+    backgroundColor: appPrimaryColor,
     alignSelf: 'flex-start',
-    height:70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 70,
     borderRadius: 50,
-    width:70,
+    width: 70,
   },
   right: {
-    backgroundColor: 'white',
+    backgroundColor: appPrimaryColor,
     alignSelf: 'flex-end',
-    height:70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 70,
     borderRadius: 50,
-    width:70,
+    width: 70,
   },
-  buttonTitle: {
-    color: '#8D8D8D',
-  }
-
 });

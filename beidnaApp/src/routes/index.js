@@ -3,17 +3,17 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import Login from '../Components/Login';
 import SetPin from '../Components/SetPin';
-import Timer from '../Components/Timer';
-import Landing from  '../Views/Landing'
+import Landing from '../Views/Landing';
 import NewCheque from '../Views/NewCheque';
-
+import UserDetails from '../Views/UserDetails';
 
 const StackNavigator = createStackNavigator(
   {
     Login,
     Landing,
     SetPin,
-    NewCheque
+    NewCheque,
+    UserDetails,
   },
   {
     defaultNavigationOptions: {

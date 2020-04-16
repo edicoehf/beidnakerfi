@@ -1,21 +1,24 @@
 import { StyleSheet } from 'react-native';
+import {
+  appPrimaryColor, appButtonColor, appButtonTextColor, appTextColor,
+} from '../../styles/colors';
 
 export default StyleSheet.create({
   pinContainer: {
     flex: 1,
-    backgroundColor: 'white',
-    paddingTop:220,
+    backgroundColor: appPrimaryColor,
+    paddingTop: 220,
     alignItems: 'center',
   },
   inputField: {
 
     maxWidth: '80%',
     marginBottom: 10,
-    backgroundColor: 'white',
+    backgroundColor: appPrimaryColor,
     borderRadius: 10,
   },
   inputText: {
-    color: 'black',
+    color: appTextColor,
     fontSize: 15,
   },
   buttonGroup: {
@@ -25,16 +28,22 @@ export default StyleSheet.create({
     width: '80%',
   },
   button: {
-    backgroundColor: '#8D8D8D',
+    backgroundColor: appButtonColor,
     minHeight: 80,
     minWidth: 80,
     borderRadius: 50,
-
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonTitle: {
-    color: 'white',
+    color: appButtonTextColor,
     fontWeight: 'bold',
     fontSize: 32,
+  },
+  icon: {
+    color: appButtonTextColor,
+    fontWeight: 'bold',
+    fontSize: 28,
   },
 
 });

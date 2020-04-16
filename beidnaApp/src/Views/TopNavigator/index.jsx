@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,28 +15,41 @@ const TopNavigator = () => {
   const dispatch = useDispatch();
   const { state: { routeName, params }, goBack, navigate } = useNavigation();
   const { userInfo } = useSelector((state) => state.userInfo);
-  const back = () => {
-    api.deleteCheque(userInfo.token, params.cheque.code)
-    goBack()
-  }
-  const logout = () => {
-    api.deleteCheque(userInfo.token, params.cheque.code)
-    navigate('Login')
-  }
+  const clearcheck = async () => {
+    await api.deleteCheque(userInfo.token, params.cheque.code);
+  };
+  const back = async () => {
+    if (routeName === 'NewCheque') {
+      await clearcheck();
+    }
+    goBack();
+  };
+  const logout = async () => {
+    if (routeName === 'NewCheque') {
+      await clearcheck();
+    }
+    await navigate('Login');
+    dispatch(setUserInfo(''));
+  };
+
   return (
     <View style={styles.container}>
-    {
-      routeName === 'Landing' ? (
-        <Button buttonStyle={styles.left} titleStyle={styles.buttonTitle} title='ham' onPress={() => console.log('ham')} />
-      ) :  null
-    }
-    {
-      routeName === 'NewCheque' ? (
-        <Button buttonStyle={styles.left} titleStyle={styles.buttonTitle} title='back' onPress={() => back()} />
-      ) : null
-    }
-    <Button buttonStyle={styles.right} titleStyle={styles.buttonTitle} title='out' onPress={logout} />
+      {
+        routeName === 'Landing' ? (
+          <View style={styles.left}>
+            <Icon name="person" onPress={() => navigate('UserDetails')} />
+          </View>
+        ) : (
+          <View style={styles.left}>
+            <Icon name="arrow-back" onPress={() => back()} />
+          </View>
+        )
+      }
+      <View style={styles.right}>
+        <Icon name="lock" onPress={async () => logout()} />
+      </View>
     </View>
-  )};
+  );
+};
 
 export default TopNavigator;
