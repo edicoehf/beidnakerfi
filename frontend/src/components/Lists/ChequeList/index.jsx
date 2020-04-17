@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import '../Lists.css';
-import { getChequesByDepartmentId, getChequesByOrgId } from '../../../services/apiGateway';
+import { getChequesByOrgId } from '../../../services/apiGateway';
+import { statusCodes } from '../../../config';
 
 
 const ChequeList = (props) => {
@@ -17,6 +18,7 @@ const ChequeList = (props) => {
 
     fetchCheques();
   }, []);
+
 
   return (
 
@@ -50,7 +52,7 @@ const ChequeList = (props) => {
                 <td>{ deptName }</td>
                 <td>{ username }</td>
                 <td>{ readableDate }</td>
-                <td>{ status }</td>
+                <td>{ statusCodes[status] }</td>
               </tr>
             );
           })
