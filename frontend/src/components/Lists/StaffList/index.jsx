@@ -21,7 +21,6 @@ const StaffList = (props) => {
           <th>Username</th>
           <th>Email</th>
           <th>Departments</th>
-          <th> </th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +34,6 @@ const StaffList = (props) => {
                   staff.departments.map((dept) => dept.name).join(', ')
                 }
               </td>
-              <td><button type="button">Breyta user</button></td>
             </tr>
           ))
         }

@@ -28,8 +28,8 @@ export const sidebarButtons = {
   SuperSeller: {
     allowedGroups: ['SELLER_SUPER_USER'],
     buttons: [
-      { name: 'Ný beiðni', path: '/createcheque', pressed: false },
-      { name: 'Yfirli t beiðna', path: '/home', pressed: true },
+      { name: 'Ný beiðni', path: '/createcheque', pressed: true },
+      { name: 'Yfirlit beiðna', path: '/home', pressed: false },
       { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
       { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },
       { name: 'Viðskiptamannalisti', path: '/viewcustomers', pressed: false },
