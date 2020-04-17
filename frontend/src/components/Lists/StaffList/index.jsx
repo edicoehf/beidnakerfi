@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import '../Lists.css';
 import { getUsers } from '../../../services/apiGateway';
-import DisableUserButton from '../../DisableUserButton';
 
 const StaffList = (props) => {
   const [staffList, setStaffList] = useState([]);
@@ -23,13 +22,12 @@ const StaffList = (props) => {
           <th>Email</th>
           <th>Departments</th>
           <th> </th>
-          <th> </th>
         </tr>
       </thead>
       <tbody>
         {
           staffList.filter((staff) => staff.username.includes(props.query)).map((staff) => (
-            <tr key={staff.id}>
+            <tr className="row" key={staff.id}>
               <td>{staff.username}</td>
               <td>{staff.email}</td>
               <td>
@@ -38,7 +36,6 @@ const StaffList = (props) => {
                 }
               </td>
               <td><button type="button">Breyta user</button></td>
-              <td><DisableUserButton userId={staff.id} /></td>
             </tr>
           ))
         }

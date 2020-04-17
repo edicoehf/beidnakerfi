@@ -46,7 +46,7 @@ const ChequeList = (props) => {
             const readableDate = new Date(created).toLocaleString('en-GB');
 
             return (
-              <tr key={code}>
+              <tr className="row" key={code}>
                 <td>{ code }</td>
                 <td>{ sellerName }</td>
                 <td>{ deptName }</td>

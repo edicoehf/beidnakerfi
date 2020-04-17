@@ -34,3 +34,10 @@ th, thead{
   border: 2px solid #990000;
   font-weight: unset;
 }
+
+.row:hover {
+  background-color: #6D6D6D;
+  color: lightgray;
+  cursor: pointer;
+  
+}
