@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { appPrimaryColor, appTextColor } from '../../styles/colors';
+import { appPrimaryColor, appTextColor, appFont } from '../../styles/style-config';
 
 export default StyleSheet.create({
   container: {
@@ -19,6 +19,6 @@ export default StyleSheet.create({
   costsite: {
     fontSize: 30,
     color: appTextColor,
-    paddingBottom: 20,
+    fontFamily: appFont,
   },
 });

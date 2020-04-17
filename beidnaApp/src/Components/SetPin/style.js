@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import {
-  appPrimaryColor, appButtonColor, appButtonTextColor, appTextColor,
-} from '../../styles/colors';
+  appPrimaryColor, appButtonColor, appButtonTextColor, appTextColor, appFont,
+} from '../../styles/style-config';
 
 export default StyleSheet.create({
   pinContainer: {
@@ -11,7 +11,6 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   inputField: {
-
     maxWidth: '80%',
     marginBottom: 10,
     backgroundColor: appPrimaryColor,
@@ -20,6 +19,7 @@ export default StyleSheet.create({
   inputText: {
     color: appTextColor,
     fontSize: 15,
+    fontFamily: appFont,
   },
   buttonGroup: {
     paddingTop: 30,
@@ -39,6 +39,7 @@ export default StyleSheet.create({
     color: appButtonTextColor,
     fontWeight: 'bold',
     fontSize: 32,
+    fontFamily: appFont,
   },
   icon: {
     color: appButtonTextColor,

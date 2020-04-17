@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { appPrimaryColor, appTextColor } from '../../styles/colors';
+import { appPrimaryColor, appTextColor, appFont } from '../../styles/style-config';
 
 export default StyleSheet.create({
   logoContainer: {
@@ -11,12 +11,16 @@ export default StyleSheet.create({
   },
   edicoLogo: {
     height: 125,
-    width: '70%',
+    width: '80%',
   },
   logoText: {
     fontSize: 20,
+    textAlign: 'center',
     fontFamily: 'Roboto',
-    fontWeight: '100',
+    width: '100%',
     color: appTextColor,
+  },
+  font: {
+    fontFamily: appFont,
   },
 });

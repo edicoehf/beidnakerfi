@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import {
-  appPrimaryColor, appButtonColor, appButtonTextColor, appTextColor,
-} from '../../styles/colors';
+  appPrimaryColor, appButtonColor, appButtonTextColor, appTextColor, appFont,
+} from '../../styles/style-config';
 
 export default StyleSheet.create({
   container: {
@@ -23,6 +23,7 @@ export default StyleSheet.create({
   },
   inputText: {
     color: appTextColor,
+    fontFamily: appFont,
   },
   button: {
     backgroundColor: appButtonColor,
@@ -33,8 +34,8 @@ export default StyleSheet.create({
   },
   buttonTitle: {
     color: appButtonTextColor,
-    fontWeight: 'bold',
     fontSize: 32,
+    fontFamily: appFont,
   },
   overlay: {
     flexDirection: 'column',
