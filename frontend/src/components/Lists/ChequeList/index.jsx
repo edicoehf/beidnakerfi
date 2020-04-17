@@ -62,8 +62,12 @@ const ChequeList = (props) => {
   );
 };
 
+ChequeList.defaultProps = {
+  query: '',
+};
+
 ChequeList.propTypes = {
-  query: PropTypes.string.isRequired,
+  query: PropTypes.string,
 };
 
 export default ChequeList;
