@@ -18,8 +18,8 @@ export const sidebarButtons = {
   SuperBuyer: {
     allowedGroups: ['BUYER_SUPER_USER'],
     buttons: [
-      { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
       { name: 'Yfirlit beiðna', path: '/home', pressed: true },
+      { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
       { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },
       { name: 'Viðskiptamannalisti', path: '/viewcustomers', pressed: false },
 
@@ -29,11 +29,17 @@ export const sidebarButtons = {
     allowedGroups: ['SELLER_SUPER_USER'],
     buttons: [
       { name: 'Ný beiðni', path: '/createcheque', pressed: false },
+      { name: 'Yfirli t beiðna', path: '/home', pressed: true },
       { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
-      { name: 'Yfirlit beiðna', path: '/home', pressed: true },
       { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },
       { name: 'Viðskiptamannalisti', path: '/viewcustomers', pressed: false },
 
     ],
   },
+};
+
+export const statusCodes = {
+  0: 'Stofnað',
+  1: 'Móttekið',
+  2: 'Greitt',
 };
