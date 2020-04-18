@@ -10,7 +10,7 @@ from .models import User, Organization, Department, Cheque, Client
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password', 'organization')}),
-        (('Info'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (('Info'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'superuser', 'groups', 'user_permissions')}),
         (('Dates'), {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
@@ -19,7 +19,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username','email', 'password1', 'password2', 'organization')
         }),
     )
-    list_display = ('username', 'is_staff')
+    list_display = ('username', 'is_staff', 'is_superuser', 'organization')
     search_fields = ('username',)
 
 admin.site.register(Organization)

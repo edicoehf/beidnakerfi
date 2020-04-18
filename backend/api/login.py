@@ -44,6 +44,6 @@ class loginToken(ObtainAuthToken):
             'user': user.username,
             'org_id': user.organization.id,
             'org_seller': user.organization.is_seller,
-            'departments': self._user_departments(user),
-            'groups': self._user_groups(user)
+            'is_superuser': user.is_superuser
+            
         })

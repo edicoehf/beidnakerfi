@@ -28,7 +28,7 @@ class Client(models.Model):
 
 class User(AbstractUser):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    #superuser = models.BooleanField(("Super User"))
+    superuser = models.BooleanField(("Super User"), default=False)
 
     def __str__(self):
         return self.username
@@ -74,7 +74,7 @@ class Cheque(models.Model):
     modified = models.DateTimeField(("Last modified"))
 
     def __str__(self):
-        return "{}: {}".format(self.id, self.description)
+        return "{}: {}".format(self.id, self.code)
 
     def save(self, *args, **kwargs):
         if not self.id:

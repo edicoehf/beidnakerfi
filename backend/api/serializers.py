@@ -63,7 +63,7 @@ class ChequeListSerializer(serializers.ModelSerializer):
     dep_id = serializers.IntegerField(source='department.id', write_only=True)
     class Meta:
         model = Cheque
-        fields = ('code', 'status', 'description', 'price', 'created', 'user', 'department', 'seller', 'user_id', 'dep_id')
+        fields = ('code', 'status', 'created', 'user', 'department', 'seller', 'user_id', 'dep_id')
         extra_kwargs = {'code': {'read_only': True}, 'description': {'read_only': True}, 'price': {'read_only': True}}
 
     def create(self, validated_data):
