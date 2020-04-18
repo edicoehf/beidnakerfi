@@ -28,7 +28,7 @@ const CostSitePicker = () => {
     <>
       <EdicoLogo />
       <View style={styles.container}>
-        <Text>Opna nýja beiðni fyrir:</Text>
+        <Text style={styles.font}>Opna nýja beiðni fyrir:</Text>
         {
           userInfo && userInfo.departments.length > 1 ? (
             <>

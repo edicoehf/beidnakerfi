@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import {
-  appPrimaryColor, appButtonColor, appButtonTextColor, appSecondaryColor,
-} from '../../styles/colors';
+  appPrimaryColor, appButtonColor, appButtonTextColor, appSecondaryColor, appTextColor, appFont,
+} from '../../styles/style-config';
 
 export default StyleSheet.create({
   container: {
@@ -20,6 +20,7 @@ export default StyleSheet.create({
     color: appButtonTextColor,
     fontWeight: 'bold',
     fontSize: 32,
+    fontFamily: appFont,
   },
   overlay: {
     flexDirection: 'column',
@@ -65,8 +66,10 @@ export default StyleSheet.create({
   rightMark: {
     fontSize: 30,
     marginLeft: 'auto',
+    fontFamily: appFont,
   },
   costsiteText: {
     fontSize: 30,
+    fontFamily: appFont,
   },
 });

@@ -10,7 +10,7 @@ import AppContainer from '../routes';
 
 const AppWrapper = () => (
   <View style={styles.container}>
-    <AppContainer />
+    <AppContainer style={styles.font} />
   </View>
 );
 export default AppWrapper;

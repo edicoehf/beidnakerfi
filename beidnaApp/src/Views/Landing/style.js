@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { appPrimaryColor, appTextColor } from '../../styles/colors';
+import { appPrimaryColor, appTextColor } from '../../styles/style-config';
 
 export default StyleSheet.create({
   container: {
