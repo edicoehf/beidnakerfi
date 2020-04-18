@@ -5,24 +5,24 @@ import PropTypes from 'prop-types';
 
 // Source
 import { useAuth } from './context/auth';
-import { views } from './config';
 
 const PrivateRoute = (props) => {
-  const { component: Component, func, path } = props;
+  const { component: Component, checkPrivileges, path } = props;
   const { authTokens } = useAuth();
 
   const handlePageChange = (parent) => {
     if (authTokens) {
-      if (func(views[path])) {
+      if (checkPrivileges(path)) {
         return <Component parent={parent} />;
       }
+      return <Redirect to="/401" />;
     }
     return <Redirect to="/" />;
   };
 
   return (
     <Route
-      func={func}
+      func={checkPrivileges}
       path={path}
       render={(parent) => handlePageChange(parent)}
     />
@@ -31,7 +31,8 @@ const PrivateRoute = (props) => {
 
 PrivateRoute.propTypes = {
   component: PropTypes.func.isRequired,
-  func: PropTypes.func.isRequired,
+  checkPrivileges: PropTypes.func.isRequired,
   path: PropTypes.string.isRequired,
 };
+
 export default PrivateRoute;

@@ -1,0 +1,20 @@
+.unauth { 
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.unauth > h1 {
+  margin-bottom: 20px;
+}
+
+.unauth > p {
+  margin-bottom: 20px;
+}
+
+.unauth > sub {
+  margin-left: 200px;
+}

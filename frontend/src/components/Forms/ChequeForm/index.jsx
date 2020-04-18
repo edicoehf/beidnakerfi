@@ -64,7 +64,7 @@ const ChequeForm = () => {
           name="costSite"
           type="text"
           ref={register({ required: true })}
-          placeholder="Kostnaða rstaður"
+          placeholder="Kostnaðarstaður"
           disabled
         />
       </div>

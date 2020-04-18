@@ -19,7 +19,9 @@ const ChequeList = (props) => {
     fetchCheques();
   }, []);
 
-
+  const handleClick = (e) => {
+    console.log(e);
+  };
   return (
 
     <table className="table">
@@ -46,7 +48,7 @@ const ChequeList = (props) => {
             const readableDate = new Date(created).toLocaleString('en-GB');
 
             return (
-              <tr className="row" key={code}>
+              <tr onClick={handleClick} className="row" key={code}>
                 <td>{ code }</td>
                 <td>{ sellerName }</td>
                 <td>{ deptName }</td>

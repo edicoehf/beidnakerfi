@@ -5,13 +5,11 @@ import '../Forms.css';
 
 import { getDepartments, createUser } from '../../../services/apiGateway';
 
-import { forms } from '../../../config';
-
-import { checkPrivileges } from '../../../services';
-
 const BuyerSuperUser = () => {
   const { register, handleSubmit } = useForm();
   const [costSites, setCostSites] = useState([]);
+
+  const isSeller = JSON.parse(localStorage.getItem('tokens')).org_seller;
 
   useEffect(() => {
     const fetchCostSites = async () => {
@@ -53,18 +51,17 @@ const BuyerSuperUser = () => {
         ref={register}
       />
       {
-        (checkPrivileges(forms.SuperBuyer)
-          ? (
-            <select className="inputField" ref={register} name="department">
-              {
-                costSites.map((site) => (
-                  <option key={site.id} value={site.id}>
-                    {site.name}
-                  </option>
-                ))
-              }
-            </select>
-          ) : null)
+        !isSeller ? (
+          <select className="inputField" ref={register} name="department">
+            {
+              costSites.map((site) => (
+                <option key={site.id} value={site.id}>
+                  {site.name}
+                </option>
+              ))
+            }
+          </select>
+        ) : null
       }
       <button className="submitButton" type="submit">
         Skrá starfsmann

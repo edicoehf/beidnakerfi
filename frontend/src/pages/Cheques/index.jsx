@@ -9,7 +9,7 @@ import SearchForm from '../../components/Forms/SearchForm';
 // Style
 import '../Pages.css';
 
-const Home = () => {
+const Cheques = () => {
   const [search, setSearch] = useState('');
 
   return (
@@ -26,4 +26,4 @@ const Home = () => {
 };
 
 
-export default Home;
+export default Cheques;

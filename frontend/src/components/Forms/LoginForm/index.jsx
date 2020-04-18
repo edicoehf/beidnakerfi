@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
 
+
 // Source
 import EdicoLogo from '../../EdicoLogo';
 import '../Forms.css';
@@ -24,8 +25,14 @@ const LoginForm = () => {
       setLoggedIn(true);
     } else { setError(true); }
   };
+
+
   if (isLoggedIn) {
-    return <Redirect to="/home" />;
+    const isSeller = JSON.parse(localStorage.getItem('tokens')).org_seller;
+    if (isSeller) {
+      return <Redirect to="/createcheque" />;
+    }
+    return <Redirect to="/cheques" />;
   }
   return (
     <div className="loginContainer">
