@@ -123,11 +123,10 @@ export const disableUser = async (id) => {
 */
 
 export const getDepartments = async () => {
-  const OrgID = getOrgId();
   const APIKEY = getKey();
 
   const query = await axios
-    .get(`${API_URL}/api/organizations/${OrgID}/departments/`, {
+    .get(`${API_URL}/api/departments/`, {
       headers: {
         authorization: APIKEY,
       },

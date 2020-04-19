@@ -51,8 +51,8 @@ const Sidebar = () => {
             </Link>
           ))
         }
-        <button type="button" className="sidebarButton" onClick={() => logOut()}>
-          Utskraning
+        <button type="button" className="sidebarButton logout" onClick={() => logOut()}>
+          Útskráning
         </button>
       </div>
     </div>

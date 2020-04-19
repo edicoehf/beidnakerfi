@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 // Source from us
 import LoginForm from './components/Forms/LoginForm';
-import Home from './pages/Home';
+import Cheques from './pages/Cheques';
 import CreateUser from './pages/CreateUser';
 import CreateCheque from './pages/CreateCheque';
 import ViewCustomers from './pages/ViewCustomers';
@@ -29,11 +29,11 @@ const Routes = () => {
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <Router>
         <Route exact path="/" component={LoginForm} />
-        <PrivateRoute path="/home" component={Home} func={checkPrivileges} />
-        <PrivateRoute path="/createuser" component={CreateUser} func={checkPrivileges} />
-        <PrivateRoute path="/createcheque" component={CreateCheque} func={checkPrivileges} />
-        <PrivateRoute path="/viewcustomers" component={ViewCustomers} func={checkPrivileges} />
-        <PrivateRoute path="/viewusers" component={ViewUsers} func={checkPrivileges} />
+        <PrivateRoute path="/cheques" component={Cheques} checkPrivileges={checkPrivileges} />
+        <PrivateRoute path="/createuser" component={CreateUser} checkPrivileges={checkPrivileges} />
+        <PrivateRoute path="/createcheque" component={CreateCheque} checkPrivileges={checkPrivileges} />
+        <PrivateRoute path="/viewcustomers" component={ViewCustomers} checkPrivileges={checkPrivileges} />
+        <PrivateRoute path="/viewusers" component={ViewUsers} checkPrivileges={checkPrivileges} />
         <Route exact path="/401" component={Unauthorized} />
       </Router>
     </AuthContext.Provider>

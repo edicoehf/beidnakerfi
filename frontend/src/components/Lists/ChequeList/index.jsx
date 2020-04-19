@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import '../Lists.css';
-import { getChequesByDepartmentId, getChequesByOrgId } from '../../../services/apiGateway';
+import { getChequesByOrgId } from '../../../services/apiGateway';
+import { statusCodes } from '../../../config';
 
 
 const ChequeList = (props) => {
@@ -18,41 +19,42 @@ const ChequeList = (props) => {
     fetchCheques();
   }, []);
 
+  const handleClick = (e) => {
+    console.log(e);
+  };
   return (
+
     <table className="table">
       <thead>
         <tr>
           <th>Beiðnanúmer</th>
-          <th>Lýsing</th>
-          <th>Verð</th>
-          <th>Staða</th>
-          <th>Úttektaraðili</th>
+          <th>Söluaðili</th>
           <th>Kostnaðarstaður</th>
+          <th>Úttektaraðili</th>
           <th>Dagsetning</th>
+          <th>Staða</th>
         </tr>
       </thead>
       <tbody>
         {
           cheques.filter((cheque) => cheque.code.includes(props.query)).map((cheque) => {
             const {
-              code, price, status, description, created,
+              code, status, created,
             } = cheque;
-            const { name } = cheque.department;
+            const { name: deptName } = cheque.department;
             const { username } = cheque.user;
+            const { name: sellerName } = cheque.seller;
 
             const readableDate = new Date(created).toLocaleString('en-GB');
 
             return (
-              <tr key={code}>
+              <tr onClick={handleClick} className="row" key={code}>
                 <td>{ code }</td>
-                <td>{ description }</td>
-                <td>
-                  { `${price} ISK`}
-                </td>
-                <td>{ status }</td>
+                <td>{ sellerName }</td>
+                <td>{ deptName }</td>
                 <td>{ username }</td>
-                <td>{ name }</td>
                 <td>{ readableDate }</td>
+                <td>{ statusCodes[status] }</td>
               </tr>
             );
           })
@@ -62,8 +64,12 @@ const ChequeList = (props) => {
   );
 };
 
+ChequeList.defaultProps = {
+  query: '',
+};
+
 ChequeList.propTypes = {
-  query: PropTypes.string.isRequired,
+  query: PropTypes.string,
 };
 
 export default ChequeList;
