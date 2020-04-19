@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import {
-  appPrimaryColor, appButtonColor, appButtonTextColor, appSecondaryColor, appTextColor, appFont,
+  appPrimaryColor, appButtonColor, appButtonTextColor, appSecondaryColor, appFont,
 } from '../../styles/style-config';
 
 export default StyleSheet.create({
@@ -21,11 +21,6 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 32,
     fontFamily: appFont,
-  },
-  overlay: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    height: 500,
   },
   defaultPick: {
     flex: 0,

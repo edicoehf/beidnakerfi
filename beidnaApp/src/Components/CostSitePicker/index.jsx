@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import {
-  View, TouchableOpacity, ScrollView,
-} from 'react-native';
-import {
-  Button, Text, Overlay, Icon,
-} from 'react-native-elements';
+import { View, TouchableOpacity } from 'react-native';
+import { Button, Text, Icon } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import { useSelector } from 'react-redux';
+
 import EdicoLogo from '../../Views/EdicoLogo';
+import CostsiteOverlay from '../../Views/Overlays/CostsiteOverlay';
 
 // Styles
 import styles from './style';
@@ -17,7 +15,7 @@ import * as api from '../../service/apiGateway';
 const CostSitePicker = () => {
   const { navigate } = useNavigation();
   const { userInfo } = useSelector((state) => state.userInfo);
-  const [isVisible, setVisable] = useState(false);
+  const [isVisible, setVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState(userInfo !== '' ? userInfo.departments[0] : '');
   const handleNewCheque = async () => {
     const newCheque = await api.generateCheque(userInfo.token, userInfo.id, selectedValue.id);
@@ -32,7 +30,7 @@ const CostSitePicker = () => {
         {
           userInfo && userInfo.departments.length > 1 ? (
             <>
-              <TouchableOpacity onPress={() => setVisable(true)}>
+              <TouchableOpacity onPress={() => setVisible(true)}>
                 <View style={styles.defaultPick}>
                   <Text style={styles.costsiteText}>{selectedValue.name}</Text>
                   <View style={styles.rightMark}>
@@ -40,42 +38,13 @@ const CostSitePicker = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-              <Overlay
-                overlayStyle={styles.overlay}
-                isVisible={isVisible}
-                onBackdropPress={() => setVisable(false)}
-                borderRadius={25}
-              >
-                <ScrollView>
-                  {
-                    userInfo.departments.map((x) => (
-                      <TouchableOpacity
-                        key={x.id}
-                        style={styles.costsitePicker}
-                        onPress={() => {
-                          setSelectedValue(x);
-                          setVisable(false);
-                        }}
-                      >
-                        <View style={styles.listItem}>
-                          {
-                            x.id === selectedValue.id ? (
-                              <>
-                                <Text style={styles.costsiteText}>{x.name}</Text>
-                                <View style={styles.rightMark}>
-                                  <Icon name="radio-button-checked" />
-                                </View>
-                              </>
-                            ) : (
-                              <Text style={styles.costsiteText}>{x.name}</Text>
-                            )
-                          }
-                        </View>
-                      </TouchableOpacity>
-                    ))
-                  }
-                </ScrollView>
-              </Overlay>
+              <CostsiteOverlay
+                departments={userInfo.departments}
+                visible={isVisible}
+                value={selectedValue}
+                visibleFunc={setVisible}
+                valueFunc={setSelectedValue}
+              />
             </>
           ) : (
             <View style={styles.oneCostsite}>

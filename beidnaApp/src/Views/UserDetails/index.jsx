@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Text, Icon } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 
 import TopNavigator from '../TopNavigator';
@@ -9,27 +9,39 @@ import TopNavigator from '../TopNavigator';
 import styles from './style';
 
 const UserDetails = () => {
-  const { userInfo } = useSelector((state) => state.userInfo);
+  const {
+    userInfo: {
+      username, departments, email, organization,
+    },
+  } = useSelector((state) => state.userInfo);
   return (
     <View style={styles.container}>
       <TopNavigator />
       <View style={styles.content}>
-        <Text>
-          Nafn:
-          {userInfo.user}
-        </Text>
-        <Text>
-          org id:
-          {userInfo.org_id}
-        </Text>
-        <Text>Deildir: </Text>
+        <Icon iconStyle={styles.userIcon} name="person" />
+        <View style={styles.userItem}>
+          <Text style={styles.itemDesc}>Nafn:</Text>
+          <Text style={styles.itemUser}>{username}</Text>
+        </View>
+        <View style={styles.userItem}>
+          <Text style={styles.itemDesc}>Email:</Text>
+          <Text style={styles.itemUser}>{email}</Text>
+        </View>
         {
-          userInfo ? (
-            userInfo.departments.map((x) => (
-              <Text key={x.id}>{x.name}</Text>
+          organization ? (
+            <View style={styles.userItem}>
+              <Text style={styles.itemDesc}>Fyrirtæki:</Text>
+              <Text style={styles.itemUser}>{organization.name}</Text>
+            </View>
+          ) : null
+        }
+        <Text style={styles.userDepartmentDesc}>Deildir: </Text>
+        {
+          departments ? (
+            departments.map((x) => (
+              <Text style={styles.departmentItem} key={x.id}>{x.name}</Text>
             ))
           ) : null
-
         }
       </View>
     </View>
