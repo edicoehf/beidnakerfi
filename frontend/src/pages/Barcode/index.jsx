@@ -3,11 +3,14 @@
 
 import React from 'react';
 import Barcode from 'react-barcode';
+import './Barcode.css';
 
 const BarcodeGenerator = (props) => {
   const { code } = props.match.params;
   return (
-    <Barcode value={code} />
+    <div className="barcode">
+      <Barcode value={code} />
+    </div>
   );
 };
 
