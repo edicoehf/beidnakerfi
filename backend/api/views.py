@@ -11,7 +11,6 @@ from .serializers import UserListSerializer, UserDetailSerializer, OrganizationL
 
 from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOrg
 
-
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     search_fields = [ 'username', 'email', 'departments__name' ]
@@ -67,7 +66,6 @@ class UserViewSet(ModelViewSet):
         
         user_serializer = self.get_serializer(user)
         return Response({'success': True, 'message': 'User activated', 'user': user_serializer.data}, status=status.HTTP_200_OK)
-
 
 class OrganizationViewSet(ModelViewSet):
     queryset = Organization.objects.all()
