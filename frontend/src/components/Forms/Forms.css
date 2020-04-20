@@ -15,13 +15,6 @@
   min-width: 300px;
   max-width: 500px;
 }
-.forms {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 80%
-}
 .searchForm {
   display: flex;
   flex-direction: row;
