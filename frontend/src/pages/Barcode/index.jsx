@@ -5,7 +5,7 @@ import React from 'react';
 import Barcode from 'react-barcode';
 
 const BarcodeGenerator = (props) => {
-  const { code } = props.match.params.code;
+  const { code } = props.match.params;
   return (
     <Barcode value={code} />
   );
