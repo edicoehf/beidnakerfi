@@ -7,9 +7,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import User, Department, Organization, Cheque, Client
-from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer, ChequeListSerializer, ChequeDetailSerializer, ChequeActionSerializer, ClientSerializer, ClientActionSerializer
+from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer, ChequeListSerializer, ChequeDetailSerializer, ChequeActionSerializer, ClientSerializer, ClientActionSerializer, PasswordSerializer
 
-from .permissions import IsAdmin, IsSelfOrAdmin, Org_IsUserInOrg, Dep_IsUserInOrg
+from .permissions import IsAdmin, IsSelfOrAdmin, IsSelfOrSuper, Org_IsUserInOrg, Dep_IsUserInOrg
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
@@ -34,12 +34,15 @@ class UserViewSet(ModelViewSet):
 
     def get_permissions(self):
         permission_classes = []
+        print(self.action)
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [permissions.IsAuthenticated]
         elif self.action == 'create' or self.action == 'destroy':
             permission_classes = [permissions.IsAuthenticated, IsAdmin]
         elif self.action == 'update' or self.action == 'partial_update':
             permission_classes = [permissions.IsAuthenticated, IsSelfOrAdmin]
+        elif self.action == 'set_password':
+            permission_classes = [permissions.IsAuthenticated, IsSelfOrSuper]
         return [permission() for permission in permission_classes]
 
     def destroy(self, request, *args, **kwargs):
@@ -66,6 +69,26 @@ class UserViewSet(ModelViewSet):
         
         user_serializer = self.get_serializer(user)
         return Response({'success': True, 'message': 'User activated', 'user': user_serializer.data}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['PUT'])
+    def set_password(self, request, pk):
+        user = self.get_object()
+
+        if not user.is_active:
+            return Response({'success': True, 'message': 'User disabled'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = PasswordSerializer(data=request.data)
+
+        # Superuser skips serializer check in order to set password for other users
+        if serializer.is_valid() or request.user.is_superuser:
+            if not user.check_password(serializer.data.get('old_password')) and not request.user.is_superuser:
+                return Response({'success': False, 'messsage': 'Password incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+            user.set_password(serializer.data.get('new_password'))
+            user.save()
+            
+            return Response({'success': True, 'message': 'New password set'}, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OrganizationViewSet(ModelViewSet):
     queryset = Organization.objects.all()
