@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
-import Barcode from 'react-native-barcode-builder';
+import { WebView } from 'react-native-webview';
 
 import TopNavigator from '../TopNavigator';
 import Timer from '../../Components/Timer';
@@ -20,7 +20,14 @@ const NewCheque = () => {
         <View style={styles.content}>
           <Text>Ný beiðni fyrir:</Text>
           <Text style={styles.costsite}>{ costsite.name }</Text>
-          <Barcode value={cheque.code} text={cheque.code} />
+        </View>
+        <View style={styles.web}>
+          <WebView
+            source={{ uri: `http://beidnakerfi.herokuapp.com/generate/${cheque.code}` }}
+            startInLoadingState
+            bounces={false}
+            scrollEnabled={false}
+          />
         </View>
       </View>
       <Timer />

@@ -12,13 +12,19 @@ export default StyleSheet.create({
   },
   content: {
     alignItems: 'center',
-    paddingTop: 25,
-    marginTop: '15%',
     marginRight: 'auto',
     marginLeft: 'auto',
     justifyContent: 'center',
     width: '80%',
     color: appTextColor,
+    height: '80%',
+  },
+  userItem: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: appSecondaryColor,
+    borderBottomWidth: 1,
   },
   itemUser: {
     padding: 10,
@@ -36,12 +42,12 @@ export default StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontFamily: appFont,
-    marginTop: 100,
+    marginTop: '15%',
     fontSize: 23,
     borderBottomColor: appSecondaryColor,
     borderBottomWidth: 1,
   },
-  departmentItem: {
+  centerItem: {
     padding: 10,
     width: '100%',
     textAlign: 'center',
@@ -49,15 +55,19 @@ export default StyleSheet.create({
     fontSize: 23,
   },
   itemDesc: {
+    flex: 0,
     padding: 10,
     fontFamily: appFont,
     fontSize: 23,
   },
-  userItem: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomColor: appSecondaryColor,
-    borderBottomWidth: 1,
-  },
+  changePW:{
+    marginTop: 'auto',
+    backgroundColor: appSecondaryColor,
+    borderWidth: 2,
+    borderRadius: 15,
+    paddingRight: 15,
+    paddingLeft: 15,
+
+  }
+
 });

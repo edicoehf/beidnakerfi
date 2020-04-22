@@ -25,7 +25,7 @@ export const deleteCheque = async (apiKey, chequePK) => axios.delete(`${API_URL}
 }).then((resp) => resp.data)
   .catch((e) => e.response);
 
-export const getUserInfo = async (apiKey, userId) => axios.get(`${API_URL}/api/users/${userId}`, {
+export const getUserInfo = async (apiKey, userId) => axios.get(`${API_URL}/api/users/${userId}/`, {
   headers: {
     authorization: `Token ${apiKey}`,
   },

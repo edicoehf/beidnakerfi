@@ -14,11 +14,13 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     backgroundColor: appPrimaryColor,
-    minHeight: 80,
   },
   costsite: {
     fontSize: 30,
     color: appTextColor,
     fontFamily: appFont,
+  },
+  web: {
+    minHeight: 145,
   },
 });

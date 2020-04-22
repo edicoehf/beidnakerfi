@@ -46,7 +46,6 @@ const Login = () => {
       setVisible(true);
     }
   };
-
   return (
     <>
       <View style={styles.container}>

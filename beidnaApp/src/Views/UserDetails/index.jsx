@@ -1,7 +1,8 @@
-import React from 'react';
-import { View } from 'react-native';
-import { Text, Icon } from 'react-native-elements';
+import React, { useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import { Text, Icon, Button } from 'react-native-elements';
 import { useSelector } from 'react-redux';
+import ChangePasswordOverlay from '../Overlays/ChangePasswordOverlay';
 
 import TopNavigator from '../TopNavigator';
 
@@ -9,6 +10,7 @@ import TopNavigator from '../TopNavigator';
 import styles from './style';
 
 const UserDetails = () => {
+  const [isVisible, setVisible] = useState(false);
   const {
     userInfo: {
       username, departments, email, organization,
@@ -39,11 +41,23 @@ const UserDetails = () => {
         {
           departments ? (
             departments.map((x) => (
-              <Text style={styles.departmentItem} key={x.id}>{x.name}</Text>
+              <Text style={styles.centerItem} key={x.id}>{x.name}</Text>
             ))
           ) : null
         }
+          <TouchableOpacity
+            style={styles.changePW}
+            onPress={() => {
+              setVisible(true);
+            }}
+          >
+            <Text style={styles.centerItem}>Breyta lykilorði</Text>
+          </TouchableOpacity>
       </View>
+      <ChangePasswordOverlay
+        visible={isVisible}
+        visibleFunc={setVisible}
+      />
     </View>
   );
 };
