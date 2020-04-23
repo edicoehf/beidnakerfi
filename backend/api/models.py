@@ -8,9 +8,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
-# EMAIL API
-import requests
-import json
+# EMAIL
+from .email import send_email
+
 
 class Organization(models.Model):
     name = models.CharField(("Organization name"), max_length=50, unique=True)
@@ -33,6 +33,12 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+# Signal to create auth token after user create
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
 class Department(models.Model):
     name = models.CharField(("Department name"), max_length=50)
     costsite = models.CharField(("Costsite"), max_length=50)
@@ -41,11 +47,6 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
 
 class Cheque(models.Model):
     # Constants for choice integers to avoid magic number usage
@@ -92,16 +93,3 @@ def email_init(sender, instance, created=False, **kwargs):
         # response = send_email(instance.user.email, title, body)
         # print(response.text)
         # print(response.status_code)
-
-
-def send_email(email_recipient, title, body):
-    server = settings.MAIL_URL
-    auth = ("api", settings.MAIL_KEY)
-    data = {
-        "from": "Ingi Pingi <ingitho@gmail.com>",
-        "to": email_recipient,
-        "subject": title,
-        "text": body
-    }
-    
-    return requests.post(server, auth=auth, data=data)
