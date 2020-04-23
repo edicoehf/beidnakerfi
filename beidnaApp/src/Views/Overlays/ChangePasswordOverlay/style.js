@@ -5,25 +5,24 @@ export default StyleSheet.create({
   overlay: {
     flexDirection: 'column',
     justifyContent: 'center',
-    height: '50%',
+    minHeight: 330,
+    maxHeight: 330,
   },
   closeModal: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'center',
     alignItems: 'flex-end',
-    paddingRight: 10,
-    paddingTop: 10,
   },
-  modalText: {
-    flex: 4,
-    paddingTop: 10,
-    justifyContent: 'flex-start',
+  modalContent: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputField: {
     width: '100%',
     marginBottom: 10,
   },
-  changePW:{
+  changePW: {
     marginBottom: 10,
     marginTop: 'auto',
     backgroundColor: appSecondaryColor,
@@ -31,6 +30,19 @@ export default StyleSheet.create({
     borderRadius: 15,
     paddingTop: 15,
     paddingBottom: 15,
+    width: '80%',
     alignItems: 'center',
-  }
+  },
+  redText: {
+    color: 'red',
+  },
+  checkIcon: {
+    fontSize: 200,
+  },
+  iconPress: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 50,
+    height: 50,
+  },
 });

@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint *.jsx **/*.jsx"
+    "lint": "eslint *.js **/*.js"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.6",

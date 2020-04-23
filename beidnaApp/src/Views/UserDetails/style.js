@@ -60,14 +60,12 @@ export default StyleSheet.create({
     fontFamily: appFont,
     fontSize: 23,
   },
-  changePW:{
+  changePW: {
     marginTop: 'auto',
     backgroundColor: appSecondaryColor,
     borderWidth: 2,
     borderRadius: 15,
     paddingRight: 15,
     paddingLeft: 15,
-
-  }
-
+  },
 });

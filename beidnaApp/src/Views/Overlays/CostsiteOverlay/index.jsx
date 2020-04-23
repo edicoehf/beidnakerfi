@@ -55,25 +55,10 @@ const CostsiteOverlay = (
   );
 };
 export default CostsiteOverlay;
-// Barcode.propTypes = {
-//   value: PropTypes.string.isRequired,
-//   renderer: PropTypes.string,
-//   format: PropTypes.string,
-//   width: PropTypes.number,
-//   height: PropTypes.number,
-//   displayValue: PropTypes.bool,
-//   fontOptions: PropTypes.string,
-//   font: PropTypes.string,
-//   textAlign: PropTypes.string,
-//   textPosition: PropTypes.string,
-//   textMargin: PropTypes.number,
-//   fontSize: PropTypes.number,
-//   background: PropTypes.string,
-//   lineColor: PropTypes.string,
-//   margin: PropTypes.number,
-//   marginTop: PropTypes.number,
-//   marginBottom: PropTypes.number,
-//   marginLeft: PropTypes.number,
-//   marginRight: PropTypes.number,
+// CostsiteOverlay.propTypes = {
+//   departments: PropTypes.bool.isRequired,
+//   visible: PropTypes.bool.isRequired,
+//   value: PropTypes.string,
+//
 // };
 // TODO: add prop validation

@@ -4,7 +4,7 @@ import { appPrimaryColor } from '../../styles/style-config';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    maxHeight: 70,
+    maxHeight: 60,
     backgroundColor: appPrimaryColor,
     flexDirection: 'row',
     paddingRight: 3,
@@ -17,17 +17,15 @@ export default StyleSheet.create({
     alignSelf: 'flex-start',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 70,
-    borderRadius: 50,
-    width: 70,
   },
   right: {
     backgroundColor: appPrimaryColor,
     alignSelf: 'flex-end',
+  },
+  iconPress: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 70,
-    borderRadius: 50,
     width: 70,
+    height: 60,
   },
 });

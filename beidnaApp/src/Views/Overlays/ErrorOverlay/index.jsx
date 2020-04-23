@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import {
   Text, Overlay, Icon,
 } from 'react-native-elements';
@@ -8,20 +8,25 @@ import PropTypes from 'prop-types';
 // Styles
 import styles from './style';
 
-const ErrorOverlay = ({ errorText, visible, func }) => {
+const ErrorOverlay = ({ errorText, visible, visibleFunc }) => {
   useEffect(() => {
-    func(visible);
+    visibleFunc(visible);
   }, [visible]);
   return (
     <Overlay
       overlayStyle={styles.overlay}
       isVisible={visible}
-      onBackdropPress={() => func(false)}
+      onBackdropPress={() => visibleFunc(false)}
       borderRadius={25}
     >
       <>
         <View style={styles.closeModal}>
-          <Icon name="close" onPress={() => func(false)} />
+          <TouchableOpacity
+            style={styles.iconPress}
+            onPress={() => visibleFunc(false)}
+          >
+            <Icon name="close" />
+          </TouchableOpacity>
         </View>
         <View style={styles.modalText}>
           {
