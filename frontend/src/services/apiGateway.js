@@ -44,10 +44,12 @@ export const getUsers = async () => {
 export const getUser = async (id) => {
   const query = await axios
     .get(`${API_URL}/api/users/${id}/`, {
-      method: 'GET',
+      headers: {
+        authorization: getKey(),
+      },
 
     })
-    .then((resp) => resp)
+    .then((resp) => resp.data)
     .catch((e) => e.response);
   return query;
 };
