@@ -22,13 +22,13 @@ class IsSuperUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user and request.user.is_superuser
 
-class Dep_IsUserInOrg(permissions.BasePermission):
+class IsUserInOrg(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.user.organization == obj.organization
+        return request.user.organization == obj.organization or request.user.is_staff
 
-class Org_IsUserInOrg(permissions.BasePermission):
+class IsUserOrgBuyer(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.user.organization == obj or request.user.is_staff
+        return not request.user.organization.is_seller
 
 """
 #### USERS

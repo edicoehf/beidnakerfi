@@ -9,17 +9,17 @@ from rest_framework.response import Response
 from .models import User, Department, Organization, Cheque, Client
 from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer, ChequeListSerializer, ChequeDetailSerializer, ChequeActionSerializer, ClientSerializer, ClientActionSerializer, PasswordSerializer
 
-from .permissions import IsAdmin, IsSelfOrAdmin, IsSelfOrSuper, Org_IsUserInOrg, Dep_IsUserInOrg
+from .permissions import IsAdmin, IsSelfOrAdmin, IsSuperUser, IsSelfOrSuper, IsUserInOrg, IsUserOrgBuyer
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     search_fields = [ 'username', 'email', 'departments__name' ]
-    ordering_fields = [ 'username', 'email', 'departments']
+    ordering_fields = [ 'username', 'email', 'departments' ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
-            return User.objects.filter(organization=self.kwargs['organization_pk'])
+            return User.objects.filter(organization=self.kwargs['organization_pk']).prefetch_related('department_user')
         else:
             organization = self.request.user.organization
             return User.objects.filter(organization=organization).prefetch_related('department_user')
@@ -34,15 +34,16 @@ class UserViewSet(ModelViewSet):
 
     def get_permissions(self):
         permission_classes = []
-        print(self.action)
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [permissions.IsAuthenticated]
         elif self.action == 'create' or self.action == 'destroy':
-            permission_classes = [permissions.IsAuthenticated, IsAdmin]
+            permission_classes = [permissions.IsAuthenticated, IsSuperUser, IsUserInOrg]
         elif self.action == 'update' or self.action == 'partial_update':
-            permission_classes = [permissions.IsAuthenticated, IsSelfOrAdmin]
+            permission_classes = [permissions.IsAuthenticated, IsSelfOrSuper, IsUserInOrg]
+        elif self.action == 'activate':
+            permission_classes = [permissions.IsAuthenticated, IsSuperUser, IsUserInOrg]
         elif self.action == 'set_password':
-            permission_classes = [permissions.IsAuthenticated, IsSelfOrSuper]
+            permission_classes = [permissions.IsAuthenticated, IsSelfOrSuper, IsUserInOrg]
         return [permission() for permission in permission_classes]
 
     def destroy(self, request, *args, **kwargs):
@@ -75,7 +76,7 @@ class UserViewSet(ModelViewSet):
         user = self.get_object()
 
         if not user.is_active:
-            return Response({'success': True, 'message': 'User disabled'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'success': False, 'message': 'User disabled'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = PasswordSerializer(data=request.data)
 
@@ -93,6 +94,10 @@ class UserViewSet(ModelViewSet):
 class OrganizationViewSet(ModelViewSet):
     queryset = Organization.objects.all()
 
+    def get_queryset(self):
+        organization = self.request.user.organization.id
+        return Organization.objects.filter(id=organization).prefetch_related('departments')
+
     def get_serializer_class(self):
         if self.action == 'list':
             return OrganizationListSerializer
@@ -104,7 +109,7 @@ class OrganizationViewSet(ModelViewSet):
     def get_permissions(self):
         permission_classes = []
         if self.action == 'list' or self.action == 'retrieve':
-            permission_classes = [permissions.IsAuthenticated, Org_IsUserInOrg]
+            permission_classes = [permissions.IsAuthenticated]
         elif self.action == 'create' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
             permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
@@ -138,9 +143,11 @@ class DepartmentViewSet(ModelViewSet):
     def get_permissions(self):
         permission_classes = []
         if self.action == 'list' or self.action == 'retrieve':
-            permission_classes = [permissions.IsAuthenticated, Dep_IsUserInOrg]
+            permission_classes = [permissions.IsAuthenticated]
         elif self.action == 'create' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
-            permission_classes = [permissions.IsAuthenticated, IsAdmin]
+            permission_classes = [permissions.IsAuthenticated, IsSuperUser, IsUserInOrg]
+        elif self.action == 'add_user' or self.action == 'remove_user':
+            permission_classes = [permissions.IsAuthenticated, IsSuperUser, IsUserInOrg]
 
         return [permission() for permission in permission_classes]
 
@@ -226,8 +233,19 @@ class ChequeViewSet(ModelViewSet):
         if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
             return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
 
-        request.data['status'] = 2
+        request.data['status'] = cheque.PENDING
         return super().partial_update(request, *args, **kwargs)
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [permissions.IsAuthenticated]
+        elif self.action == 'create':
+            permissions_classes = [permissions.IsAuthenticated, IsUserOrgBuyer]
+        elif self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
+            permission_classes = [permissions.IsAuthenticated]
+
+        return [permission() for permission in permission_classes]
 
     def destroy(self, request, *args, **kwargs):
         cheque = self.get_object()
@@ -236,7 +254,7 @@ class ChequeViewSet(ModelViewSet):
         # Cheque delete if user is owner and cheque not confirmed by seller
         # Cheque cancel if user is in seller organization and cheque pending
         if not cheque.seller or not user.organization.is_seller:
-            if cheque.status <= 1:
+            if cheque.status <= cheque.CREATED:
                 if cheque.user == user:
                     return super().destroy(request, *args, **kwargs)
                 else:
@@ -244,9 +262,9 @@ class ChequeViewSet(ModelViewSet):
             else:
                 return Response({'success': False, 'message': 'Cheque already confirmed by seller. Seller must cancel for delete'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            if cheque.status == 2:
+            if cheque.status == cheque.PENDING:
                 if cheque.seller == user.organization:
-                    cheque.status = 0
+                    cheque.status = cheque.CANCELLED
                     cheque.save()
                     return Response({'success': True, 'message': 'Cheque cancelled'}, status=status.HTTP_200_OK)
                 else:
