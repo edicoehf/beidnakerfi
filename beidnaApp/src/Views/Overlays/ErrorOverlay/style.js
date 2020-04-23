@@ -7,15 +7,19 @@ export default StyleSheet.create({
     height: 120,
   },
   closeModal: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'center',
     alignItems: 'flex-end',
-    paddingRight: 10,
-    paddingTop: 10,
   },
   modalText: {
-    flex: 4,
+    flex: 1,
     paddingTop: 10,
     justifyContent: 'flex-start',
+  },
+  iconPress: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

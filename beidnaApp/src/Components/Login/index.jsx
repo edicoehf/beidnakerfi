@@ -75,7 +75,7 @@ const Login = () => {
           </View>
         </View>
       </View>
-      <ErrorOverlay errorText={errorText} visible={isVisible} func={setVisible} />
+      <ErrorOverlay errorText={errorText} visible={isVisible} visibleFunc={setVisible} />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation } from 'react-navigation-hooks';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,16 +37,31 @@ const TopNavigator = () => {
       {
         routeName === 'Landing' ? (
           <View style={styles.left}>
-            <Icon name="person" onPress={() => navigate('UserDetails')} />
+            <TouchableOpacity
+              style={styles.iconPress}
+              onPress={() => navigate('UserDetails')}
+            >
+              <Icon name="person" />
+            </TouchableOpacity>
           </View>
         ) : (
           <View style={styles.left}>
-            <Icon name="arrow-back" onPress={() => back()} />
+            <TouchableOpacity
+              style={styles.iconPress}
+              onPress={() => back()}
+            >
+              <Icon name="arrow-back" />
+            </TouchableOpacity>
           </View>
         )
       }
       <View style={styles.right}>
-        <Icon name="lock" onPress={async () => logout()} />
+        <TouchableOpacity
+          style={styles.iconPress}
+          onPress={async () => logout()}
+        >
+          <Icon name="lock" />
+        </TouchableOpacity>
       </View>
     </View>
   );

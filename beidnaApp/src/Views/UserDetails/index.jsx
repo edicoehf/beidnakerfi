@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { Text, Icon, Button } from 'react-native-elements';
+import { Text, Icon } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import ChangePasswordOverlay from '../Overlays/ChangePasswordOverlay';
 
@@ -45,14 +45,14 @@ const UserDetails = () => {
             ))
           ) : null
         }
-          <TouchableOpacity
-            style={styles.changePW}
-            onPress={() => {
-              setVisible(true);
-            }}
-          >
-            <Text style={styles.centerItem}>Breyta lykilorði</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.changePW}
+          onPress={() => {
+            setVisible(true);
+          }}
+        >
+          <Text style={styles.centerItem}>Breyta lykilorði</Text>
+        </TouchableOpacity>
       </View>
       <ChangePasswordOverlay
         visible={isVisible}
