@@ -4,6 +4,7 @@ import {
   Text, Overlay, Icon, Input,
 } from 'react-native-elements';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 // Service
 import * as api from '../../../service/apiGateway';
 // Styles
@@ -107,4 +108,9 @@ const ChangePasswordOverlay = ({ visible, visibleFunc }) => {
 };
 export default ChangePasswordOverlay;
 
+ChangePasswordOverlay.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  visibleFunc: PropTypes.func.isRequired,
+
+};
 // TODO: add prop validation

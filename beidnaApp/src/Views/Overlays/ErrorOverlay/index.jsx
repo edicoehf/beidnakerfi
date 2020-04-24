@@ -41,4 +41,10 @@ const ErrorOverlay = ({ errorText, visible, visibleFunc }) => {
 };
 export default ErrorOverlay;
 
-// TODO: add prop validation
+ErrorOverlay.propTypes = {
+  errorText: PropTypes.arrayOf(
+    PropTypes.string,
+  ).isRequired,
+  visible: PropTypes.bool.isRequired,
+  visibleFunc: PropTypes.func.isRequired,
+};

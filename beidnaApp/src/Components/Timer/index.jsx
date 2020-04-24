@@ -37,7 +37,7 @@ const Timer = () => {
         backgroundColor="darkred"
       >
         {
-          (fill) => (
+          (fill) => ( // eslint-disable-line no-unused-vars
             <View style={styles.timebox}>
               <Text style={styles.timeText}>
                 {
