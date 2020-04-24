@@ -1,6 +1,6 @@
 export const views = {
   superSeller: ['/cheques', '/createcheque', '/createuser', '/viewcustomers', '/viewusers'],
-  superBuyer: ['/cheques', '/createcheque', '/createuser', '/viewcustomers', '/viewusers'],
+  superBuyer: ['/cheques', '/createuser', '/viewcustomers', '/viewusers'],
   seller: ['/cheques', '/createcheque'],
   buyer: [],
 };

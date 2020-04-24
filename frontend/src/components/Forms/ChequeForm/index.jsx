@@ -23,6 +23,10 @@ const useStyles = makeStyles((themes) => ({
     marginTop: themes.spacing(3),
     marginLeft: 'auto',
   },
+  formContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 }));
 
 const ChequeForm = () => {
@@ -65,69 +69,69 @@ const ChequeForm = () => {
   };
 
   return (
-    <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-      {errors.key && <span>{errors.key.message}</span>}
-      <div className={classes.formGroup}>
-        <TextField
-          className={classes.inputField}
-          name="key"
-          inputRef={register({ required: true, maxLength: 20, minLength: 20 })}
-          label="Lykill"
-          onChange={(e) => {
-            const { value } = e.target;
-            if (value.length === 20) {
-              getChequeData(value);
-            }
-          }}
-          autoFocus
-        />
-        <TextField
-          className={classes.inputField}
-          name="costSite"
-          inputRef={register({ required: true })}
-          label="Kostnaðarstaður"
-          disabled
-        />
-      </div>
+    <div className={classes.formContainer}>
+      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+        {errors.key && <span>{errors.key.message}</span>}
+        <div className={classes.formGroup}>
+          <TextField
+            className={classes.inputField}
+            name="key"
+            inputRef={register({ required: true, maxLength: 20, minLength: 20 })}
+            label="Lykill"
+            onChange={(e) => {
+              const { value } = e.target;
+              if (value.length === 20) {
+                getChequeData(value);
+              }
+            }}
+            autoFocus
+          />
+          <TextField
+            className={classes.inputField}
+            name="costSite"
+            inputRef={register({ required: true })}
+            label="Kostnaðarstaður"
+            disabled
+          />
+        </div>
 
-      <div className={classes.formGroup}>
-        <TextField
-          className={classes.inputField}
-          name="itemDescription"
-          inputRef={register({ required: true })}
-          label="Lýsing"
-        />
-        <TextField
-          className={classes.inputField}
-          name="itemPrice"
-          inputRef={register({ required: true })}
-          label="Verð"
+        <div className={classes.formGroup}>
+          <TextField
+            className={classes.inputField}
+            name="itemDescription"
+            inputRef={register({ required: true })}
+            label="Lýsing"
+          />
+          <TextField
+            className={classes.inputField}
+            name="itemPrice"
+            inputRef={register({ required: true })}
+            label="Verð"
+          />
+        </div>
 
-        />
-      </div>
+        <div className={classes.formGroup}>
+          <TextField
+            className={classes.inputField}
+            name="buyerName"
+            inputRef={register({ required: true })}
+            label="Vinnustaður úttektaraðila"
+            disabled
+          />
+          <TextField
+            className={classes.inputField}
+            name="createdDate"
+            inputRef={register({ required: true })}
+            label="Tími og dagsetning stofnunar"
+            disabled
+          />
+        </div>
 
-      <div className={classes.formGroup}>
-        <TextField
-          className={classes.inputField}
-          name="buyerName"
-          inputRef={register({ required: true })}
-          label="Vinnustaður úttektaraðila"
-          disabled
-        />
-        <TextField
-          className={classes.inputField}
-          name="createdDate"
-          inputRef={register({ required: true })}
-          label="Tími og dagsetning stofnunar"
-          disabled
-        />
-      </div>
-
-      <Button variant="contained" color="primary" className={classes.submitButton} type="submit">
-        Skrá beiðni
-      </Button>
-    </form>
-
+        <Button variant="contained" color="primary" className={classes.submitButton} type="submit">
+          Skrá beiðni
+        </Button>
+      </form>
+    </div>
   );
 };
 

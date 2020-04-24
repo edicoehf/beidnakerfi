@@ -101,11 +101,12 @@ export const createUser = async (newUser) => {
 };
 
 export const updateUser = async (user) => {
-  const { id } = user;
+  const { id, email, username } = user;
   const APIKEY = getKey();
   const query = await axios
     .patch(`${API_URL}/api/users/${id}/`, {
-      user,
+      email,
+      username,
     }, {
       headers: {
         authorization: APIKEY,
@@ -116,10 +117,10 @@ export const updateUser = async (user) => {
   return query;
 };
 
-export const disableUser = async (id) => {
+export const deactivateUser = async (id) => {
   const APIKEY = getKey();
-  const query = await axios
-    .delete(`${API_URL}/api/users/${id}/`,
+  await axios
+    .post(`${API_URL}/api/users/${id}/deactivate/`, {},
       {
         headers: {
           authorization: APIKEY,
@@ -127,7 +128,18 @@ export const disableUser = async (id) => {
       })
     .then((resp) => resp)
     .catch((e) => e.response);
-  return query;
+};
+
+export const activateUser = async (id) => {
+  const APIKEY = getKey();
+  await axios
+    .post(`${API_URL}/api/users/${id}/activate/`, {}, {
+      headers: {
+        authorization: APIKEY,
+      },
+    })
+    .then((resp) => resp)
+    .catch((e) => e.repsonse);
 };
 
 /*

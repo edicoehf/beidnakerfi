@@ -5,7 +5,7 @@ import {
   Button, TextField, makeStyles, List, ListItem, ListSubheader,
 } from '@material-ui/core';
 
-import { updateUser, disableUser } from '../../../services/apiGateway';
+import { updateUser, deactivateUser, activateUser } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
   form: {
@@ -37,6 +37,9 @@ const UserDetailsForm = (props) => {
     const { id, username, email } = userData;
     await updateUser({ id, username, email });
   };
+
+  const userActivate = () => activateUser(userData.id);
+  const userDeactivate = () => deactivateUser(userData.id);
 
   return (
     <>
@@ -96,8 +99,8 @@ const UserDetailsForm = (props) => {
           // eslint-disable-next-line no-nested-ternary
           isSuperUser
             ? user.is_active
-              ? <Button type="button" className={classes.button} variant="contained" color="primary">Loka aðgang</Button>
-              : <Button type="button" className={classes.button} variant="contained" color="primary">Opna aðgang</Button>
+              ? <Button type="button" className={classes.button} variant="contained" color="primary" onClick={userDeactivate}>Loka aðgang</Button>
+              : <Button type="button" className={classes.button} variant="contained" color="primary" onClick={userActivate}>Opna aðgang</Button>
             : null
         }
         {
