@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import '../Forms.css';
+import { TextField } from '@material-ui/core';
 
 const SearchForm = (props) => {
   const handleChange = (e) => {
@@ -10,12 +11,13 @@ const SearchForm = (props) => {
   return (
     <>
       <form className="searchForm">
-        <input
+        <TextField
           onChange={handleChange}
           className="inputField"
           name="query"
           type="text"
-          placeholder="Leitarstrengur"
+          label="Stimplaðu inn notendanafn"
+          autoFocus
         />
       </form>
     </>

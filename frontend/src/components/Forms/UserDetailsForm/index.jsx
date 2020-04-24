@@ -5,7 +5,7 @@ import {
   Button, TextField, makeStyles, List, ListItem, ListSubheader,
 } from '@material-ui/core';
 
-import { updateUser } from '../../../services/apiGateway';
+import { updateUser, disableUser } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
   form: {
@@ -95,7 +95,7 @@ const UserDetailsForm = (props) => {
         {
           // eslint-disable-next-line no-nested-ternary
           isSuperUser
-            ? user.isActive
+            ? user.is_active
               ? <Button type="button" className={classes.button} variant="contained" color="primary">Loka aðgang</Button>
               : <Button type="button" className={classes.button} variant="contained" color="primary">Opna aðgang</Button>
             : null
