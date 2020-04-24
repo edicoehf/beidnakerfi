@@ -16,7 +16,7 @@ const SearchForm = (props) => {
           className="inputField"
           name="query"
           type="text"
-          label="Stimplaðu inn notendanafn"
+          label="Leitarstrengur"
           autoFocus
         />
       </form>
