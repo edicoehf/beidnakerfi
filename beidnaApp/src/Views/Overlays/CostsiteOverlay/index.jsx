@@ -3,6 +3,7 @@ import { View, TouchableOpacity, ScrollView } from 'react-native';
 import {
   Text, Overlay, Icon,
 } from 'react-native-elements';
+import PropTypes from 'prop-types';
 
 // Styles
 import styles from './style';
@@ -55,10 +56,22 @@ const CostsiteOverlay = (
   );
 };
 export default CostsiteOverlay;
-// CostsiteOverlay.propTypes = {
-//   departments: PropTypes.bool.isRequired,
-//   visible: PropTypes.bool.isRequired,
-//   value: PropTypes.string,
-//
-// };
+
+CostsiteOverlay.propTypes = {
+  departments: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  visible: PropTypes.bool.isRequired,
+  visibleFunc: PropTypes.func.isRequired,
+  valueFunc: PropTypes.func.isRequired,
+  value: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  }),
+};
+CostsiteOverlay.defaultProps = { value: '' };
+
 // TODO: add prop validation
