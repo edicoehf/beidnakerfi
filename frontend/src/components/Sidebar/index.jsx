@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Button, makeStyles } from '@material-ui/core';
 
 import EdicoLogo from '../EdicoLogo';
-import './Sidebar.css';
 
 import { useAuth } from '../../context/auth';
 import { getSidebarInfo } from '../../services';
@@ -30,6 +29,7 @@ const useStyles = makeStyles((themes) => ({
     flexDirection: 'column',
     alignItems: 'center',
     height: '100vh',
+    width: '100%',
   },
   link: {
     textDecoration: 'none',
