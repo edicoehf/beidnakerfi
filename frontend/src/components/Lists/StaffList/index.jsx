@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import '../Lists.css';
-import { getUsers } from '../../../services/apiGateway';
+import { getUsers, getUser } from '../../../services/apiGateway';
 
 
 const StaffList = (props) => {
@@ -17,10 +17,12 @@ const StaffList = (props) => {
     getStaff();
   }, []);
 
-  const handleClick = (uid) => {
-    const { setDrawerOpen, setUserId } = props;
+  const handleClick = async (uid) => {
+    const { setUser, setDrawerOpen } = props;
 
-    setUserId(uid);
+    const user = await getUser(uid);
+
+    setUser(user);
     setDrawerOpen(true);
   };
   return (
@@ -54,7 +56,7 @@ const StaffList = (props) => {
 StaffList.propTypes = {
   query: PropTypes.string.isRequired,
   setDrawerOpen: PropTypes.func.isRequired,
-  setUserId: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired,
 };
 
 export default StaffList;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../Forms.css';
+import { TextField } from '@material-ui/core';
 import { getCheque, updateCheque } from '../../../services/apiGateway';
 
 const ChequeForm = () => {
@@ -45,11 +46,11 @@ const ChequeForm = () => {
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
       {errors.key && <span>{errors.key.message}</span>}
       <div className="form-group">
-        <input
+        <TextField
           className="inputField"
           name="key"
           type="text"
-          ref={register({ required: true, maxLength: 20, minLength: 20 })}
+          inputRef={register({ required: true, maxLength: 20, minLength: 20 })}
           placeholder="Lykill"
           onChange={(e) => {
             const { value } = e.target;
@@ -57,6 +58,7 @@ const ChequeForm = () => {
               getChequeData(value);
             }
           }}
+          autoFocus
         />
 
         <input

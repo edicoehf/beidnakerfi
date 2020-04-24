@@ -12,7 +12,7 @@ import '../Pages.css';
 const Main = () => {
   const [search, setSearch] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [userId, setUserId] = useState('');
+  const [user, setUser] = useState({});
 
   return (
     <div id="mainGrid">
@@ -21,16 +21,14 @@ const Main = () => {
       </div>
       <div className="container">
         <SearchForm setSearch={setSearch} />
-        <StaffList query={search} setUserId={setUserId} setDrawerOpen={setDrawerOpen} />
+        <StaffList query={search} setUser={setUser} setDrawerOpen={setDrawerOpen} />
       </div>
-      <div>
-        {
+      {
           drawerOpen
             // eslint-disable-next-line max-len
-            ? <UserDetails DetailsDrawer={userId} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+            ? <UserDetails user={user} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
             : null
         }
-      </div>
     </div>
   );
 };

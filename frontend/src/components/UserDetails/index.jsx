@@ -1,36 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Drawer } from '@material-ui/core';
+import { Drawer, makeStyles } from '@material-ui/core';
+import UserDetailsForm from '../Forms/UserDetailsForm';
 
-import { getUser } from '../../services/apiGateway';
-
+const useStyles = makeStyles({
+  drawer: {
+    width: 500,
+  },
+});
 const UserDetails = (props) => {
-  const { drawerOpen, setDrawerOpen } = props;
-  const [user, setUser] = useState();
+  const classes = useStyles();
+  const { drawerOpen, setDrawerOpen, user } = props;
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userData = await getUser(props.uid);
-
-      setUser(userData);
-    };
-
-    fetchUserData();
-  }, []);
   const toggleClose = () => {
     setDrawerOpen(false);
   };
+
   return (
     <>
-      <Drawer anchor="right" open={drawerOpen} onClose={toggleClose}>
-        <h1> User details koma hingað </h1>
+      <Drawer PaperProps={{ className: classes.drawer }} anchor="right" open={drawerOpen} onClose={toggleClose}>
+        <UserDetailsForm user={user} />
       </Drawer>
     </>
   );
 };
 
 UserDetails.propTypes = {
-  uid: PropTypes.number.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  user: PropTypes.object.isRequired,
   drawerOpen: PropTypes.bool.isRequired,
   setDrawerOpen: PropTypes.func.isRequired,
 };

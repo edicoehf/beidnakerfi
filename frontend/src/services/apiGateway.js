@@ -100,6 +100,21 @@ export const createUser = async (newUser) => {
   return query;
 };
 
+export const updateUser = async (user) => {
+  const { id } = user;
+  const APIKEY = getKey();
+  const query = await axios
+    .patch(`${API_URL}/api/users/${id}/`, {
+      user,
+    }, {
+      headers: {
+        authorization: APIKEY,
+      },
+    })
+    .then((resp) => resp.data)
+    .catch((e) => e.response);
+  return query;
+};
 
 export const disableUser = async (id) => {
   const APIKEY = getKey();
