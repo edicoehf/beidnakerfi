@@ -1,14 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import '../Forms.css';
-
+import {
+  TextField, Button, Select, MenuItem, makeStyles,
+} from '@material-ui/core';
 import { getDepartments, createUser } from '../../../services/apiGateway';
+
+const useStyles = makeStyles((themes) => ({
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '60%',
+    marginTop: themes.spacing(5),
+  },
+
+  button: {
+    width: '180px',
+    height: '50px',
+    marginTop: themes.spacing(2),
+    marginLeft: 'auto',
+  },
+
+  inputField: {
+    width: '100%',
+    margin: '2px',
+  },
+}));
+
 
 const BuyerSuperUser = () => {
   const { register, handleSubmit } = useForm();
   const [costSites, setCostSites] = useState([]);
-
+  const [deptValue, setDeptValue] = useState('');
+  const classes = useStyles();
   const isSeller = JSON.parse(localStorage.getItem('tokens')).org_seller;
 
   useEffect(() => {
@@ -21,51 +47,64 @@ const BuyerSuperUser = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    await createUser(data);
+    await createUser({ ...data, department: deptValue });
   };
 
+  const handleDeptChange = (e) => {
+    setDeptValue(e.target.value);
+  };
+
+
   return (
-    <form className="form" onSubmit={handleSubmit(onSubmit)}>
-      <input
-        className="inputField"
+    <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+      <TextField
         name="username"
-        type="text"
-        placeholder="Notendanafn"
+        label="Notendanafn"
         required
-        ref={register}
+        inputRef={register}
+        autoFocus
+        className={classes.inputField}
       />
-      <input
-        className="inputField"
+      <TextField
         name="password"
         type="password"
-        placeholder="Lykilorð"
+        label="Lykilorð"
         required
-        ref={register}
+        inputRef={register}
+        className={classes.inputField}
       />
-      <input
-        className="inputField"
+      <TextField
         name="email"
         type="email"
-        placeholder="Netfang"
+        label="Netfang"
         required
-        ref={register}
+        inputRef={register}
+        className={classes.inputField}
       />
       {
         !isSeller ? (
-          <select className="inputField" ref={register} name="department">
+          <Select
+            name="department"
+            className={classes.inputField}
+            value={deptValue}
+            onChange={handleDeptChange}
+            autoWidth={false}
+            label="Deild"
+            required
+          >
             {
               costSites.map((site) => (
-                <option key={site.id} value={site.id}>
+                <MenuItem key={site.id} value={site.id}>
                   {site.name}
-                </option>
+                </MenuItem>
               ))
             }
-          </select>
+          </Select>
         ) : null
       }
-      <button className="submitButton" type="submit">
+      <Button color="primary" variant="contained" className={classes.button} type="submit">
         Skrá starfsmann
-      </button>
+      </Button>
     </form>
   );
 };

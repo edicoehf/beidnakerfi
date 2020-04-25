@@ -44,10 +44,12 @@ export const getUsers = async () => {
 export const getUser = async (id) => {
   const query = await axios
     .get(`${API_URL}/api/users/${id}/`, {
-      method: 'GET',
+      headers: {
+        authorization: getKey(),
+      },
 
     })
-    .then((resp) => resp)
+    .then((resp) => resp.data)
     .catch((e) => e.response);
   return query;
 };
@@ -98,11 +100,27 @@ export const createUser = async (newUser) => {
   return query;
 };
 
-
-export const disableUser = async (id) => {
+export const updateUser = async (user) => {
+  const { id, email, username } = user;
   const APIKEY = getKey();
   const query = await axios
-    .delete(`${API_URL}/api/users/${id}/`,
+    .patch(`${API_URL}/api/users/${id}/`, {
+      email,
+      username,
+    }, {
+      headers: {
+        authorization: APIKEY,
+      },
+    })
+    .then((resp) => resp.data)
+    .catch((e) => e.response);
+  return query;
+};
+
+export const deactivateUser = async (id) => {
+  const APIKEY = getKey();
+  await axios
+    .post(`${API_URL}/api/users/${id}/deactivate/`, {},
       {
         headers: {
           authorization: APIKEY,
@@ -110,7 +128,18 @@ export const disableUser = async (id) => {
       })
     .then((resp) => resp)
     .catch((e) => e.response);
-  return query;
+};
+
+export const activateUser = async (id) => {
+  const APIKEY = getKey();
+  await axios
+    .post(`${API_URL}/api/users/${id}/activate/`, {}, {
+      headers: {
+        authorization: APIKEY,
+      },
+    })
+    .then((resp) => resp)
+    .catch((e) => e.repsonse);
 };
 
 /*

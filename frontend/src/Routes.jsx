@@ -10,7 +10,6 @@ import CreateCheque from './pages/CreateCheque';
 import ViewCustomers from './pages/ViewCustomers';
 import ViewUsers from './pages/ViewUsers';
 import Unauthorized from './components/Unauthorized';
-import UserDetailsModal from './components/Modals/UserDetailsModal';
 import BarcodeGenerator from './pages/Barcode';
 
 import { AuthContext } from './context/auth';
@@ -38,7 +37,6 @@ const Routes = () => {
         <PrivateRoute path="/viewusers" component={ViewUsers} checkPrivileges={checkPrivileges} />
         <Route path="/generate/:code" component={BarcodeGenerator} />
         <Route exact path="/401" component={Unauthorized} />
-        <Route exact path="/test" component={UserDetailsModal} />
       </Router>
     </AuthContext.Provider>
   );

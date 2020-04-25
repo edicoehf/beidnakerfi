@@ -1,25 +1,39 @@
 // Dependencies
 import React from 'react';
+import { makeStyles } from '@material-ui/core';
 
 // Components
 import Sidebar from '../../components/Sidebar';
 import CustomerList from '../../components/Lists/CustomerList';
 import SearchForm from '../../components/Forms/SearchForm';
 
-// Style
-import '../Pages.css';
+const useStyles = makeStyles((themes) => ({
+  main: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '100%',
+    width: '100%',
+  },
+  container: {
+    width: '80%',
+    marginLeft: themes.spacing(5),
+  },
+}));
 
-const Main = () => (
-  <div id="mainGrid">
-    <div id="sidebar">
-      <Sidebar />
-    </div>
-    <div className="container">
-      <SearchForm />
-      <CustomerList />
-    </div>
-  </div>
-);
+const Main = () => {
+  const classes = useStyles();
 
+  return (
+    <div className={classes.main}>
+      <div>
+        <Sidebar />
+      </div>
+      <div className={classes.container}>
+        <SearchForm />
+        <CustomerList />
+      </div>
+    </div>
+  );
+};
 
 export default Main;

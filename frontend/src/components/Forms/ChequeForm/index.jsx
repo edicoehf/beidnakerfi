@@ -1,12 +1,40 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import '../Forms.css';
+import { TextField, Button, makeStyles } from '@material-ui/core';
 import { getCheque, updateCheque } from '../../../services/apiGateway';
+
+const useStyles = makeStyles((themes) => ({
+  inputField: {
+    width: '100%',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '60%',
+    marginTop: themes.spacing(7),
+  },
+  formGroup: {
+    width: '100%',
+    display: 'flex',
+  },
+  submitButton: {
+    marginTop: themes.spacing(3),
+    marginLeft: 'auto',
+  },
+  formContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}));
 
 const ChequeForm = () => {
   const {
     register, handleSubmit, errors, setValue, setError, clearError,
   } = useForm();
+
+  const classes = useStyles();
 
   const [chequeStatus, setChequeStatus] = useState(0);
 
@@ -30,7 +58,6 @@ const ChequeForm = () => {
         department, user, created, status,
       } = chequeData;
 
-
       setValue([
         { costSite: department.name },
         { buyerName: user.username },
@@ -42,73 +69,69 @@ const ChequeForm = () => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit(onSubmit)}>
-      {errors.key && <span>{errors.key.message}</span>}
-      <div className="form-group">
-        <input
-          className="inputField"
-          name="key"
-          type="text"
-          ref={register({ required: true, maxLength: 20, minLength: 20 })}
-          placeholder="Lykill"
-          onChange={(e) => {
-            const { value } = e.target;
-            if (value.length === 20) {
-              getChequeData(value);
-            }
-          }}
-        />
+    <div className={classes.formContainer}>
+      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+        {errors.key && <span>{errors.key.message}</span>}
+        <div className={classes.formGroup}>
+          <TextField
+            className={classes.inputField}
+            name="key"
+            inputRef={register({ required: true, maxLength: 20, minLength: 20 })}
+            label="Lykill"
+            onChange={(e) => {
+              const { value } = e.target;
+              if (value.length === 20) {
+                getChequeData(value);
+              }
+            }}
+            autoFocus
+          />
+          <TextField
+            className={classes.inputField}
+            name="costSite"
+            inputRef={register({ required: true })}
+            label="Kostnaðarstaður"
+            disabled
+          />
+        </div>
 
-        <input
-          className="inputField"
-          name="costSite"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Kostnaðarstaður"
-          disabled
-        />
-      </div>
+        <div className={classes.formGroup}>
+          <TextField
+            className={classes.inputField}
+            name="itemDescription"
+            inputRef={register({ required: true })}
+            label="Lýsing"
+          />
+          <TextField
+            className={classes.inputField}
+            name="itemPrice"
+            inputRef={register({ required: true })}
+            label="Verð"
+          />
+        </div>
 
-      <div className="form-group">
-        <input
-          className="inputField"
-          name="itemDescription"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Lýsing"
-        />
-        <input
-          className="inputField"
-          name="itemPrice"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Verð"
+        <div className={classes.formGroup}>
+          <TextField
+            className={classes.inputField}
+            name="buyerName"
+            inputRef={register({ required: true })}
+            label="Vinnustaður úttektaraðila"
+            disabled
+          />
+          <TextField
+            className={classes.inputField}
+            name="createdDate"
+            inputRef={register({ required: true })}
+            label="Tími og dagsetning stofnunar"
+            disabled
+          />
+        </div>
 
-        />
-      </div>
-      <div className="form-group">
-        <input
-          className="inputField"
-          name="buyerName"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Vinnustaður úttektaraðila"
-          disabled
-        />
-        <input
-          className="inputField"
-          name="createdDate"
-          type="text"
-          ref={register({ required: true })}
-          placeholder="Tími og dagsetning stofnunar"
-          disabled
-        />
-      </div>
-      <button className="submitButton" type="submit">
-        Skrá beiðni
-      </button>
-    </form>
-
+        <Button variant="contained" color="primary" className={classes.submitButton} type="submit">
+          Skrá beiðni
+        </Button>
+      </form>
+    </div>
   );
 };
 
