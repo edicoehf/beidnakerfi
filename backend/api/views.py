@@ -209,10 +209,10 @@ class ChequeViewSet(ModelViewSet):
         elif 'user_pk' in self.kwargs:
             return Cheque.objects.filter(user=self.kwargs['user_pk']).select_related('user', 'department', 'seller')
         elif 'organization_pk' in self.kwargs:
-            return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller')
-        else:
-            ## ! TODO: 
-            return Cheque.objects.all().select_related('user', 'department', 'seller')
+            if self.request.user.is_superuser:
+                return Cheque.objects.filter(user__organization=self.request.user.organization.id).select_related('user', 'department', 'seller')
+            else:
+                return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller')
 
     def get_serializer_class(self):
         if self.action == 'list':
