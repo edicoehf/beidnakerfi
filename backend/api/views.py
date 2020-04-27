@@ -234,6 +234,7 @@ class ChequeViewSet(ModelViewSet):
             return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
 
         request.data['status'] = cheque.PENDING
+        request.data['seller'] = seller.id
         return super().partial_update(request, *args, **kwargs)
 
     def get_permissions(self):
