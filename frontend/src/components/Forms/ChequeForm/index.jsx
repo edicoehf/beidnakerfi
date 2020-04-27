@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Button, makeStyles } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { getCheque, updateCheque } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({

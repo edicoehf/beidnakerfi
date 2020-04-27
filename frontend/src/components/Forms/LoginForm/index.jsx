@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
-import { TextField, Button, makeStyles } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Source
 import EdicoLogo from '../../EdicoLogo';

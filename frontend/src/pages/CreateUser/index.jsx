@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Components
 import Sidebar from '../../components/Sidebar';
