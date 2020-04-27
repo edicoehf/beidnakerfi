@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
-  TextField, Button, Select, MenuItem, makeStyles,
+  TextField, Button, Select, MenuItem,
 } from '@material-ui/core';
+
+import { makeStyles } from '@material-ui/core/styles';
 import { getDepartments, createUser } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, makeStyles } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import EdicoLogo from '../EdicoLogo';
 
