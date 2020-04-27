@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../Forms.css';
 import {
-  TextField, makeStyles, InputAdornment,
+  TextField, InputAdornment,
 } from '@material-ui/core';
+
+import { makeStyles } from '@material-ui/core/styles';
 import { Search } from '@material-ui/icons';
 
 const useStyles = makeStyles((themes) => ({
