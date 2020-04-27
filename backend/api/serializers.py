@@ -73,6 +73,9 @@ class ChequeListSerializer(serializers.ModelSerializer):
             dep_id = validated_data.pop('department')
             department = Department.objects.get(id=dep_id['id'])
 
+            if not user.Organization.is_seller:
+                raise serializers.ValidationError("User Organization not  in department")
+
             if not department.users.filter(id=user.id, department_user=department).exists():
                 raise serializers.ValidationError("User not in department")
 
@@ -120,9 +123,13 @@ class ClientActionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         seller = validated_data.get('seller')
+        buyer = validated_data.get('buyer')
 
         if not seller.is_seller:
             raise serializers.ValidationError("Seller organization is not seller")
+
+        if buyer.is_seller:
+            raise serializers.ValidationError("Buyer organization is not buyer")
 
         return super().create(validated_data)
         

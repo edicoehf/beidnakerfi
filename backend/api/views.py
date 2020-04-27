@@ -211,6 +211,7 @@ class ChequeViewSet(ModelViewSet):
         elif 'organization_pk' in self.kwargs:
             return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller')
         else:
+            ## ! TODO: 
             return Cheque.objects.all().select_related('user', 'department', 'seller')
 
     def get_serializer_class(self):
@@ -233,8 +234,12 @@ class ChequeViewSet(ModelViewSet):
         if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
             return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
 
-        request.data['status'] = cheque.PENDING
-        request.data['seller'] = seller.id
+        if cheque.status == cheque.CREATED:
+            request.data['status'] = cheque.PENDING
+            request.data['seller'] = seller.id
+        elif cheque.status == cheque.CANCELLED and request.user.is_superuser:
+            request.data['status'] = cheque.PENDING
+
         return super().partial_update(request, *args, **kwargs)
 
     def get_permissions(self):
@@ -242,7 +247,7 @@ class ChequeViewSet(ModelViewSet):
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [permissions.IsAuthenticated]
         elif self.action == 'create':
-            permissions_classes = [permissions.IsAuthenticated, IsUserOrgBuyer]
+            permissions_classes = [permissions.IsAuthenticated, IsUserOrgBuyer, ]
         elif self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
             permission_classes = [permissions.IsAuthenticated]
 
