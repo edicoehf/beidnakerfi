@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { useSelector } from 'react-redux'
 import { useNavigation } from 'react-navigation-hooks';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
+import { deleteCheque } from '../../service/apiGateway';
 // Styles
 import styles from './style';
 
@@ -12,7 +14,12 @@ const Timer = () => {
   const dropPerSecond = 100 / startTime;
   const [time, setTime] = useState(startTime);
   const [animation, setAnimation] = useState(100);
-  const { navigate } = useNavigation();
+
+  const { state: { routeName, params }, navigate } = useNavigation();
+  const { userInfo } = useSelector((state) => state.userInfo);
+  const clearcheck = async () => {
+    await deleteCheque(userInfo.token, params.cheque.code);
+  };
   useEffect(() => {
     const timer = setTimeout(() => {
       if (time > 0) {
@@ -20,6 +27,7 @@ const Timer = () => {
         setAnimation(animation - dropPerSecond * 2);
       } else {
         navigate('Landing');
+        clearcheck();
       }
     }, 1000);
     return () => clearTimeout(timer);

@@ -20,6 +20,7 @@ const CostSitePicker = () => {
   const handleNewCheque = async () => {
     const newCheque = await api.generateCheque(userInfo.token, userInfo.id, selectedValue.id);
     navigate('NewCheque', { costsite: selectedValue, cheque: newCheque });
+
   };
 
   return (
