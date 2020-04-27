@@ -73,8 +73,8 @@ class ChequeListSerializer(serializers.ModelSerializer):
             dep_id = validated_data.pop('department')
             department = Department.objects.get(id=dep_id['id'])
 
-            if not user.Organization.is_seller:
-                raise serializers.ValidationError("User Organization not  in department")
+            if user.organization.is_seller:
+                raise serializers.ValidationError("Organization is not buyer")
 
             if not department.users.filter(id=user.id, department_user=department).exists():
                 raise serializers.ValidationError("User not in department")
