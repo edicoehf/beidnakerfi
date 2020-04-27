@@ -23,10 +23,10 @@ All data is filtered by Organization. Users cannot interact with or read data fr
     "username": "string",
     "email": "string@string.string",
     "password": "string",
-    "organization":  relation,
-    "is_active" True,
-    "is_superuser" False,
-    "is_staff" False
+    "organization":  "relation",
+    "is_active": true,
+    "is_superuser": false,
+    "is_staff": false
 } 
 ```
 
@@ -72,7 +72,7 @@ All data is filtered by Organization. Users cannot interact with or read data fr
 ```json
 {
     "name": "string",
-    "is_seller": True
+    "is_seller": true
 } 
 ```
 
@@ -111,8 +111,8 @@ All data is filtered by Organization. Users cannot interact with or read data fr
 {
     "name": "string",
     "costsite": "string",
-    "organization": relation,
-    "users": Many-to-Many relation
+    "organization": "relation",
+    "users": "Many-to-Many relation"
 } 
 ```
 
@@ -149,8 +149,8 @@ All data is filtered by Organization. Users cannot interact with or read data fr
 
 ```json
 {
-    "buyer": relation <Organization>,
-    "seller": relation <Organization>
+    "buyer": "relation <Organization>",
+    "seller": "relation <Organization>"
 } 
 ```
 
@@ -176,9 +176,9 @@ All data is filtered by Organization. Users cannot interact with or read data fr
     "code": 1234567890,
     "description": "string",
     "price": 122.0,
-    "user": relation,
-    "department": relation,
-    "seller": relation,
+    "user": "relation",
+    "department": "relation",
+    "seller": "relation",
     "created": "datetime",
     "modified": "datetime"
 } 
@@ -208,7 +208,7 @@ All data is filtered by Organization. Users cannot interact with or read data fr
     * DELETE  
     Request owner organization must be buyer.  
     Cheque status must be CREATED
-    
+
     * CANCEL  
     Request owner organization must be seller.  
     Cheque status must be PENDING.
