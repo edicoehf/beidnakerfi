@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Drawer, makeStyles } from '@material-ui/core';
+import { Drawer } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import UserDetailsForm from '../Forms/UserDetailsForm';
 
 const useStyles = makeStyles({
