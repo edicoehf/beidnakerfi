@@ -7,12 +7,11 @@ import { statusCodes } from '../../../config';
 
 const ChequeList = (props) => {
   const [cheques, setCheques] = useState([]);
-
+  const { setDrawerOpen, setCheque } = props;
 
   useEffect(() => {
     const fetchCheques = async () => {
       const chequeList = await getChequesByOrgId();
-      console.log(chequeList);
 
       setCheques(chequeList);
     };
@@ -20,9 +19,9 @@ const ChequeList = (props) => {
     fetchCheques();
   }, []);
 
-  const handleClick = async (cheque) => {
+  const handleClick = (cheque) => {
 
-    const { setDrawerOpen, setCheque } = props;
+
     setCheque(cheque);
     setDrawerOpen(true);
   };
@@ -70,10 +69,13 @@ const ChequeList = (props) => {
 
 ChequeList.defaultProps = {
   query: '',
+  setCheque: () => {},
+  setDrawerOpen: () => {},
 };
 
 ChequeList.propTypes = {
   query: PropTypes.string,
+  setCheque: PropTypes.func.isRequired,
 };
 
 export default ChequeList;

@@ -1,11 +1,12 @@
 // Dependencies
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Components
 import Sidebar from '../../components/Sidebar';
 import ChequeList from '../../components/Lists/ChequeList';
 import ChequeForm from '../../components/Forms/ChequeForm';
+import ChequeDetails from '../../components/ChequeDetails';
 
 const useStyles = makeStyles((themes) => ({
   main: {
@@ -22,6 +23,8 @@ const useStyles = makeStyles((themes) => ({
 
 const Main = () => {
   const classes = useStyles();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [cheque, setCheque] = useState({});
 
   return (
     <div className={classes.main}>
@@ -30,8 +33,14 @@ const Main = () => {
       </div>
       <div className={classes.container}>
         <ChequeForm />
-        <ChequeList />
+        <ChequeList setCheque={setCheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
       </div>
+      {
+          drawerOpen
+            // eslint-disable-next-line max-len
+            ? <ChequeDetails cheque={cheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+            : null
+        }
     </div>
   );
 };
