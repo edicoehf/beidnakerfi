@@ -209,8 +209,10 @@ All data is filtered by Organization. Users cannot interact with or read data fr
 + `[DELETE]` Self, superuser and admin only. Deletes or cancels cheque depending on status.
     * DELETE  
     Request owner organization must be buyer.  
-    Cheque status must be CREATED
+    Cheque status must be CREATED or CANCELLED.  
+    Deletes cheque from DB.
 
     * CANCEL  
     Request owner organization must be seller.  
-    Cheque status must be PENDING.
+    Cheque status must be PENDING.  
+    Updates status to CANCELLED.
