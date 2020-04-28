@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
-import { TextField, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 // Source
 import EdicoLogo from '../../EdicoLogo';
@@ -12,43 +10,11 @@ import { useAuth } from '../../../context/auth';
 // Service
 import { login } from '../../../services/apiGateway';
 
-
-const useStyles = makeStyles((themes) => ({
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '60%',
-  },
-
-  button: {
-    width: '180px',
-    height: '50px',
-    marginTop: themes.spacing(2),
-  },
-
-  inputField: {
-    width: '30%',
-    margin: '2px',
-  },
-
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-  },
-}));
-
 const LoginForm = () => {
   const { register, handleSubmit, errors } = useForm();
   const { setAuthTokens } = useAuth();
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setError] = useState(false);
-  const classes = useStyles();
-  console.log('loading login form');
   const onSubmit = async (data) => {
     const loginInfo = await login(data);
     if (loginInfo.status === 200) {
@@ -66,27 +32,24 @@ const LoginForm = () => {
     return <Redirect to="/cheques" />;
   }
   return (
-    <div className={classes.container}>
+    <div>
 
       <EdicoLogo />
-      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         {isError ? <span> Wrong username or password </span> : null}
-        <TextField
-          className={classes.inputField}
+        <input
           name="username"
+          type="text"
           inputRef={register({ required: true })}
-          label="Notendanafn"
         />
         {errors.username && <span>This field is required</span>}
-        <TextField
-          className={classes.inputField}
+        <input
           name="password"
           type="password"
           inputRef={register({ required: true })}
-          label="Lykilorð"
         />
         {errors.password && <span>This field is required</span>}
-        <Button className={classes.button} color="primary" variant="contained" type="submit">Skrá inn</Button>
+        <button type="submit">Skrá inn</button>
       </form>
 
     </div>
