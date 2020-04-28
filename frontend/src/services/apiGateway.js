@@ -7,6 +7,10 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const getKey = () => `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
 
 const getOrgId = () => JSON.parse(localStorage.getItem('tokens')).org_id;
+
+const getDepIDs = () => {
+  return getUsers(JSON.parse(localStorage.getItem('tokens')).id);
+}
 /*
   USERS
     [GET] / - GET ALL USERS                   DONE
@@ -257,6 +261,7 @@ export const updateCheque = async (cheque) => {
 export const getChequesByOrgId = async () => {
   const APIKEY = getKey();
   const orgId = getOrgId();
+  console.log(orgId)
   const query = await axios
     .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
       {
@@ -266,13 +271,14 @@ export const getChequesByOrgId = async () => {
       })
     .then((resp) => resp.data)
     .catch((e) => e.response);
-
   return query;
 };
 
 export const getChequesByDepartmentId = async () => {
   const APIKEY = getKey();
+  const depIDs = getDepIDs();
   const orgId = getOrgId();
+  console.log(depIDs)
   const query = await axios
     .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
       {
@@ -285,3 +291,14 @@ export const getChequesByDepartmentId = async () => {
 
   return query;
 };
+
+export const deleteCheque = async (chequePK) => {
+  const APIKEY = getKey();
+  const query = axios.delete(`${API_URL}/api/cheques/${chequePK}/`, {
+    headers: {
+      authorization: APIKEY,
+    },
+  }).then((resp) => resp.data)
+    .catch((e) => e.response);
+  return query;
+}
