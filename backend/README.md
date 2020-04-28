@@ -143,6 +143,8 @@ All data is filtered by Organization. Users cannot interact with or read data fr
 `api/departments/:id/cheques/`
 
 + `[GET]` Returns a list of all cheques belonging to the specified Department.  
+    * Filters by seller field for users in seller organization
+    * Filters by user.organization for superusers in buyer organization
     * Further supports `cheques/:id/` endpoint and all cheque actions.
 
 ### Clients
