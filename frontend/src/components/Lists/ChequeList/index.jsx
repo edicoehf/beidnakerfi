@@ -12,6 +12,7 @@ const ChequeList = (props) => {
   useEffect(() => {
     const fetchCheques = async () => {
       const chequeList = await getChequesByOrgId();
+      console.log(chequeList);
 
       setCheques(chequeList);
     };
@@ -19,8 +20,11 @@ const ChequeList = (props) => {
     fetchCheques();
   }, []);
 
-  const handleClick = (e) => {
-    console.log(e);
+  const handleClick = async (cheque) => {
+
+    const { setDrawerOpen, setCheque } = props;
+    setCheque(cheque);
+    setDrawerOpen(true);
   };
   return (
 
@@ -43,12 +47,12 @@ const ChequeList = (props) => {
             } = cheque;
             const { name: deptName } = cheque.department;
             const { username } = cheque.user;
-            const { name: sellerName } = cheque.seller;
+            const { name: sellerName } = cheque.seller ? cheque.seller : '';
 
             const readableDate = new Date(created).toLocaleString('en-GB');
 
             return (
-              <tr onClick={handleClick} className="row" key={code}>
+              <tr onClick={() => handleClick(cheque)} className="row" key={code}>
                 <td>{ code }</td>
                 <td>{ sellerName }</td>
                 <td>{ deptName }</td>

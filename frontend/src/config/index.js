@@ -34,7 +34,8 @@ export const sidebarButtons = {
 };
 
 export const statusCodes = {
-  0: 'Stofnað',
-  1: 'Móttekið',
-  2: 'Greitt',
+  0: 'Hætt við',
+  1: 'Stofnuð',
+  2: 'Ógreitt',
+  3: 'Greitt',
 };

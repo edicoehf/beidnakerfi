@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core';
 import Sidebar from '../../components/Sidebar';
 import ChequeList from '../../components/Lists/ChequeList';
 import SearchForm from '../../components/Forms/SearchForm';
+import ChequeDetails from '../../components/ChequeDetails';
 
 // Style
 
@@ -24,7 +25,10 @@ const useStyles = makeStyles((themes) => ({
 
 const Cheques = () => {
   const [search, setSearch] = useState('');
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [cheque, setCheque] = useState({});
   const classes = useStyles();
+
 
   return (
     <div className={classes.main}>
@@ -33,8 +37,14 @@ const Cheques = () => {
       </div>
       <div className={classes.container}>
         <SearchForm setSearch={setSearch} />
-        <ChequeList query={search} />
+        <ChequeList query={search} setCheque={setCheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
       </div>
+      {
+          drawerOpen
+            // eslint-disable-next-line max-len
+            ? <ChequeDetails cheque={cheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+            : null
+        }
     </div>
   );
 };
