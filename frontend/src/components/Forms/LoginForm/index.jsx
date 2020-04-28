@@ -40,13 +40,13 @@ const LoginForm = () => {
         <input
           name="username"
           type="text"
-          inputRef={register({ required: true })}
+          ref={register({ required: true })}
         />
         {errors.username && <span>This field is required</span>}
         <input
           name="password"
           type="password"
-          inputRef={register({ required: true })}
+          ref={register({ required: true })}
         />
         {errors.password && <span>This field is required</span>}
         <button type="submit">Skrá inn</button>
