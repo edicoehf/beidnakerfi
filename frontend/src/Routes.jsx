@@ -25,7 +25,7 @@ const Routes = () => {
     localStorage.setItem('tokens', JSON.stringify(data));
     setAuthTokens(data);
   };
-
+  console.log('made it to routes');
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <Router>

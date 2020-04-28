@@ -14,6 +14,8 @@ function App() {
       secondary: { A400: '#6D6D6D' },
     },
   });
+
+  console.log('in App');
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

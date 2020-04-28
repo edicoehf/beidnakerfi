@@ -48,7 +48,7 @@ const LoginForm = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setError] = useState(false);
   const classes = useStyles();
-
+  console.log('loading login form');
   const onSubmit = async (data) => {
     const loginInfo = await login(data);
     if (loginInfo.status === 200) {
