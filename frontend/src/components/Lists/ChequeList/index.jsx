@@ -20,8 +20,6 @@ const ChequeList = (props) => {
   }, []);
 
   const handleClick = (cheque) => {
-
-
     setCheque(cheque);
     setDrawerOpen(true);
   };
@@ -69,13 +67,12 @@ const ChequeList = (props) => {
 
 ChequeList.defaultProps = {
   query: '',
-  setCheque: () => {},
-  setDrawerOpen: () => {},
 };
 
 ChequeList.propTypes = {
   query: PropTypes.string,
   setCheque: PropTypes.func.isRequired,
+  setDrawerOpen: PropTypes.func.isRequired,
 };
 
 export default ChequeList;
