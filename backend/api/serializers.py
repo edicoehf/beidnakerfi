@@ -41,6 +41,20 @@ class DepartmentDetailSerializer(serializers.ModelSerializer):
         model = Department
         fields = ['url', 'id', 'name', 'costsite', 'organization', 'users']
 
+class DepartmentActionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ['name', 'costsite']
+
+    def create(self, validated_data):
+        request = self.context['request']
+        user = request.user
+
+        validated_data['organization'] = user.organization
+        validated_data['users'] = [ user ]
+
+        return super().create(validated_data)
+        
 class UserDetailSerializer(serializers.ModelSerializer):
     organization = OrganizationListSerializer(required=True)
     departments = DepartmentListSerializer(source='department_user', many=True)
