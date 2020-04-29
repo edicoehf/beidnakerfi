@@ -27,8 +27,8 @@ const ChequeList = (props) => {
   };
   const sort = async (item, subItem) => {
     const sorted = await sortBy(cheques, item, subItem, setDesc, desc);
-    setCheques(sorted)
-  }
+    setCheques(sorted);
+  };
   return (
 
     <table className="table">

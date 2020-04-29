@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
 import {
   TextField, Button, Select, MenuItem,
@@ -32,13 +33,13 @@ const useStyles = makeStyles((themes) => ({
 }));
 
 
-const BuyerSuperUser = () => {
+const CreateUserForm = (props) => {
   const { register, handleSubmit } = useForm();
   const [costSites, setCostSites] = useState([]);
   const [deptValue, setDeptValue] = useState('');
   const classes = useStyles();
   const isSeller = JSON.parse(localStorage.getItem('tokens')).org_seller;
-
+  const { setOpen, setErrorOpen } = props;
   useEffect(() => {
     const fetchCostSites = async () => {
       const result = await getDepartments();
@@ -49,13 +50,18 @@ const BuyerSuperUser = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    await createUser({ ...data, department: deptValue });
+    const result = await createUser({ ...data, department: deptValue });
+    if (result.status === 201 || result.status === 200) {
+      console.log('setting open to true');
+      setOpen(true);
+    } else {
+      setErrorOpen(true);
+    }
   };
 
   const handleDeptChange = (e) => {
     setDeptValue(e.target.value);
   };
-
 
   return (
     <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
@@ -111,4 +117,9 @@ const BuyerSuperUser = () => {
   );
 };
 
-export default BuyerSuperUser;
+CreateUserForm.propTypes = {
+  setOpen: PropTypes.func.isRequired,
+  setErrorOpen: PropTypes.func.isRequired,
+};
+
+export default CreateUserForm;
