@@ -32,7 +32,7 @@ const useStyles = makeStyles((themes) => ({
 
 const ChequeForm = () => {
   const {
-    register, handleSubmit, errors, setValue, setError, clearError,
+    register, handleSubmit, errors, setError, clearError,
   } = useForm();
 
   const classes = useStyles();
