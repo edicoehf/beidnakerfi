@@ -52,7 +52,6 @@ const CreateUserForm = (props) => {
   const onSubmit = async (data) => {
     const result = await createUser({ ...data, department: deptValue });
     if (result.status === 201 || result.status === 200) {
-      console.log('setting open to true');
       setOpen(true);
     } else {
       setErrorOpen(true);
