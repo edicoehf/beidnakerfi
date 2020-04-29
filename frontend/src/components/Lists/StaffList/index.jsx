@@ -11,7 +11,7 @@ const StaffList = (props) => {
   useEffect(() => {
     const getStaff = async () => {
       const results = await getUsers();
-      setStaffList(results.data);
+      setStaffList(results);
     };
 
     getStaff();

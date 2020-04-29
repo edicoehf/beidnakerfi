@@ -47,10 +47,9 @@ const LoginForm = () => {
   const { register, handleSubmit, errors } = useForm();
   const { setAuthTokens } = useAuth();
 
-  const loginSuccess = localStorage.getItem('tokens');
+  const tokens = localStorage.getItem('tokens');
   const [isError, setError] = useState(false);
   const classes = useStyles();
-
   const onSubmit = async (data) => {
     const loginInfo = await login(data);
     if (loginInfo.status === 200) {
@@ -58,7 +57,7 @@ const LoginForm = () => {
     } else { setError(true); }
   };
 
-  if (loginSuccess !== 'undefined') {
+  if (tokens !== 'undefined' && tokens !== null) {
     const isSeller = JSON.parse(localStorage.getItem('tokens')).org_seller;
     if (isSeller) {
       return <Redirect to="/createcheque" />;
