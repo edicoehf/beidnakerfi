@@ -35,7 +35,7 @@ const DepartmentFrom = () => {
   const classes = useStyles();
 
   const onSubmit = async (data) => {
-    await console.log(createDepartment({ ...data}));
+    await createDepartment({ ...data});
   };
 
   return (
