@@ -38,7 +38,7 @@ export const getUsers = async () => {
         authorization: getKey(),
       },
     })
-    .then((resp) => resp.data)
+    .then((resp) => resp)
     .catch((e) => e.response);
   return query;
 };
@@ -53,7 +53,7 @@ export const getUser = async (id) => {
       },
 
     })
-    .then((resp) => resp.data)
+    .then((resp) => resp)
     .catch((e) => e.response);
   return query;
 };
@@ -219,6 +219,7 @@ const convertDate = (dateString) => {
 
   return date.toLocaleString('en-GB');
 };
+
 export const getCheque = async (id) => {
   const APIKEY = getKey();
   const query = await axios
@@ -236,7 +237,8 @@ export const getCheque = async (id) => {
 
       return newData;
     })
-    .catch((e) => e.response.data);
+    .catch((e) => e.response);
+
   return query;
 };
 
@@ -268,7 +270,7 @@ export const getChequesByOrgId = async () => {
           authorization: APIKEY,
         },
       })
-    .then((resp) => resp.data)
+    .then((resp) => resp)
     .catch((e) => e.response);
   return query;
 };

@@ -12,8 +12,9 @@ const ChequeList = (props) => {
   useEffect(() => {
     const fetchCheques = async () => {
       const chequeList = await getChequesByOrgId();
-
-      setCheques(chequeList);
+      if (chequeList.status === 200) {
+        setCheques(chequeList.data);
+      }
     };
 
     fetchCheques();
