@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import '../Lists.css';
 import { getChequesByOrgId } from '../../../services/apiGateway';
 import { statusCodes } from '../../../config';
-
+import { sortBy } from '../../../services';
 
 const ChequeList = (props) => {
   const [cheques, setCheques] = useState([]);
   const { setDrawerOpen, setCheque } = props;
+  const [desc, setDesc] = useState(true);
 
   useEffect(() => {
     const fetchCheques = async () => {
@@ -20,22 +21,24 @@ const ChequeList = (props) => {
   }, []);
 
   const handleClick = (cheque) => {
-
-
     setCheque(cheque);
     setDrawerOpen(true);
   };
+  const sort = async (item, subItem) => {
+    const sorted = await sortBy(cheques, item, subItem, setDesc, desc);
+    setCheques(sorted)
+  }
   return (
 
     <table className="table">
       <thead>
         <tr>
-          <th>Beiðnanúmer</th>
-          <th>Söluaðili</th>
-          <th>Kostnaðarstaður</th>
-          <th>Úttektaraðili</th>
-          <th>Dagsetning</th>
-          <th>Staða</th>
+          <th onClick={() => sort('code')}>Beiðnanúmer</th>
+          <th onClick={() => sort('seller', 'name')}>Söluaðili</th>
+          <th onClick={() => sort('department', 'name')}>Kostnaðarstaður</th>
+          <th onClick={() => sort('user', 'username')}>Úttektaraðili</th>
+          <th onClick={() => sort('created')}>Dagsetning</th>
+          <th onClick={() => sort('status')}>Staða</th>
         </tr>
       </thead>
       <tbody>
