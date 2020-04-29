@@ -48,7 +48,6 @@ const Main = () => {
     setErrorOpen(false);
   };
 
-  console.log(open, errorOpen);
   return (
     <div className={classes.main}>
       <div>
