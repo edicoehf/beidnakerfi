@@ -8,6 +8,7 @@ const getKey = () => `Token ${JSON.parse(localStorage.getItem('tokens')).token}`
 
 const getOrgId = () => JSON.parse(localStorage.getItem('tokens')).org_id;
 
+
 /*
   USERS
     [GET] / - GET ALL USERS                   DONE
@@ -37,7 +38,7 @@ export const getUsers = async () => {
         authorization: getKey(),
       },
     })
-    .then((resp) => resp)
+    .then((resp) => resp.data)
     .catch((e) => e.response);
   return query;
 };
