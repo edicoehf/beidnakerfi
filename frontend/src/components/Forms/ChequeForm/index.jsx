@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+
 import { getCheque, updateCheque } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
@@ -30,11 +32,10 @@ const useStyles = makeStyles((themes) => ({
   },
 }));
 
-const ChequeForm = () => {
+const ChequeForm = (props) => {
   const {
     register, handleSubmit, errors, setError, clearError,
   } = useForm();
-
   const classes = useStyles();
   const [chequeData, setChequeData] = useState({
     costSite: '',
@@ -44,13 +45,22 @@ const ChequeForm = () => {
   const [chequeStatus, setChequeStatus] = useState(0);
   const descriptionField = useRef(null);
 
+  const { setOpen, setErrorOpen } = props;
+
+
   const onSubmit = async (data) => {
     if (chequeStatus === 2) {
       setError('key', 'inUse', 'Beiðni er nú þegar í notkun');
     } else if (chequeStatus === 1) {
       clearError('key');
       const { itemDescription, key, itemPrice } = data;
-      await updateCheque({ itemDescription, key, itemPrice });
+      const result = await updateCheque({ itemDescription, key, itemPrice });
+
+      if (result.status === 200) {
+        setOpen(true);
+      } else {
+        setErrorOpen(true);
+      }
     }
   };
 
@@ -148,4 +158,8 @@ const ChequeForm = () => {
   );
 };
 
+ChequeForm.propTypes = {
+  setOpen: PropTypes.func.isRequired,
+  setErrorOpen: PropTypes.func.isRequired,
+};
 export default ChequeForm;

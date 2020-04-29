@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
 import { TextField, Button } from '@material-ui/core';
 
@@ -30,12 +31,18 @@ const useStyles = makeStyles((themes) => ({
 }));
 
 
-const DepartmentFrom = () => {
+const DepartmentForm = (props) => {
   const { register, handleSubmit } = useForm();
   const classes = useStyles();
+  const { setOpen, setErrorOpen } = props;
 
   const onSubmit = async (data) => {
-    await createDepartment({ ...data});
+    const result = await createDepartment({ ...data });
+    if (result.status === 201 || result.status === 200) {
+      setOpen(true);
+    } else {
+      setErrorOpen(true);
+    }
   };
 
   return (
@@ -63,4 +70,9 @@ const DepartmentFrom = () => {
   );
 };
 
-export default DepartmentFrom;
+DepartmentForm.propTypes = {
+  setOpen: PropTypes.func.isRequired,
+  setErrorOpen: PropTypes.func.isRequired,
+};
+
+export default DepartmentForm;
