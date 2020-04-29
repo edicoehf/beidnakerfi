@@ -48,3 +48,25 @@ export const checkPrivileges = (path) => {
 
 // eslint-disable-next-line consistent-return
 export const getSidebarInfo = () => getButtons();
+
+export const sortBy = (list, item, subItem = '', setDesc, desc) => {
+  var A, B;
+    return list.sort((a, b) => {
+    if(subItem !== ''){
+      A = a[item] ? a[item][subItem].toUpperCase() : 'xxxxxxxxxxx';
+      B = b[item] ? b[item][subItem].toUpperCase() : 'xxxxxxxxxxx';
+    } else {
+      A = typeof a[item] === 'string' ? a[item].toUpperCase() : a[item]; // ignore upper and lowercase
+      B = typeof b[item] === 'string' ? b[item].toUpperCase() : b[item];  // ignore upper and lowercase
+    }
+    if(desc){
+      setDesc(false);
+      if (A < B) return -1;
+      else return 1;
+    } else {
+      setDesc(true);
+      if (A > B) return -1;
+      else return 1;
+    }
+  });
+}
