@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from .models import Department
 
-from .authentication import token_expire_handler, expire_time
+from .authentication import token_login_handler, expire_time
 
 class loginToken(ObtainAuthToken):
     def _user_groups(self, user):
@@ -33,8 +33,9 @@ class loginToken(ObtainAuthToken):
 
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-
-        is_expired, token = token_expire_handler(token)
+        
+        if not created:
+            token = token_login_handler(token)
 
         return Response({
             'success': True,

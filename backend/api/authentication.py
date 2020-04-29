@@ -17,6 +17,11 @@ def expire_time(token):
 def is_token_expired(token):
     return expire_time(token) < timedelta(seconds = 0)
 
+def token_login_handler(token):
+    token.delete()
+    token = Token.objects.create(user = token.user)
+    return token
+
 def token_expire_handler(token):
     is_expired = is_token_expired(token)
     if is_expired:
