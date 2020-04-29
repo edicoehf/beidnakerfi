@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
-import { TextField, Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Source
@@ -45,25 +46,26 @@ const useStyles = makeStyles((themes) => ({
 const LoginForm = () => {
   const { register, handleSubmit, errors } = useForm();
   const { setAuthTokens } = useAuth();
-  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  const loginSuccess = localStorage.getItem('tokens');
   const [isError, setError] = useState(false);
   const classes = useStyles();
+
   const onSubmit = async (data) => {
     const loginInfo = await login(data);
     if (loginInfo.status === 200) {
       await setAuthTokens(loginInfo.data);
-      setLoggedIn(true);
     } else { setError(true); }
   };
 
-
-  if (isLoggedIn) {
+  if (loginSuccess !== 'undefined') {
     const isSeller = JSON.parse(localStorage.getItem('tokens')).org_seller;
     if (isSeller) {
       return <Redirect to="/createcheque" />;
     }
     return <Redirect to="/cheques" />;
   }
+
   return (
     <div className={classes.container}>
 
