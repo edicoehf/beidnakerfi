@@ -7,7 +7,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import User, Department, Organization, Cheque, Client
-from .serializers import UserListSerializer, UserDetailSerializer, OrganizationListSerializer, OrganizationDetailSerializer, DepartmentListSerializer, DepartmentDetailSerializer, ChequeListSerializer, ChequeDetailSerializer, ChequeActionSerializer, ClientSerializer, ClientActionSerializer, PasswordSerializer
+from .serializers import UserListSerializer, OrganizationListSerializer, DepartmentListSerializer, ChequeListSerializer, ClientSerializer,  \
+                         UserDetailSerializer, OrganizationDetailSerializer, DepartmentDetailSerializer,  ChequeDetailSerializer, \
+                         DepartmentActionSerializer, ChequeActionSerializer,  ClientActionSerializer, PasswordSerializer
 
 from .permissions import IsAdmin, IsSelfOrAdmin, IsSuperUser, IsSelfOrSuper, IsUserInOrg, IsUserOrgBuyer
 
@@ -134,7 +136,7 @@ class DepartmentViewSet(ModelViewSet):
         elif self.action == 'retrieve':
             return DepartmentDetailSerializer
         elif self.request.method == 'POST':
-            return DepartmentDetailSerializer
+            return DepartmentActionSerializer
         elif self.request.method == 'DELETE':
             return DepartmentDetailSerializer
         else:

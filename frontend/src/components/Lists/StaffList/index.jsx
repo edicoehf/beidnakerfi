@@ -13,7 +13,7 @@ const StaffList = (props) => {
   useEffect(() => {
     const getStaff = async () => {
       const results = await getUsers();
-      setStaffList(results);
+      if (results.status === 200) setStaffList(results.data);
     };
 
     getStaff();
@@ -26,9 +26,10 @@ const StaffList = (props) => {
     const { setUser, setDrawerOpen } = props;
 
     const user = await getUser(uid);
-
-    setUser(user);
-    setDrawerOpen(true);
+    if (user.status) {
+      setUser(user.data);
+      setDrawerOpen(true);
+    }
   };
   return (
     <table className="table">
