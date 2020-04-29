@@ -18,6 +18,10 @@ const useStyles = makeStyles((themes) => ({
   container: {
     width: '80%',
     marginLeft: themes.spacing(5),
+    display: 'flex',
+    paddingTop: themes.spacing(5),
+    alignItems: 'center',
+    flexDirection: 'column',
   },
 }));
 
