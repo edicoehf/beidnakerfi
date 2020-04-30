@@ -3,35 +3,41 @@ import PropTypes from 'prop-types';
 
 import '../Lists.css';
 import { getUsers, getUser } from '../../../services/apiGateway';
+import { sortBy } from '../../../services';
 
 
 const StaffList = (props) => {
   const [staffList, setStaffList] = useState([]);
+  const [desc, setDesc] = useState(true);
 
   useEffect(() => {
     const getStaff = async () => {
       const results = await getUsers();
-      setStaffList(results.data);
+      if (results.status === 200) setStaffList(results.data);
     };
 
     getStaff();
   }, []);
-
+  const sort = async (item, subItem) => {
+    const sorted = await sortBy(staffList, item, subItem, setDesc, desc);
+    setStaffList(sorted)
+  }
   const handleClick = async (uid) => {
     const { setUser, setDrawerOpen } = props;
 
     const user = await getUser(uid);
-
-    setUser(user);
-    setDrawerOpen(true);
+    if (user.status) {
+      setUser(user.data);
+      setDrawerOpen(true);
+    }
   };
   return (
     <table className="table">
       <thead>
         <tr>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Departments</th>
+          <th onClick={() => sort('username')}>Username</th>
+          <th onClick={() => sort('email')}>Email</th>
+          <th onClick={() => sort('department', 'name')}>Departments</th>
         </tr>
       </thead>
       <tbody>

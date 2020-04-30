@@ -4,9 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 // Components
 import Sidebar from '../../components/Sidebar';
-import ChequeList from '../../components/Lists/ChequeList';
-import ChequeForm from '../../components/Forms/ChequeForm';
-import ChequeDetails from '../../components/ChequeDetails';
+import DepartmentForm from '../../components/Forms/DepartmentForm';
 import SuccessSnackbar from '../../components/Snackbars/SuccessSnackbar';
 import FailSnackbar from '../../components/Snackbars/FailSnackbar';
 
@@ -20,13 +18,15 @@ const useStyles = makeStyles((themes) => ({
   container: {
     width: '80%',
     marginLeft: themes.spacing(5),
+    display: 'flex',
+    paddingTop: themes.spacing(5),
+    alignItems: 'center',
+    flexDirection: 'column',
   },
 }));
 
-const Main = () => {
+const CreateDepartment = () => {
   const classes = useStyles();
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [cheque, setCheque] = useState({});
   const [open, setOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
 
@@ -44,26 +44,21 @@ const Main = () => {
     setErrorOpen(false);
   };
 
+
   return (
     <div className={classes.main}>
       <div>
         <Sidebar />
       </div>
       <div className={classes.container}>
-        <ChequeForm setOpen={setOpen} setErrorOpen={setErrorOpen} />
-        <ChequeList setCheque={setCheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+        <DepartmentForm setOpen={setOpen} setErrorOpen={setErrorOpen} />
         { open ? <SuccessSnackbar open={open} handleClose={handleSuccessSnackbarClose} /> : null }
-
         { errorOpen
           ? <FailSnackbar open={errorOpen} handleClose={handleFailSnackbarClose} />
           : null}
       </div>
-      { drawerOpen
-        // eslint-disable-next-line max-len
-        ? <ChequeDetails cheque={cheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
-        : null}
     </div>
   );
 };
 
-export default Main;
+export default CreateDepartment;

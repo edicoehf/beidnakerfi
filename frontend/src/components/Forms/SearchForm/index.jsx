@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../Forms.css';
 import {
-  TextField, InputAdornment,
+  TextField,
 } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Search } from '@material-ui/icons';
 
 const useStyles = makeStyles((themes) => ({
   search: {
@@ -31,13 +30,6 @@ const SearchForm = (props) => {
         name="query"
         type="text"
         label="Leitarstrengur"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          ),
-        }}
         autoFocus
       />
     </form>

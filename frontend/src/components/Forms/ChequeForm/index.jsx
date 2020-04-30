@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+
 import { getCheque, updateCheque } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
@@ -30,14 +32,21 @@ const useStyles = makeStyles((themes) => ({
   },
 }));
 
-const ChequeForm = () => {
+const ChequeForm = (props) => {
   const {
-    register, handleSubmit, errors, setValue, setError, clearError,
+    register, handleSubmit, errors, setError, clearError,
   } = useForm();
-
   const classes = useStyles();
-
+  const [chequeData, setChequeData] = useState({
+    costSite: '',
+    buyerName: '',
+    createdDate: '',
+  });
   const [chequeStatus, setChequeStatus] = useState(0);
+  const descriptionField = useRef(null);
+
+  const { setOpen, setErrorOpen } = props;
+
 
   const onSubmit = async (data) => {
     if (chequeStatus === 2) {
@@ -45,27 +54,34 @@ const ChequeForm = () => {
     } else if (chequeStatus === 1) {
       clearError('key');
       const { itemDescription, key, itemPrice } = data;
-      await updateCheque({ itemDescription, key, itemPrice });
+      const result = await updateCheque({ itemDescription, key, itemPrice });
+
+      if (result.status === 200) {
+        setOpen(true);
+      } else {
+        setErrorOpen(true);
+      }
     }
   };
 
   const getChequeData = async (chequeId) => {
-    const chequeData = await getCheque(chequeId);
+    const result = await getCheque(chequeId);
     if ('detail' in chequeData) {
       setError('key', 'invalidKey', 'Beiðni er ekki til');
     } else {
       clearError('key');
       const {
         department, user, created, status,
-      } = chequeData;
+      } = result;
 
-      setValue([
-        { costSite: department.name },
-        { buyerName: user.username },
-        { createdDate: created },
-      ]);
 
+      setChequeData({
+        costSite: department.name,
+        buyerName: user.username,
+        createdDate: created,
+      });
       setChequeStatus(status);
+      descriptionField.current.focus();
     }
   };
 
@@ -89,18 +105,42 @@ const ChequeForm = () => {
           />
           <TextField
             className={classes.inputField}
+            name="createdDate"
+            inputRef={register({ required: true })}
+            label="Tími og dagsetning stofnunar"
+            value={chequeData.createdDate}
+            disabled
+          />
+        </div>
+        <div className={classes.formGroup}>
+          <TextField
+            className={classes.inputField}
             name="costSite"
             inputRef={register({ required: true })}
             label="Kostnaðarstaður"
             disabled
+            value={chequeData.costSite}
+            onChange={(e) => e.target.value}
+          />
+          <TextField
+            className={classes.inputField}
+            name="buyerName"
+            inputRef={register({ required: true })}
+            label="Úttektaraðili"
+            value={chequeData.buyerName}
+            disabled
           />
         </div>
+
 
         <div className={classes.formGroup}>
           <TextField
             className={classes.inputField}
             name="itemDescription"
-            inputRef={register({ required: true })}
+            inputRef={(e) => {
+              register({ required: true });
+              descriptionField.current = e;
+            }}
             label="Lýsing"
           />
           <TextField
@@ -110,24 +150,6 @@ const ChequeForm = () => {
             label="Verð"
           />
         </div>
-
-        <div className={classes.formGroup}>
-          <TextField
-            className={classes.inputField}
-            name="buyerName"
-            inputRef={register({ required: true })}
-            label="Vinnustaður úttektaraðila"
-            disabled
-          />
-          <TextField
-            className={classes.inputField}
-            name="createdDate"
-            inputRef={register({ required: true })}
-            label="Tími og dagsetning stofnunar"
-            disabled
-          />
-        </div>
-
         <Button variant="contained" color="primary" className={classes.submitButton} type="submit">
           Skrá beiðni
         </Button>
@@ -136,4 +158,8 @@ const ChequeForm = () => {
   );
 };
 
+ChequeForm.propTypes = {
+  setOpen: PropTypes.func.isRequired,
+  setErrorOpen: PropTypes.func.isRequired,
+};
 export default ChequeForm;

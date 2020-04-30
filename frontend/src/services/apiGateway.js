@@ -7,6 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const getKey = () => `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
 
 const getOrgId = () => JSON.parse(localStorage.getItem('tokens')).org_id;
+
+
 /*
   USERS
     [GET] / - GET ALL USERS                   DONE
@@ -41,6 +43,8 @@ export const getUsers = async () => {
   return query;
 };
 
+const getDepIDs = () => getUsers(JSON.parse(localStorage.getItem('tokens')).id);
+
 export const getUser = async (id) => {
   const query = await axios
     .get(`${API_URL}/api/users/${id}/`, {
@@ -49,7 +53,7 @@ export const getUser = async (id) => {
       },
 
     })
-    .then((resp) => resp.data)
+    .then((resp) => resp)
     .catch((e) => e.response);
   return query;
 };
@@ -215,6 +219,7 @@ const convertDate = (dateString) => {
 
   return date.toLocaleString('en-GB');
 };
+
 export const getCheque = async (id) => {
   const APIKEY = getKey();
   const query = await axios
@@ -232,7 +237,8 @@ export const getCheque = async (id) => {
 
       return newData;
     })
-    .catch((e) => e.response.data);
+    .catch((e) => e.response);
+
   return query;
 };
 
@@ -264,14 +270,14 @@ export const getChequesByOrgId = async () => {
           authorization: APIKEY,
         },
       })
-    .then((resp) => resp.data)
+    .then((resp) => resp)
     .catch((e) => e.response);
-
   return query;
 };
 
 export const getChequesByDepartmentId = async () => {
   const APIKEY = getKey();
+  const depIDs = getDepIDs();
   const orgId = getOrgId();
   const query = await axios
     .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
@@ -283,5 +289,16 @@ export const getChequesByDepartmentId = async () => {
     .then((resp) => resp.data)
     .catch((e) => e.response);
 
+  return query;
+};
+
+export const deleteCheque = async (chequePK) => {
+  const APIKEY = getKey();
+  const query = axios.delete(`${API_URL}/api/cheques/${chequePK}/`, {
+    headers: {
+      authorization: APIKEY,
+    },
+  }).then((resp) => resp.data)
+    .catch((e) => e.response);
   return query;
 };
