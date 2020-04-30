@@ -69,7 +69,7 @@ Quit the server with CONTROL-C.
 
 ### Framendi
 
-Framendinn okkar keyrir á Node.JS server sem notast m.a við React, Material-UI og Axios pakkana til þess að tala við bakendann og birta gögnin frá honum á snirtilegann máta. 
+Framendinn okkar keyrir á Node.JS server sem notast m.a við React, Material-UI og Axios pakkana til þess að tala við bakendann og birta gögnin frá honum á snirtilegann máta.
 
 Þar sem að við notuðumst við Node útgáfu `>= 13.0.0` mælum við eindregið með því að nota slíka þar sem við tryggjum ekki að virkni virki eins á eldri útgáfum.
 
@@ -81,3 +81,46 @@ v13.7.0
 ➜  frontend git:(master) ✗ npm -v
 6.14.1
 ```
+
+Eins og með bakendann, þá notast framendinn einnig við .env skrár. Hinsvegar í þetta skiptið, þá er það bara ein lína sem þörf er á. Við setjum skrána í rótina af frontend/ möppunni og í henni á að vera:
+
+```env
+REACT_APP_API_URL='URL_OF_BACKEND_SERVER'
+```
+
+Áður en node serverinn er keyrður upp þarf að setja upp nauðsynlega pakka sem er gert með því að:
+
+```bash
+➜  frontend git:(master) npm install
+```
+
+Þegar búið er að setja upp alla nauðsynlegu pakkana þá má keyra npm start:
+
+```bash
+➜  frontend git:(master) ✗ npm start
+
+> frontend@0.1.0 start /Users/emilnewel/Documents/git/beidnakerfi/frontend
+> react-scripts start
+
+Compiled successfully!
+
+You can now view frontend in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.111.195:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+```
+
+#### Production útgáfa
+
+Development útgáfan af forritinu er stór. Ef áætlunin er að hýsa framendann á netinu, þá mælum við með því að notast við production útgáfuna.
+
+Til þess að fá hana er hægt að keyra skipunina `npm build`. 
+
+Eftir að skipunina er hætt að keyra, munt þú sjá `build/` möppu í `frontend/` möppunni.
+
+### App
+
+Arnór skrifa hér!!!
