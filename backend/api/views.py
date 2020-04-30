@@ -210,8 +210,9 @@ class ChequeViewSet(ModelViewSet):
             return Cheque.objects.filter(department=self.kwargs['department_pk']).select_related('user', 'department', 'seller')
         elif 'user_pk' in self.kwargs:
             return Cheque.objects.filter(user=self.kwargs['user_pk']).select_related('user', 'department', 'seller')
+        # api/organization/:id/cheques/
         elif 'organization_pk' in self.kwargs:
-            if self.request.user.is_superuser:
+            if self.request.user.is_superuser and not self.request.user.organization.is_seller:
                 return Cheque.objects.filter(user__organization=self.request.user.organization.id).select_related('user', 'department', 'seller')
             else:
                 return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller')
