@@ -1,5 +1,5 @@
 // Dependencies
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Components
@@ -9,6 +9,7 @@ import ChequeForm from '../../components/Forms/ChequeForm';
 import ChequeDetails from '../../components/ChequeDetails';
 import SuccessSnackbar from '../../components/Snackbars/SuccessSnackbar';
 import FailSnackbar from '../../components/Snackbars/FailSnackbar';
+import { getChequesByOrgId } from '../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
   main: {
@@ -27,8 +28,20 @@ const Main = () => {
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cheque, setCheque] = useState({});
+  const [chequeList, setChequeList] = useState([]);
   const [open, setOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchCheques = async () => {
+      const result = await getChequesByOrgId();
+      if (chequeList.status === 200) {
+        setChequeList(result.data);
+      }
+    };
+
+    fetchCheques();
+  });
 
   const handleSuccessSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -43,7 +56,6 @@ const Main = () => {
     }
     setErrorOpen(false);
   };
-
   return (
     <div className={classes.main}>
       <div>
@@ -51,7 +63,13 @@ const Main = () => {
       </div>
       <div className={classes.container}>
         <ChequeForm setOpen={setOpen} setErrorOpen={setErrorOpen} />
-        <ChequeList setCheque={setCheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+        <ChequeList
+          setCheque={setCheque}
+          drawerOpen={drawerOpen}
+          setDrawerOpen={setDrawerOpen}
+          chequeList={chequeList}
+          setChequeList={setChequeList}
+        />
         { open ? <SuccessSnackbar open={open} handleClose={handleSuccessSnackbarClose} /> : null }
 
         { errorOpen

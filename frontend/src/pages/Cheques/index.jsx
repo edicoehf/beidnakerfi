@@ -8,6 +8,7 @@ import ChequeList from '../../components/Lists/ChequeList';
 import SearchForm from '../../components/Forms/SearchForm';
 import ChequeDetails from '../../components/ChequeDetails';
 
+
 // Style
 
 const useStyles = makeStyles((themes) => ({
@@ -31,6 +32,7 @@ const Cheques = () => {
   const [search, setSearch] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cheque, setCheque] = useState({});
+  const [chequeList, setChequeList] = useState([]);
   const classes = useStyles();
 
 
@@ -41,7 +43,14 @@ const Cheques = () => {
       </div>
       <div className={classes.container}>
         <SearchForm setSearch={setSearch} />
-        <ChequeList query={search} setCheque={setCheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+        <ChequeList
+          query={search}
+          setCheque={setCheque}
+          drawerOpen={drawerOpen}
+          setDrawerOpen={setDrawerOpen}
+          chequeList={chequeList}
+          setChequeList={setChequeList}
+        />
       </div>
       {
           drawerOpen
