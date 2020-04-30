@@ -13,7 +13,7 @@ const StaffList = (props) => {
   useEffect(() => {
     const getStaff = async () => {
       const results = await getUsers();
-      if (results.status === 200) setStaffList(results.data);
+      if (results.status === 200) setStaffList(results.data.results);
     };
 
     getStaff();

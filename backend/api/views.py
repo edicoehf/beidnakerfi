@@ -21,10 +21,10 @@ class UserViewSet(ModelViewSet):
 
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
-            return User.objects.filter(organization=self.kwargs['organization_pk']).prefetch_related('department_user')
+            return User.objects.filter(organization=self.kwargs['organization_pk']).prefetch_related('department_user').order_by('-date_joined')
         else:
             organization = self.request.user.organization
-            return User.objects.filter(organization=organization).prefetch_related('department_user')
+            return User.objects.filter(organization=organization).prefetch_related('department_user').order_by('-date_joined')
     
     def get_serializer_class(self):
         if self.action == 'list':
@@ -98,7 +98,7 @@ class OrganizationViewSet(ModelViewSet):
 
     def get_queryset(self):
         organization = self.request.user.organization.id
-        return Organization.objects.filter(id=organization).prefetch_related('departments')
+        return Organization.objects.filter(id=organization).prefetch_related('departments').order_by('name')
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -125,10 +125,10 @@ class DepartmentViewSet(ModelViewSet):
 
     def get_queryset(self):
         if 'organization_pk' in self.kwargs:
-            return Department.objects.filter(organization=self.kwargs['organization_pk'])
+            return Department.objects.filter(organization=self.kwargs['organization_pk']).order_by('name')
         else:
             organization = self.request.user.organization
-            return Department.objects.filter(organization=organization)
+            return Department.objects.filter(organization=organization).order_by('name')
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -207,17 +207,17 @@ class ChequeViewSet(ModelViewSet):
     def get_queryset(self):
         # variable_pk used to filter for nested relations
         if 'department_pk' in self.kwargs:
-            return Cheque.objects.filter(department=self.kwargs['department_pk']).select_related('user', 'department', 'seller')
+            return Cheque.objects.filter(department=self.kwargs['department_pk']).select_related('user', 'department', 'seller').order_by('-created')
         elif 'user_pk' in self.kwargs:
-            return Cheque.objects.filter(user=self.kwargs['user_pk']).select_related('user', 'department', 'seller')
+            return Cheque.objects.filter(user=self.kwargs['user_pk']).select_related('user', 'department', 'seller').order_by('-created')
         # api/organization/:id/cheques/
         elif 'organization_pk' in self.kwargs:
             if self.request.user.is_superuser and not self.request.user.organization.is_seller:
-                return Cheque.objects.filter(user__organization=self.request.user.organization.id).select_related('user', 'department', 'seller')
+                return Cheque.objects.filter(user__organization=self.request.user.organization.id).select_related('user', 'department', 'seller').order_by('-created')
             else:
-                return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller')
+                return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller').order_by('-created')
         else:
-            return Cheque.objects.all().select_related('user', 'department', 'seller')
+            return Cheque.objects.all().select_related('user', 'department', 'seller').order_by('-created')
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -301,9 +301,9 @@ class ClientViewSet(ModelViewSet):
     def get_queryset(self):
         organization = self.request.user.organization
         if organization.is_seller:
-            return Client.objects.filter(seller=organization).select_related('buyer', 'seller')
+            return Client.objects.filter(seller=organization).select_related('buyer', 'seller').order_by('buyer')
         else:
-            return Client.objects.filter(buyer=organization).select_related('seller', 'buyer')
+            return Client.objects.filter(buyer=organization).select_related('seller', 'buyer').order_by('seller')
 
     def get_serializer_class(self):
         if self.action == 'list' or self.action == 'retrieve':
