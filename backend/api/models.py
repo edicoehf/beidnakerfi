@@ -28,7 +28,7 @@ class Client(models.Model):
 
 class User(AbstractUser):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    superuser = models.BooleanField(("Super User"), default=False)
+    manager = models.BooleanField(("Department manager"), default=False)
 
     def __str__(self):
         return self.username

@@ -43,7 +43,7 @@ const CreateUserForm = (props) => {
   useEffect(() => {
     const fetchCostSites = async () => {
       const result = await getDepartments();
-      setCostSites(result.data);
+      setCostSites(result.data.results);
     };
 
     fetchCostSites();
