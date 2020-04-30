@@ -1,33 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../Lists.css';
-import { getChequesByOrgId } from '../../../services/apiGateway';
 import { statusCodes } from '../../../config';
 import { sortBy } from '../../../services';
 
 const ChequeList = (props) => {
-  const [cheques, setCheques] = useState([]);
-  const { setDrawerOpen, setCheque } = props;
+  const {
+    setDrawerOpen, setCheque, chequeList, setChequeList,
+  } = props;
   const [desc, setDesc] = useState(true);
-
-  useEffect(() => {
-    const fetchCheques = async () => {
-      const chequeList = await getChequesByOrgId();
-      if (chequeList.status === 200) {
-        setCheques(chequeList.data);
-      }
-    };
-
-    fetchCheques();
-  }, []);
 
   const handleClick = (cheque) => {
     setCheque(cheque);
     setDrawerOpen(true);
   };
   const sort = async (item, subItem) => {
-    const sorted = await sortBy(cheques, item, subItem, setDesc, desc);
-    setCheques(sorted);
+    const sorted = await sortBy(chequeList, item, subItem, setDesc, desc);
+    setChequeList(sorted);
   };
   return (
 
@@ -44,7 +33,7 @@ const ChequeList = (props) => {
       </thead>
       <tbody>
         {
-          cheques.filter((cheque) => cheque.code.includes(props.query)).map((cheque) => {
+          chequeList.filter((cheque) => cheque.code.includes(props.query)).map((cheque) => {
             const {
               code, status, created,
             } = cheque;
@@ -79,6 +68,9 @@ ChequeList.propTypes = {
   query: PropTypes.string,
   setCheque: PropTypes.func.isRequired,
   setDrawerOpen: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  chequeList: PropTypes.array.isRequired,
+  setChequeList: PropTypes.func.isRequired,
 };
 
 export default ChequeList;
