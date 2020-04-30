@@ -9,18 +9,7 @@ const ChequeList = (props) => {
     setDrawerOpen, setCheque, chequeList, setChequeList,
   } = props;
   const [desc, setDesc] = useState(true);
-
-  useEffect(() => {
-    const fetchCheques = async () => {
-      const chequeList = await getChequesByOrgId();
-      if (chequeList.status === 200) {
-        setCheques(chequeList.data.results);
-      }
-    };
-
-    fetchCheques();
-  }, []);
-
+  
   const handleClick = (cheque) => {
     setCheque(cheque);
     setDrawerOpen(true);
