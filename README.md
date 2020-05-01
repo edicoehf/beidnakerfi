@@ -20,7 +20,7 @@ Til þess að sækja forritið skal hlaða niður Github gagnahirslunni með efi
 
 ### Bakendi
 
-Bakendinn keyrir á Python 3.7 með PostgreSQL gagnagrunni. Til þess að vera viss um að not andi sé með réttar útgáfur skal nota eftirfarandi skipanir:
+Bakendinn keyrir á Python 3.7 með PostgreSQL gagnagrunni. Til þess að vera viss um að notandi sé með réttar útgáfur skal nota eftirfarandi skipanir:
 
 ```bash
 ➜  beidnakerfi git:(master) ✗ python3.7 --version
@@ -117,9 +117,9 @@ To create a production build, use npm run build.
 
 Development útgáfan af forritinu er stór. Ef áætlunin er að hýsa framendann á netinu, þá mælum við með því að notast við production útgáfuna.
 
-Til þess að fá hana er hægt að keyra skipunina `npm build`. 
+Til þess að fá hana er hægt að keyra skipunina `npm build`.
 
-Eftir að skipunina er hætt að keyra, munt þú sjá `build/` möppu í `frontend/` möppunni.
+Eftir að skipunin er hætt að keyra, munt þú sjá `build/` möppu í `frontend/` möppunni.
 
 ### App
 
