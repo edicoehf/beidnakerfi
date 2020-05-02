@@ -1,5 +1,5 @@
 // Dependencies
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Components
@@ -7,6 +7,7 @@ import Sidebar from '../../components/Sidebar';
 import ChequeList from '../../components/Lists/ChequeList';
 import SearchForm from '../../components/Forms/SearchForm';
 import ChequeDetails from '../../components/ChequeDetails';
+import { getChequesByOrgId } from '../../services/apiGateway';
 
 
 // Style
@@ -35,6 +36,16 @@ const Cheques = () => {
   const [chequeList, setChequeList] = useState([]);
   const classes = useStyles();
 
+  useEffect(() => {
+    const fetchCheques = async () => {
+      const result = await getChequesByOrgId();
+      if (result.status === 200) {
+        setChequeList(result.data.results);
+      }
+    };
+
+    fetchCheques();
+  }, []);
 
   return (
     <div className={classes.main}>

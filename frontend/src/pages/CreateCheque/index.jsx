@@ -35,8 +35,8 @@ const Main = () => {
   useEffect(() => {
     const fetchCheques = async () => {
       const result = await getChequesByOrgId();
-      if (chequeList.status === 200) {
-        setChequeList(result.data);
+      if (result.status === 200) {
+        setChequeList(result.data.results);
       }
     };
 
