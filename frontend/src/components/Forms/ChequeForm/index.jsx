@@ -45,7 +45,7 @@ const ChequeForm = (props) => {
   const [chequeStatus, setChequeStatus] = useState(0);
   const descriptionField = useRef(null);
 
-  const { setOpen, setErrorOpen } = props;
+  const { setOpen, setErrorOpen, setShouldRender } = props;
 
 
   const onSubmit = async (data) => {
@@ -58,6 +58,7 @@ const ChequeForm = (props) => {
 
       if (result.status === 200) {
         setOpen(true);
+        setShouldRender(true);
       } else {
         setErrorOpen(true);
       }

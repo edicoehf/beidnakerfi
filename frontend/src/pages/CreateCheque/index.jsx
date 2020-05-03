@@ -28,6 +28,7 @@ const Main = () => {
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [cheque, setCheque] = useState({});
+  const [shouldRender, setShouldRender] = useState(true);
   const [chequeList, setChequeList] = useState([]);
   const [open, setOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
@@ -37,11 +38,12 @@ const Main = () => {
       const result = await getChequesByOrgId();
       if (result.status === 200) {
         setChequeList(result.data.results);
+        setShouldRender(false);
       }
     };
 
-    fetchCheques();
-  });
+    if(shouldRender) fetchCheques();
+  }, [shouldRender]);
 
   const handleSuccessSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -62,7 +64,7 @@ const Main = () => {
         <Sidebar />
       </div>
       <div className={classes.container}>
-        <ChequeForm setOpen={setOpen} setErrorOpen={setErrorOpen} />
+        <ChequeForm setOpen={setOpen} setErrorOpen={setErrorOpen} setShouldRender={setShouldRender}/>
         <ChequeList
           setCheque={setCheque}
           drawerOpen={drawerOpen}
