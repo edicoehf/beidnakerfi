@@ -29,6 +29,7 @@ const useStyles = makeStyles((themes) => ({
   formContainer: {
     display: 'flex',
     justifyContent: 'center',
+    width: '100%',
   },
 }));
 

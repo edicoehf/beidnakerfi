@@ -9,7 +9,7 @@ const ChequeList = (props) => {
     setDrawerOpen, setCheque, chequeList, setChequeList,
   } = props;
   const [desc, setDesc] = useState(true);
-  
+
   const handleClick = (cheque) => {
     setCheque(cheque);
     setDrawerOpen(true);

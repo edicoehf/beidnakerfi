@@ -21,6 +21,9 @@ const useStyles = makeStyles((themes) => ({
   container: {
     width: '80%',
     marginLeft: themes.spacing(5),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 }));
 
@@ -42,7 +45,7 @@ const Main = () => {
       }
     };
 
-    if(shouldRender) fetchCheques();
+    if (shouldRender) fetchCheques();
   }, [shouldRender, cheque]);
 
   const handleSuccessSnackbarClose = (event, reason) => {
@@ -64,7 +67,7 @@ const Main = () => {
         <Sidebar />
       </div>
       <div className={classes.container}>
-        <ChequeForm setOpen={setOpen} setErrorOpen={setErrorOpen} setShouldRender={setShouldRender}/>
+        <ChequeForm setOpen={setOpen} setErrorOpen={setErrorOpen} setShouldRender={setShouldRender} />
         <ChequeList
           setCheque={setCheque}
           drawerOpen={drawerOpen}
