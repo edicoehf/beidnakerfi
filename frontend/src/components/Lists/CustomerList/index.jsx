@@ -5,8 +5,8 @@ const CustomerList = () => (
   <table className="table">
     <thead>
       <tr>
-        <th>Fyrirtaeki</th>
-        <th>kt</th>
+        <th>Fyrirtæki</th>
+        <th>Kennitala</th>
         <th>mammamia</th>
         <th>lolning</th>
       </tr>

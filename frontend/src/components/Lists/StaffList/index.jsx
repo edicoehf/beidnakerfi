@@ -20,8 +20,8 @@ const StaffList = (props) => {
   }, []);
   const sort = async (item, subItem) => {
     const sorted = await sortBy(staffList, item, subItem, setDesc, desc);
-    setStaffList(sorted)
-  }
+    setStaffList(sorted);
+  };
   const handleClick = async (uid) => {
     const { setUser, setDrawerOpen } = props;
 
@@ -35,9 +35,9 @@ const StaffList = (props) => {
     <table className="table">
       <thead>
         <tr>
-          <th onClick={() => sort('username')}>Username</th>
-          <th onClick={() => sort('email')}>Email</th>
-          <th onClick={() => sort('department', 'name')}>Departments</th>
+          <th onClick={() => sort('username')}>Notendanafn</th>
+          <th onClick={() => sort('email')}>Netfang</th>
+          <th onClick={() => sort('department', 'name')}>Deildir</th>
         </tr>
       </thead>
       <tbody>

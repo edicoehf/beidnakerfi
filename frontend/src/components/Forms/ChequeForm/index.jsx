@@ -93,11 +93,11 @@ const ChequeForm = (props) => {
           <TextField
             className={classes.inputField}
             name="key"
-            inputRef={register({ required: true, maxLength: 20, minLength: 20 })}
+            inputRef={register({ required: true, maxLength: 13, minLength: 13 })}
             label="Lykill"
             onChange={(e) => {
               const { value } = e.target;
-              if (value.length === 20) {
+              if (value.length === 13) {
                 getChequeData(value);
               }
             }}

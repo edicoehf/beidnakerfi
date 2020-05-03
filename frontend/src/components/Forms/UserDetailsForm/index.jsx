@@ -7,7 +7,9 @@ import {
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { updateUser, deactivateUser, activateUser } from '../../../services/apiGateway';
+import {
+  updateUser, deactivateUser, activateUser, changeUserPassword,
+} from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
   form: {
@@ -19,6 +21,7 @@ const useStyles = makeStyles((themes) => ({
   },
   inputField: {
     width: '80%',
+    marginTop: '20px',
   },
   button: {
     marginTop: themes.spacing(2),
@@ -30,7 +33,7 @@ const useStyles = makeStyles((themes) => ({
 const UserDetailsForm = (props) => {
   const { handleSubmit, register } = useForm();
   const { user } = props;
-  const [userData, setUserData] = useState(user);
+  const [userData, setUserData] = useState({ ...user, oldPassword: '', newPassword: '' });
 
   const isSuperUser = JSON.parse(localStorage.getItem('tokens')).is_superuser;
   const classes = useStyles();
@@ -38,6 +41,19 @@ const UserDetailsForm = (props) => {
   const onSubmit = async () => {
     const { id, username, email } = userData;
     await updateUser({ id, username, email });
+  };
+
+  const handlePasswordChange = async () => {
+    const { newpassword, oldpassword, id } = userData;
+    const result = await changeUserPassword(id, newpassword, oldpassword);
+    console.log(result);
+  };
+
+  const isViewingHimself = () => {
+    const viewingId = userData.id;
+    const selfId = JSON.parse(localStorage.getItem('tokens')).id;
+
+    return viewingId === selfId;
   };
 
   const userActivate = () => activateUser(userData.id);
@@ -55,6 +71,31 @@ const UserDetailsForm = (props) => {
           value={userData.username}
           onChange={(e) => {
             setUserData({ ...userData, username: e.target.value });
+          }}
+        />
+        { isViewingHimself()
+          ? (
+            <TextField
+              name="oldpassword"
+              label="Gamalt lykilorð"
+              inputRef={register}
+              type="password"
+              className={classes.inputField}
+              value={userData.oldpassword}
+              onChange={(e) => {
+                setUserData({ ...userData, oldPassword: e.target.value });
+              }}
+            />
+          ) : null}
+        <TextField
+          name="newpassword"
+          label="Nýtt lykilorð"
+          inputRef={register}
+          type="password"
+          className={classes.inputField}
+          value={userData.newpassword}
+          onChange={(e) => {
+            setUserData({ ...userData, newPassword: e.target.value });
           }}
         />
         <TextField
@@ -106,7 +147,7 @@ const UserDetailsForm = (props) => {
             : null
         }
         {
-          isSuperUser ? <Button type="button" className={classes.button} variant="contained" color="primary">Breyta lykilorði</Button> : null
+          isSuperUser || isViewingHimself() ? <Button type="button" className={classes.button} variant="contained" onClick={handlePasswordChange} color="primary">Breyta lykilorði</Button> : null
         }
       </form>
     </>

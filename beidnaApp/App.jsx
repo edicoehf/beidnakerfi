@@ -7,11 +7,9 @@ import reducers from './src/reducers';
 
 import AppWrapper from './src/AppWrapper';
 
-const roboto = require('./assets/Roboto-Medium.ttf');
-
 const App = () => {
   const [fontsLoaded] = useFonts({
-    roboto,
+    'Roboto': require('./assets/Roboto-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
