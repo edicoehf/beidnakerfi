@@ -45,7 +45,7 @@ const ChequeForm = (props) => {
   const [chequeStatus, setChequeStatus] = useState(0);
   const descriptionField = useRef(null);
 
-  const { setOpen, setErrorOpen } = props;
+  const { setOpen, setErrorOpen, setShouldRender } = props;
 
 
   const onSubmit = async (data) => {
@@ -58,6 +58,7 @@ const ChequeForm = (props) => {
 
       if (result.status === 200) {
         setOpen(true);
+        setShouldRender(true);
       } else {
         setErrorOpen(true);
       }
@@ -93,11 +94,11 @@ const ChequeForm = (props) => {
           <TextField
             className={classes.inputField}
             name="key"
-            inputRef={register({ required: true, maxLength: 20, minLength: 20 })}
+            inputRef={register({ required: true, maxLength: 13, minLength: 13 })}
             label="Lykill"
             onChange={(e) => {
               const { value } = e.target;
-              if (value.length === 20) {
+              if (value.length === 13) {
                 getChequeData(value);
               }
             }}
