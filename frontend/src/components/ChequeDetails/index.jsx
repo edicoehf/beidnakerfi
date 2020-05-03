@@ -78,6 +78,8 @@ const ChequeDetails = (props) => {
   const handleDelete = async () => {
     await deleteCheque(code);
     setDrawerOpen(false);
+    setCheque([]);
+    setShouldRender(true);
 
   }
   const handlePaid = async () => {
