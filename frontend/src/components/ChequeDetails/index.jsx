@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Drawer, makeStyles, Button } from '@material-ui/core';
 
 import { statusCodes } from '../../config';
-import { deleteCheque } from '../../services/apiGateway';
+import { deleteCheque, markAsPaid } from '../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
   drawer: {
@@ -61,7 +61,7 @@ const useStyles = makeStyles((themes) => ({
 const ChequeDetails = (props) => {
   const classes = useStyles();
 
-  const { drawerOpen, setDrawerOpen, cheque } = props;
+  const { drawerOpen, setDrawerOpen, cheque, setCheque, setShouldRender } = props;
   const {
     code,
     status,
@@ -75,8 +75,16 @@ const ChequeDetails = (props) => {
   const toggleClose = () => {
     setDrawerOpen(false);
   };
-  const handleClick = async () => {
+  const handleDelete = async () => {
     await deleteCheque(code);
+    setDrawerOpen(false);
+
+  }
+  const handlePaid = async () => {
+    await markAsPaid(code);
+    setDrawerOpen(false);
+    setCheque([]);
+    setShouldRender(true);
 
   }
 
@@ -110,7 +118,17 @@ const ChequeDetails = (props) => {
             </div>
             {
               status === 2 ?
-                <Button onClick={handleClick} className={classes.button} variant="contained" color="primary">Hætta við beiðni</Button>
+                <>
+                  <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem greidd</Button>
+                  <Button onClick={handleDelete} className={classes.button} variant="contained" color="primary">Hætta við beiðni</Button>
+                </>
+              : null
+            }{
+              status === 3 ?
+                <>
+                  <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem ógreidd</Button>
+
+                </>
               : null
             }
         </div>
@@ -124,7 +142,12 @@ ChequeDetails.propTypes = {
   cheque: PropTypes.object.isRequired,
   drawerOpen: PropTypes.bool.isRequired,
   setDrawerOpen: PropTypes.func.isRequired,
+  setCheque: PropTypes.func.isRequired,
+  setShouldRender: PropTypes.func,
 };
+ChequeDetails.defaultProps = {
+  setShouldRender: () => {},
+}
 export default ChequeDetails;
 
 // code: "03014902499054321305"

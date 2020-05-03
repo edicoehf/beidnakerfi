@@ -43,7 +43,7 @@ const Main = () => {
     };
 
     if(shouldRender) fetchCheques();
-  }, [shouldRender]);
+  }, [shouldRender, cheque]);
 
   const handleSuccessSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -80,7 +80,7 @@ const Main = () => {
       </div>
       { drawerOpen
         // eslint-disable-next-line max-len
-        ? <ChequeDetails cheque={cheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+        ? <ChequeDetails cheque={cheque} setCheque={setCheque} setShouldRender={setShouldRender} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
         : null}
     </div>
   );

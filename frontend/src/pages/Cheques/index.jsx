@@ -45,7 +45,7 @@ const Cheques = () => {
     };
 
     fetchCheques();
-  }, []);
+  }, [cheque]);
 
   return (
     <div className={classes.main}>
@@ -66,7 +66,7 @@ const Cheques = () => {
       {
           drawerOpen
             // eslint-disable-next-line max-len
-            ? <ChequeDetails cheque={cheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+            ? <ChequeDetails setCheque={setCheque} cheque={cheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
             : null
         }
     </div>

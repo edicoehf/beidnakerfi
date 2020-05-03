@@ -277,6 +277,21 @@ export const updateCheque = async (cheque) => {
   return query;
 };
 
+export const markAsPaid = async (code) => {
+  const APIKEY = getKey();
+  const query = await axios
+    .patch(`${API_URL}/api/cheques/${code}/`,
+      {
+      }, {
+        headers: {
+          authorization: APIKEY,
+        },
+      })
+    .then((resp) => resp)
+    .catch((e) => e.response);
+  return query;
+};
+
 export const getChequesByOrgId = async () => {
   const APIKEY = getKey();
   const orgId = getOrgId();
