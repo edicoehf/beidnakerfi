@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../Forms.css';
 import {
   TextField,
 } from '@material-ui/core';
@@ -11,7 +10,7 @@ const useStyles = makeStyles((themes) => ({
   search: {
     marginTop: themes.spacing(5),
     display: 'flex',
-    width: '100%',
+    width: '80%',
 
   },
 }));
@@ -27,6 +26,7 @@ const SearchForm = (props) => {
       <TextField
         onChange={handleChange}
         className="inputField"
+        fullWidth
         name="query"
         type="text"
         label="Leitarstrengur"

@@ -43,7 +43,7 @@ export const getUsers = async () => {
   return query;
 };
 
-const getDepIDs = () => getUsers(JSON.parse(localStorage.getItem('tokens')).id);
+// const getDepIDs = () => getUsers(JSON.parse(localStorage.getItem('tokens')).id);
 
 export const getUser = async (id) => {
   const query = await axios
@@ -118,6 +118,23 @@ export const updateUser = async (user) => {
     })
     .then((resp) => resp.data)
     .catch((e) => e.response);
+  return query;
+};
+
+export const changeUserPassword = async (id, password) => {
+  const APIKEY = getKey();
+  const query = await axios
+    .put(`${API_URL}/api/users/${id}/set_password/`, {
+      old_password: '',
+      new_password: password,
+    }, {
+      headers: {
+        authorization: APIKEY,
+      },
+    })
+    .then((resp) => resp)
+    .catch((e) => e.response);
+
   return query;
 };
 
@@ -277,7 +294,7 @@ export const getChequesByOrgId = async () => {
 
 export const getChequesByDepartmentId = async () => {
   const APIKEY = getKey();
-  const depIDs = getDepIDs();
+  // const depIDs = getDepIDs();
   const orgId = getOrgId();
   const query = await axios
     .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
