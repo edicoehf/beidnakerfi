@@ -244,6 +244,10 @@ class ChequeViewSet(ModelViewSet):
             request.data['seller'] = seller.id
         elif cheque.status == cheque.CANCELLED and request.user.is_superuser:
             request.data['status'] = cheque.PENDING
+        elif cheque.status == cheque.PENDING:
+            request.data['status'] = cheque.DONE
+        elif cheque.status == cheque.DONE:
+            request.data['status'] = cheque.PENDING
 
         return super().partial_update(request, *args, **kwargs)
 
