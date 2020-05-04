@@ -30,19 +30,17 @@ const NewCheque = () => {
           <Text>Ný beiðni fyrir:</Text>
           <Text style={styles.costsite}>{ costsite.name }</Text>
         </View>
-
+        <View style={styles.web}>
+          <WebView
+            source={{ uri: `http://beidnakerfi.herokuapp.com/generate/${cheque.code}` }}
+            startInLoadingState
+            bounces={false}
+            scrollEnabled={false}
+          />
+        </View>
       </View>
       <Timer />
     </>
   );
 };
 export default NewCheque;
-
-// <View style={styles.web}>
-//   <WebView
-//     source={{ uri: `http://beidnakerfi.herokuapp.com/generate/${cheque.code}` }}
-//     startInLoadingState
-//     bounces={false}
-//     scrollEnabled={false}
-//   />
-// </View>
