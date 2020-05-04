@@ -8,14 +8,15 @@ import { getCheque, updateCheque } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
   inputField: {
-    width: '100%',
+    width: '50%',
+    marginRight: '20px',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '60%',
+    width: '80%',
     marginTop: themes.spacing(7),
   },
   formGroup: {
@@ -24,7 +25,8 @@ const useStyles = makeStyles((themes) => ({
   },
   submitButton: {
     marginTop: themes.spacing(3),
-    marginLeft: 'auto',
+    marginLeft: '70px',
+    width: '30%',
   },
   formContainer: {
     display: 'flex',
@@ -44,13 +46,13 @@ const ChequeForm = (props) => {
     createdDate: '',
   });
   const [chequeStatus, setChequeStatus] = useState(0);
-  const descriptionField = useRef(null);
+  const priceField = useRef(null);
 
   const { setOpen, setErrorOpen, setShouldRender } = props;
 
 
   const onSubmit = async (data) => {
-    if (chequeStatus === 2) {
+    if (chequeStatus >= 2) {
       setError('key', 'inUse', 'Beiðni er nú þegar í notkun');
     } else if (chequeStatus === 1) {
       clearError('key');
@@ -68,14 +70,16 @@ const ChequeForm = (props) => {
 
   const getChequeData = async (chequeId) => {
     const result = await getCheque(chequeId);
-    if ('detail' in chequeData) {
+    console.log(result);
+    if ('detail' in result.data) {
       setError('key', 'invalidKey', 'Beiðni er ekki til');
     } else {
       clearError('key');
       const {
-        department, user, created, status,
-      } = result;
+        department, user, status,
+      } = result.data;
 
+      const { created } = result;
 
       setChequeData({
         costSite: department.name,
@@ -83,7 +87,7 @@ const ChequeForm = (props) => {
         createdDate: created,
       });
       setChequeStatus(status);
-      descriptionField.current.focus();
+      priceField.current.focus();
     }
   };
 
@@ -108,7 +112,7 @@ const ChequeForm = (props) => {
           <TextField
             className={classes.inputField}
             name="createdDate"
-            inputRef={register({ required: true })}
+            inputRef={register}
             label="Tími og dagsetning stofnunar"
             value={chequeData.createdDate}
             disabled
@@ -118,7 +122,7 @@ const ChequeForm = (props) => {
           <TextField
             className={classes.inputField}
             name="costSite"
-            inputRef={register({ required: true })}
+            inputRef={register}
             label="Kostnaðarstaður"
             disabled
             value={chequeData.costSite}
@@ -127,7 +131,7 @@ const ChequeForm = (props) => {
           <TextField
             className={classes.inputField}
             name="buyerName"
-            inputRef={register({ required: true })}
+            inputRef={register}
             label="Úttektaraðili"
             value={chequeData.buyerName}
             disabled
@@ -138,23 +142,35 @@ const ChequeForm = (props) => {
         <div className={classes.formGroup}>
           <TextField
             className={classes.inputField}
-            name="itemDescription"
-            inputRef={(e) => {
-              register({ required: true });
-              descriptionField.current = e;
-            }}
-            label="Lýsing"
+            name="invoiceNumber"
+            inputRef={register}
+            label="Tilvísun í reikning"
           />
           <TextField
             className={classes.inputField}
             name="itemPrice"
-            inputRef={register({ required: true })}
+            inputRef={(e) => {
+              register();
+              priceField.current = e;
+            }}
             label="Verð"
+            required
           />
         </div>
-        <Button variant="contained" color="primary" className={classes.submitButton} type="submit">
-          Skrá beiðni
-        </Button>
+        <div className={classes.formGroup}>
+          <TextField
+            className={classes.inputField}
+            name="itemDescription"
+            inputRef={register}
+            label="Lýsing"
+            required
+          />
+
+          <Button variant="contained" color="primary" className={classes.submitButton} type="submit">
+            Skrá beiðni
+          </Button>
+        </div>
+
       </form>
     </div>
   );
@@ -163,5 +179,6 @@ const ChequeForm = (props) => {
 ChequeForm.propTypes = {
   setOpen: PropTypes.func.isRequired,
   setErrorOpen: PropTypes.func.isRequired,
+  setShouldRender: PropTypes.func.isRequired,
 };
 export default ChequeForm;

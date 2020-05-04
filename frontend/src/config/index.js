@@ -1,6 +1,6 @@
 export const views = {
-  superSeller: ['/cheques', '/createcheque', '/createuser', '/viewcustomers', '/viewusers'],
-  superBuyer: ['/cheques', '/createuser', '/createdepartment', '/viewcustomers', '/viewusers'],
+  superSeller: ['/cheques', '/createcheque', '/createuser', '/viewusers'],
+  superBuyer: ['/cheques', '/createuser', '/createdepartment', '/viewusers'],
   seller: ['/cheques', '/createcheque'],
   buyer: [],
 };
@@ -18,7 +18,6 @@ export const sidebarButtons = {
       { name: 'Skrá deild', path: '/createdepartment', pressed: false },
       { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
       { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },
-      { name: 'Viðskiptamannalisti', path: '/viewcustomers', pressed: false },
 
     ],
   },
@@ -28,7 +27,6 @@ export const sidebarButtons = {
       { name: 'Yfirlit beiðna', path: '/cheques', pressed: false },
       { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
       { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },
-      { name: 'Viðskiptamannalisti', path: '/viewcustomers', pressed: false },
 
     ],
   },

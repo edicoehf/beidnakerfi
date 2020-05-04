@@ -250,7 +250,7 @@ export const getCheque = async (id) => {
       const { created } = resp.data;
       const readableDate = convertDate(created);
 
-      const newData = { ...resp.data, created: readableDate };
+      const newData = { ...resp, created: readableDate };
 
       return newData;
     })
