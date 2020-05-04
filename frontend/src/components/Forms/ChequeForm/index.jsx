@@ -70,7 +70,6 @@ const ChequeForm = (props) => {
 
   const getChequeData = async (chequeId) => {
     const result = await getCheque(chequeId);
-    console.log(result);
     if ('detail' in result.data) {
       setError('key', 'invalidKey', 'Beiðni er ekki til');
     } else {
