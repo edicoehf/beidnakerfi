@@ -113,7 +113,7 @@ class ChequeDetailSerializer(serializers.ModelSerializer):
     seller = OrganizationListSerializer()
     class Meta:
         model = Cheque
-        fields = ['code', 'status', 'description', 'price', 'user', 'department', 'seller', 'created', 'modified']
+        fields = ['code', 'invoice', 'status', 'description', 'price', 'user', 'department', 'seller', 'created', 'modified']
 
 class ChequeActionSerializer(serializers.ModelSerializer):
     user = UserBasicSerializer()
@@ -121,7 +121,7 @@ class ChequeActionSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Cheque
-        fields = ['code', 'status', 'description', 'price', 'user', 'department', 'seller', 'created', 'modified']
+        fields = ['code', 'invoice', 'status', 'description', 'price', 'user', 'department', 'seller', 'created', 'modified']
 
 class ClientSerializer(serializers.ModelSerializer):
     buyer = OrganizationListSerializer()
