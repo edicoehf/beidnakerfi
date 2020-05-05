@@ -32,6 +32,7 @@ const useStyles = makeStyles((themes) => ({
 const Cheques = () => {
   const [search, setSearch] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [shouldRender, setShouldRender] = useState(true);
   const [cheque, setCheque] = useState({});
   const [chequeList, setChequeList] = useState([]);
   const classes = useStyles();
@@ -41,11 +42,12 @@ const Cheques = () => {
       const result = await getChequesByOrgId();
       if (result.status === 200) {
         setChequeList(result.data.results);
+        setShouldRender(false);
       }
     };
 
     fetchCheques();
-  }, [cheque]);
+  }, [shouldRender]);
 
   return (
     <div className={classes.main}>
@@ -66,7 +68,7 @@ const Cheques = () => {
       {
           drawerOpen
             // eslint-disable-next-line max-len
-            ? <ChequeDetails setCheque={setCheque} cheque={cheque} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+            ? <ChequeDetails cheque={cheque} setCheque={setCheque} setShouldRender={setShouldRender} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
             : null
         }
     </div>

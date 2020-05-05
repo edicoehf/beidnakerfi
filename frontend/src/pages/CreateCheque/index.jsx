@@ -46,7 +46,7 @@ const Main = () => {
     };
 
     if (shouldRender) fetchCheques();
-  }, [shouldRender, cheque]);
+  }, [shouldRender]);
 
   const handleSuccessSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
