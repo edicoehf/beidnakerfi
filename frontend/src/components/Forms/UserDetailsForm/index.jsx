@@ -44,8 +44,9 @@ const UserDetailsForm = (props) => {
   };
 
   const handlePasswordChange = async () => {
-    const { newpassword, oldpassword, id } = userData;
-    const result = await changeUserPassword(id, newpassword, oldpassword);
+    const { newPassword, oldPassword, id } = userData;
+
+    const result = await changeUserPassword(id, newPassword, oldPassword);
   };
 
   const isViewingHimself = () => {
@@ -162,5 +163,6 @@ const UserDetailsForm = (props) => {
 UserDetailsForm.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.object.isRequired,
+  setDrawerOpen: PropTypes.func.isRequired,
 };
 export default UserDetailsForm;

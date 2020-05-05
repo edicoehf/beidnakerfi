@@ -16,8 +16,13 @@ const useStyles = makeStyles((themes) => ({
     width: '100%',
   },
   container: {
-    width: '80%',
-    marginLeft: themes.spacing(5),
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  sidebarContainer: {
+    width: '20%',
   },
 }));
 
@@ -30,7 +35,7 @@ const ViewUsers = () => {
 
   return (
     <div className={classes.main}>
-      <div>
+      <div className={classes.sidebarContainer}>
         <Sidebar />
       </div>
       <div className={classes.container}>
