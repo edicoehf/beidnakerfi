@@ -213,17 +213,19 @@ class ChequeViewSet(ModelViewSet):
     queryset = Cheque.objects.all()
     lookup_field = 'code'
     permission_classes = [permissions.IsAuthenticated]
-    search_fields = [ 'code', 'description', 'created', 'user__username', 'department__name', 'department__costsite']
+    search_fields = [ 'code', 'description', 'invoice', 'created', 'user__username', 'department__name', 'department__costsite']
     ordering_fields = [ 'code', 'price', 'description', 'created', 'user', 'department' ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
         # variable_pk used to filter for nested relations
+        # api/departments/:id/cheques/
         if 'department_pk' in self.kwargs:
             return Cheque.objects.filter(department=self.kwargs['department_pk']).select_related('user', 'department', 'seller').order_by('-created')
+        # api/users/:id/cheques/
         elif 'user_pk' in self.kwargs:
             return Cheque.objects.filter(user=self.kwargs['user_pk']).select_related('user', 'department', 'seller').order_by('-created')
-        # api/organization/:id/cheques/
+        # api/organizations/:id/cheques/
         elif 'organization_pk' in self.kwargs:
             if self.request.user.is_superuser and not self.request.user.organization.is_seller:
                 return Cheque.objects.filter(user__organization=self.request.user.organization.id).select_related('user', 'department', 'seller').order_by('-created')
