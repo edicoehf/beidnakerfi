@@ -255,7 +255,6 @@ export const getCheque = async (id) => {
       return newData;
     })
     .catch((e) => e.response);
-
   return query;
 };
 

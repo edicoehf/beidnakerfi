@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import '../Lists.css';
 import { statusCodes } from '../../../config';
 import { sortBy } from '../../../services';
+import { getCheque } from '../../../services/apiGateway';
 
 const ChequeList = (props) => {
   const {
@@ -10,9 +11,11 @@ const ChequeList = (props) => {
   } = props;
   const [desc, setDesc] = useState(true);
 
-  const handleClick = (cheque) => {
-    setCheque(cheque);
+  const handleClick = async (cheque) => {
+    const detaildCheque  = await getCheque(cheque.code);
+    await setCheque(detaildCheque.data);
     setDrawerOpen(true);
+
   };
   const sort = async (item, subItem) => {
     const sorted = await sortBy(chequeList, item, subItem, setDesc, desc);

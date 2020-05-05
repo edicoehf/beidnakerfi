@@ -60,14 +60,17 @@ const useStyles = makeStyles((themes) => ({
 }));
 const ChequeDetails = (props) => {
   const classes = useStyles();
-
   const { drawerOpen, setDrawerOpen, cheque, setCheque, setShouldRender } = props;
+
   const {
     code,
     status,
     created,
     user: {username, email},
     department: {name: depName, costsite},
+    description,
+    price,
+    invoice = '',
   } = cheque;
   const { name: sellerName } = cheque.seller ? cheque.seller : '';
   const readableDate = new Date(created).toLocaleString('en-GB');
@@ -78,14 +81,12 @@ const ChequeDetails = (props) => {
   const handleDelete = async () => {
     await deleteCheque(code);
     setDrawerOpen(false);
-    setCheque([]);
     setShouldRender(true);
 
   }
   const handlePaid = async () => {
     await markAsPaid(code);
     setDrawerOpen(false);
-    setCheque([]);
     setShouldRender(true);
 
   }
@@ -117,6 +118,18 @@ const ChequeDetails = (props) => {
             <div className={classes.row}>
               <p className={classes.desc}>Seljandi: </p>
               <p className={classes.item}>{sellerName}</p>
+            </div>
+            <div className={classes.row}>
+              <p className={classes.desc}>Lýsing: </p>
+              <p className={classes.item}>{description}</p>
+            </div>
+            <div className={classes.row}>
+              <p className={classes.desc}>Verð: </p>
+              <p className={classes.item}>{price}</p>
+            </div>
+            <div className={classes.row}>
+              <p className={classes.desc}>Tilvísun: </p>
+              <p className={classes.item}>{invoice}</p>
             </div>
             {
               status === 2 ?
