@@ -73,6 +73,19 @@ class UserViewSet(ModelViewSet):
         user_serializer = self.get_serializer(user)
         return Response({'success': True, 'message': 'User activated', 'user': user_serializer.data}, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['POST'])
+    def deactivate(self, request, pk):
+        user = self.get_object()
+        if not user.is_active:
+            user_serializer = self.get_serializer(user)
+            return Response({'success': True, 'message': 'User already disabled', 'user': user_serializer.data}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.is_active = False
+        user.save()
+        
+        user_serializer = self.get_serializer(user)
+        return Response({'success': True, 'message': 'User disabled', 'user': user_serializer.data}, status=status.HTTP_200_OK)
+
     @action(detail=True, methods=['PUT'])
     def set_password(self, request, pk):
         user = self.get_object()
