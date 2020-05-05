@@ -21,7 +21,7 @@ const useStyles = makeStyles((themes) => ({
   },
 }));
 
-const Main = () => {
+const ViewUsers = () => {
   const [search, setSearch] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [user, setUser] = useState({});
@@ -48,4 +48,4 @@ const Main = () => {
 };
 
 
-export default Main;
+export default ViewUsers;

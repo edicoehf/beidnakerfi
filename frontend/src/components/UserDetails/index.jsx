@@ -20,7 +20,7 @@ const UserDetails = (props) => {
   return (
     <>
       <Drawer PaperProps={{ className: classes.drawer }} anchor="right" open={drawerOpen} onClose={toggleClose}>
-        <UserDetailsForm user={user} />
+        <UserDetailsForm user={user} setDrawerOpen={setDrawerOpen} />
       </Drawer>
     </>
   );

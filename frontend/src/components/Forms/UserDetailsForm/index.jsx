@@ -32,7 +32,7 @@ const useStyles = makeStyles((themes) => ({
 
 const UserDetailsForm = (props) => {
   const { handleSubmit, register } = useForm();
-  const { user } = props;
+  const { user, setDrawerOpen } = props;
   const [userData, setUserData] = useState({ ...user, oldPassword: '', newPassword: '' });
 
   const isSuperUser = JSON.parse(localStorage.getItem('tokens')).is_superuser;
@@ -46,7 +46,6 @@ const UserDetailsForm = (props) => {
   const handlePasswordChange = async () => {
     const { newpassword, oldpassword, id } = userData;
     const result = await changeUserPassword(id, newpassword, oldpassword);
-    console.log(result);
   };
 
   const isViewingHimself = () => {
@@ -56,8 +55,14 @@ const UserDetailsForm = (props) => {
     return viewingId === selfId;
   };
 
-  const userActivate = () => activateUser(userData.id);
-  const userDeactivate = () => deactivateUser(userData.id);
+  const userActivate = () => {
+    activateUser(userData.id);
+    setDrawerOpen(false);
+  };
+  const userDeactivate = () => {
+    deactivateUser(userData.id);
+    setDrawerOpen(false);
+  };
 
   return (
     <>

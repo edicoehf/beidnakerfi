@@ -60,18 +60,18 @@ const useStyles = makeStyles((themes) => ({
 }));
 const ChequeDetails = (props) => {
   const classes = useStyles();
-  const { drawerOpen, setDrawerOpen, cheque, setCheque, setShouldRender } = props;
+  const {
+    drawerOpen, setDrawerOpen, cheque, setShouldRender, setOpen,
+  } = props;
 
   const {
     code,
     status,
     created,
-    user: {username, email},
-    department: {name: depName, costsite},
-    description,
-    price,
-    invoice = '',
+    user: { username, email },
+    department: { name: depName, costsite },
   } = cheque;
+
   const { name: sellerName } = cheque.seller ? cheque.seller : '';
   const readableDate = new Date(created).toLocaleString('en-GB');
   const color = [classes.red, classes.blue, classes.orange, classes.green];
@@ -81,70 +81,75 @@ const ChequeDetails = (props) => {
   const handleDelete = async () => {
     await deleteCheque(code);
     setDrawerOpen(false);
+    setOpen(true);
     setShouldRender(true);
-
-  }
+  };
   const handlePaid = async () => {
     await markAsPaid(code);
     setDrawerOpen(false);
+    setOpen(true);
     setShouldRender(true);
-
-  }
+  };
 
   return (
     <>
       <Drawer PaperProps={{ className: classes.drawer }} anchor="right" open={drawerOpen} onClose={toggleClose}>
-        <div className={classes.content} >
-            <div className={classes.row}>
-              <p className={classes.desc}>Beidnanúmer: </p>
-              <p className={classes.item}>{code}</p>
-            </div>
-            <div className={classes.row}>
-              <p className={classes.desc}>Staða: </p>
-              <p className={color[status]}>{statusCodes[status]}</p>
-            </div>
-            <div className={classes.row}>
-              <p className={classes.desc}>Dagsetning: </p>
-              <p className={classes.item}>{readableDate}</p>
-            </div>
-            <div className={classes.row}>
-              <p className={classes.desc}>Kaupandi: </p>
-              <p className={classes.item}>{username} - {email}</p>
-            </div>
-            <div className={classes.row}>
-              <p className={classes.desc}>Deild: </p>
-              <p className={classes.item}>{depName} - {costsite}</p>
-            </div>
-            <div className={classes.row}>
-              <p className={classes.desc}>Seljandi: </p>
-              <p className={classes.item}>{sellerName}</p>
-            </div>
-            <div className={classes.row}>
-              <p className={classes.desc}>Lýsing: </p>
-              <p className={classes.item}>{description}</p>
-            </div>
-            <div className={classes.row}>
-              <p className={classes.desc}>Verð: </p>
-              <p className={classes.item}>{price}</p>
-            </div>
-            <div className={classes.row}>
-              <p className={classes.desc}>Tilvísun: </p>
-              <p className={classes.item}>{invoice}</p>
-            </div>
-            {
-              status === 2 ?
-                <>
-                  <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem greidd</Button>
-                  <Button onClick={handleDelete} className={classes.button} variant="contained" color="primary">Hætta við beiðni</Button>
-                </>
-              : null
-            }{
-              status === 3 ?
-                <>
-                  <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem ógreidd</Button>
+        <div className={classes.content}>
+          <div className={classes.row}>
+            <p className={classes.desc}>Beidnanúmer: </p>
+            <p className={classes.item}>{code}</p>
+          </div>
+          <div className={classes.row}>
+            <p className={classes.desc}>Staða: </p>
+            <p className={color[status]}>{statusCodes[status]}</p>
+          </div>
+          <div className={classes.row}>
+            <p className={classes.desc}>Dagsetning: </p>
+            <p className={classes.item}>{readableDate}</p>
+          </div>
+          <div className={classes.row}>
+            <p className={classes.desc}>Kaupandi: </p>
+            <p className={classes.item}>
+              {username}
+              {' '}
+              -
+              {' '}
+              {email}
+            </p>
+          </div>
+          <div className={classes.row}>
+            <p className={classes.desc}>Deild: </p>
+            <p className={classes.item}>
+              {depName}
+              {' '}
+              -
+              {' '}
+              {costsite}
+            </p>
+          </div>
+          <div className={classes.row}>
+            <p className={classes.desc}>Seljandi: </p>
+            <p className={classes.item}>{sellerName}</p>
+          </div>
+          {
+              status === 2
+                ? (
+                  <>
+                    <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem greidd</Button>
+                    <Button onClick={handleDelete} className={classes.button} variant="contained" color="primary">Hætta við beiðni</Button>
+                  </>
+                )
+                : null
+            }
+          {
+              status === 3
+                ? (
+                  <>
+                    <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem ógreidd</Button>
 
-                </>
-              : null
+                  </>
+                )
+                : null
             }
         </div>
       </Drawer>
@@ -152,17 +157,20 @@ const ChequeDetails = (props) => {
   );
 };
 
+
+ChequeDetails.defaultProps = {
+  setShouldRender: () => {},
+};
+
 ChequeDetails.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   cheque: PropTypes.object.isRequired,
   drawerOpen: PropTypes.bool.isRequired,
   setDrawerOpen: PropTypes.func.isRequired,
-  setCheque: PropTypes.func.isRequired,
   setShouldRender: PropTypes.func,
+  setOpen: PropTypes.func.isRequired,
 };
-ChequeDetails.defaultProps = {
-  setShouldRender: () => {},
-}
+
 export default ChequeDetails;
 
 // code: "03014902499054321305"
