@@ -16,12 +16,14 @@ const useStyles = makeStyles((themes) => ({
     width: '100%',
   },
   container: {
-    width: '80%',
-    marginLeft: themes.spacing(5),
+    width: '100%',
     display: 'flex',
-    paddingTop: themes.spacing(5),
-    alignItems: 'center',
     flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sidebarContainer: {
+    width: '20%',
   },
 }));
 
@@ -46,7 +48,7 @@ const Main = () => {
 
   return (
     <div className={classes.main}>
-      <div>
+      <div className={classes.sidebarContainer}>
         <Sidebar />
       </div>
       <div className={classes.container}>

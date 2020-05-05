@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SuccessSnackbar = (props) => {
   const classes = useStyles();
-  const { handleClose, open } = props;
+  const { handleClose, open, successMessage } = props;
   return (
     <div className={classes.root}>
       <SnackBar
@@ -27,16 +27,20 @@ const SuccessSnackbar = (props) => {
 
       >
         <Alert onClose={handleClose} severity="success">
-          Aðgerð tókst!
+          { successMessage }
         </Alert>
       </SnackBar>
     </div>
   );
 };
 
+SuccessSnackbar.defaultProps = {
+  successMessage: 'Aðgerð tókst!',
+};
 SuccessSnackbar.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  successMessage: PropTypes.string,
 };
 
 export default SuccessSnackbar;

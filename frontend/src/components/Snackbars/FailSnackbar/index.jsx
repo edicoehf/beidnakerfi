@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 const FailSnackbar = (props) => {
   const classes = useStyles();
-  const { handleClose, open } = props;
+  const { handleClose, open, failMessage } = props;
   return (
     <div className={classes.root}>
       <SnackBar
@@ -26,16 +26,21 @@ const FailSnackbar = (props) => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Alert onClose={handleClose} severity="error">
-          Aðgerð mistókst.
+          { failMessage }
         </Alert>
       </SnackBar>
     </div>
   );
 };
 
+FailSnackbar.defaultProps = {
+  failMessage: 'Aðgerð mistókst',
+};
+
 FailSnackbar.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  failMessage: PropTypes.string,
 };
 
 export default FailSnackbar;

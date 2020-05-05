@@ -16,12 +16,17 @@ const useStyles = makeStyles((themes) => ({
     width: '100%',
   },
   container: {
-    width: '80%',
-    marginLeft: themes.spacing(5),
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  sidebarContainer: {
+    width: '20%',
   },
 }));
 
-const Main = () => {
+const ViewUsers = () => {
   const [search, setSearch] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [user, setUser] = useState({});
@@ -30,7 +35,7 @@ const Main = () => {
 
   return (
     <div className={classes.main}>
-      <div>
+      <div className={classes.sidebarContainer}>
         <Sidebar />
       </div>
       <div className={classes.container}>
@@ -48,4 +53,4 @@ const Main = () => {
 };
 
 
-export default Main;
+export default ViewUsers;

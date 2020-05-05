@@ -67,8 +67,8 @@ const LoginForm = () => {
 
   return (
     <div className={classes.container}>
-
       <EdicoLogo />
+
       <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
         {isError ? <span> Wrong username or password </span> : null}
         <TextField
