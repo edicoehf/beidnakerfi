@@ -31,9 +31,9 @@ export const login = async (userlogin) => {
   return query;
 };
 
-export const getUsers = async () => {
+export const getUsers = async (page) => {
   const query = await axios
-    .get(`${API_URL}/api/users/`, {
+    .get(`${API_URL}/api/users/?limit=10&offset=${page*10}`, {
       headers: {
         authorization: getKey(),
       },
@@ -291,11 +291,11 @@ export const markAsPaid = async (code) => {
   return query;
 };
 
-export const getChequesByOrgId = async () => {
+export const getChequesByOrgId = async (page) => {
   const APIKEY = getKey();
   const orgId = getOrgId();
   const query = await axios
-    .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
+    .get(`${API_URL}/api/organizations/${orgId}/cheques/?limit=10&offset=${page*10}`,
       {
         headers: {
           authorization: APIKEY,
@@ -304,6 +304,8 @@ export const getChequesByOrgId = async () => {
     .then((resp) => resp)
     .catch((e) => e.response);
   return query;
+
+
 };
 
 export const getChequesByDepartmentId = async () => {
