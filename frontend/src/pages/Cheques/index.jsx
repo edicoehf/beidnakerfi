@@ -40,11 +40,12 @@ const Cheques = () => {
   const [chequeList, setChequeList] = useState([]);
   const [open, setOpen] = useState(false);
   const [chequeCount, setChequeCount] = useState(0);
+  const [page, setPage] = useState(0);
   const classes = useStyles();
 
   useEffect(() => {
     const fetchCheques = async () => {
-      const result = await getChequesByOrgId();
+      const result = await getChequesByOrgId(page);
       if (result.status === 200) {
         setChequeList(result.data.results);
         setChequeCount(result.data.count);
@@ -78,6 +79,9 @@ const Cheques = () => {
           chequeList={chequeList}
           setChequeList={setChequeList}
           count={chequeCount}
+          setPage={setPage}
+          page={page}
+          setShouldRender={setShouldRender}
         />
       </div>
       {

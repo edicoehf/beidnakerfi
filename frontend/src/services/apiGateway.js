@@ -291,19 +291,33 @@ export const markAsPaid = async (code) => {
   return query;
 };
 
-export const getChequesByOrgId = async () => {
+export const getChequesByOrgId = async (page) => {
   const APIKEY = getKey();
   const orgId = getOrgId();
-  const query = await axios
-    .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
-      {
-        headers: {
-          authorization: APIKEY,
-        },
-      })
-    .then((resp) => resp)
-    .catch((e) => e.response);
-  return query;
+  if (page === 0){
+    const query = await axios
+      .get(`${API_URL}/api/organizations/${orgId}/cheques/`,
+        {
+          headers: {
+            authorization: APIKEY,
+          },
+        })
+      .then((resp) => resp)
+      .catch((e) => e.response);
+    return query;
+  } else {
+    const query = await axios
+      .get(`${API_URL}/api/organizations/${orgId}/cheques/?limit=10&offset=${page*10}`,
+        {
+          headers: {
+            authorization: APIKEY,
+          },
+        })
+      .then((resp) => resp)
+      .catch((e) => e.response);
+    return query;
+  }
+
 };
 
 export const getChequesByDepartmentId = async () => {

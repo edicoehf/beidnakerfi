@@ -43,11 +43,17 @@ const useStyles = makeStyles((themes) => ({
 
 const ChequeList = (props) => {
   const {
-    setDrawerOpen, setCheque, chequeList, setChequeList, count,
+    setDrawerOpen,
+    setCheque,
+    chequeList,
+    setChequeList,
+    count,
+    setPage,
+    page,
+    setShouldRender
   } = props;
   const classes = useStyles();
   const [desc, setDesc] = useState(true);
-  const [page, setPage] = useState(0);
 
   const handleClick = async (cheque) => {
     const detaildCheque = await getCheque(cheque.code);
@@ -55,7 +61,8 @@ const ChequeList = (props) => {
     setDrawerOpen(true);
   };
   const handleChangePage = (event, newPage) => {
-    setPage(newPage)
+    setPage(newPage);
+    setShouldRender(true);
   };
 
   const sort = async (item, subItem) => {
