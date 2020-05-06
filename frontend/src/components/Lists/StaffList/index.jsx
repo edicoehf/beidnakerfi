@@ -51,7 +51,6 @@ const StaffList = (props) => {
       if (results.status === 200) {
         setStaffList(results.data.results);
         setStaffCount(results.data.count);
-
       }
     };
 
