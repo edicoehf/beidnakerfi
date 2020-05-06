@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import TablePagination from '@material-ui/core/TablePagination';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { getUsers, getUser } from '../../../services/apiGateway';
@@ -41,12 +42,16 @@ const StaffList = (props) => {
   const classes = useStyles();
   const [staffList, setStaffList] = useState([]);
   const [desc, setDesc] = useState(true);
+  const [page, setPage] = useState(0);
+  const [staffCount, setStaffCount] = useState(0);
 
   useEffect(() => {
     const getStaff = async () => {
       const results = await getUsers();
       if (results.status === 200) {
         setStaffList(results.data.results);
+        setStaffCount(results.data.count);
+
       }
     };
 
@@ -66,38 +71,51 @@ const StaffList = (props) => {
       setDrawerOpen(true);
     }
   };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  };
   return (
-    <TableContainer className={classes.container} component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow className={classes.tableHead}>
-            <TableCell className={classes.tableHeadCell} onClick={() => sort('username')}>Notendanafn</TableCell>
-            <TableCell className={classes.tableHeadCell} onClick={() => sort('email')}>Netfang</TableCell>
-            <TableCell className={classes.tableHeadCell} onClick={() => sort('department', 'name')}>Deildir</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {
-          staffList.filter((staff) => staff.username.includes(props.query)).map((staff) => (
-            <TableRow
-              className={classes.tableRow}
-              key={staff.id}
-              onClick={() => handleClick(staff.id)}
-            >
-              <TableCell className={classes.tableCell}>{staff.username}</TableCell>
-              <TableCell className={classes.tableCell}>{staff.email}</TableCell>
-              <TableCell className={classes.tableCell}>
-                {
-                  staff.departments.map((dept) => dept.name).join(', ')
-                }
-              </TableCell>
+    <>
+      <TableContainer className={classes.container} component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow className={classes.tableHead}>
+              <TableCell className={classes.tableHeadCell} onClick={() => sort('username')}>Notendanafn</TableCell>
+              <TableCell className={classes.tableHeadCell} onClick={() => sort('email')}>Netfang</TableCell>
+              <TableCell className={classes.tableHeadCell} onClick={() => sort('department', 'name')}>Deildir</TableCell>
             </TableRow>
-          ))
-        }
-        </TableBody>
+          </TableHead>
+          <TableBody>
+            {
+            staffList.filter((staff) => staff.username.includes(props.query)).map((staff) => (
+              <TableRow
+                className={classes.tableRow}
+                key={staff.id}
+                onClick={() => handleClick(staff.id)}
+              >
+                <TableCell className={classes.tableCell}>{staff.username}</TableCell>
+                <TableCell className={classes.tableCell}>{staff.email}</TableCell>
+                <TableCell className={classes.tableCell}>
+                  {
+                    staff.departments.map((dept) => dept.name).join(', ')
+                  }
+                </TableCell>
+              </TableRow>
+            ))
+          }
+          </TableBody>
 
-      </Table>
-    </TableContainer>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        count={staffCount}
+        rowsPerPage={10}
+        rowsPerPageOptions={[]}
+        page={page}
+        onChangePage={handleChangePage}
+      />
+    </>
   );
 };
 

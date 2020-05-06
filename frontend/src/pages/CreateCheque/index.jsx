@@ -37,12 +37,14 @@ const Main = () => {
   const [chequeList, setChequeList] = useState([]);
   const [open, setOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
+  const [chequeCount, setChequeCount] = useState(0);
 
   useEffect(() => {
     const fetchCheques = async () => {
       const result = await getChequesByOrgId();
       if (result.status === 200) {
         setChequeList(result.data.results);
+        setChequeCount(result.data.count);
         setShouldRender(false);
       }
     };
@@ -76,6 +78,7 @@ const Main = () => {
           setDrawerOpen={setDrawerOpen}
           chequeList={chequeList}
           setChequeList={setChequeList}
+          count={chequeCount}
         />
         { open ? <SuccessSnackbar open={open} handleClose={handleSuccessSnackbarClose} /> : null }
 

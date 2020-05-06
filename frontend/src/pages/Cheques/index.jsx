@@ -39,6 +39,7 @@ const Cheques = () => {
   const [cheque, setCheque] = useState({});
   const [chequeList, setChequeList] = useState([]);
   const [open, setOpen] = useState(false);
+  const [chequeCount, setChequeCount] = useState(0);
   const classes = useStyles();
 
   useEffect(() => {
@@ -46,6 +47,7 @@ const Cheques = () => {
       const result = await getChequesByOrgId();
       if (result.status === 200) {
         setChequeList(result.data.results);
+        setChequeCount(result.data.count);
         setShouldRender(false);
       }
     };
@@ -75,6 +77,7 @@ const Cheques = () => {
           setDrawerOpen={setDrawerOpen}
           chequeList={chequeList}
           setChequeList={setChequeList}
+          count={chequeCount}
         />
       </div>
       {
