@@ -16,7 +16,10 @@ Frontend:
 
 Til þess að sækja forritið skal hlaða niður Github gagnahirslunni með efitrfarandi skipun:
 
-`git clone git@github.com:edicoehf/beidnakerfi.git`
+```bash
+➜ git clone git@github.com:edicoehf/beidnakerfi.git
+➜ cd beidnakerfi
+```
 
 ### Bakendi
 
@@ -123,4 +126,46 @@ Eftir að skipunin er hætt að keyra, munt þú sjá `build/` möppu í `fronte
 
 ### App
 
-Arnór skrifa hér!!!
+Appið okkar keyrir í Expo umhverfi sem hjúpar virkni NPM fyrir öpp, keyrir og hýsir appið svo hægt sé að sýna það í símum. Appið er skrifað í Javascript með React-Native ramma (e. framework).
+
+Útgáfan af Expo sem við notuðumst við er `3.13.1` mælum við eindregið með því að nota slíka þar sem við tryggjum ekki að virkni virki eins á öðrum útgáfum. Einnig mælum við með sömu útgáfum af npm og notast er við í framenda.
+
+Til að sjá hvaða útgáfu af Expo þú ert með:
+
+```bash
+➜  beidnaApp git:(master) ✗ expo -V
+v3.13.1
+```
+
+Áður en appið er keyrt upp þarf að setja upp nauðsynlega pakka sem er gert með:
+
+```bash
+➜  beidnaApp git:(master) expo install
+```
+
+Þegar búið er að setja upp alla nauðsynlegu pakkana þá má keyra expo start:
+
+```bash
+➜  beidnaApp git:(master) ✗ expo start
+
+Starting project at /Users/emilnewel/Documents/git/beidnakerfi/beidnaApp
+Expo DevTools is running at http://localhost:19002
+Opening DevTools in the browser... (press shift-d to disable)
+Starting Metro Bundler on port 19001.
+Tunnel ready.
+
+  exp://192.168.111.183:19000
+
+  ...
+  [Generated QR code]
+  ...
+
+  To run the app with live reloading, choose one of:
+  • Scan the QR code above with the Expo app (Android) or the Camera app (iOS).
+  • Press a for Android emulator, or w to run on web.
+  • Press e to send a link to your phone with email.
+  • Press s to sign in and enable more options.
+
+ Expo  Press ? to show a list of all available commands.
+
+```

@@ -13,11 +13,14 @@ const StaffList = (props) => {
   useEffect(() => {
     const getStaff = async () => {
       const results = await getUsers();
-      if (results.status === 200) setStaffList(results.data.results);
+      if (results.status === 200) {
+        setStaffList(results.data.results);
+      }
     };
 
     getStaff();
   }, []);
+
   const sort = async (item, subItem) => {
     const sorted = await sortBy(staffList, item, subItem, setDesc, desc);
     setStaffList(sorted);

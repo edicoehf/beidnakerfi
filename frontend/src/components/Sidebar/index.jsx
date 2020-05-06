@@ -47,13 +47,13 @@ const Sidebar = () => {
   };
 
   const changeColor = (path) => {
-    buttons.forEach((x) => {
-      if (x.path === path) {
+    buttons.forEach((button) => {
+      if (button.path === path) {
         // eslint-disable-next-line no-param-reassign
-        x.pressed = true;
+        button.pressed = true;
       } else {
         // eslint-disable-next-line no-param-reassign
-        x.pressed = false;
+        button.pressed = false;
       }
     });
   };
@@ -65,16 +65,16 @@ const Sidebar = () => {
       <EdicoLogo />
       <div className={classes.buttonList}>
         {
-          buttons.map((x) => (
-            <Link to={x.path} key={x.name} className={classes.link}>
+          buttons.map((button) => (
+            <Link to={button.path} key={button.name} className={classes.link}>
               {
-                x.pressed === true ? (
-                  <Button type="button" color="secondary" variant="contained" className={classes.button} onClick={() => changeColor(x.path)}>
-                    {x.name}
+                button.pressed === true ? (
+                  <Button type="button" color="secondary" variant="contained" className={classes.button} onClick={() => changeColor(button.path)}>
+                    {button.name}
                   </Button>
                 ) : (
-                  <Button type="button" color="primary" variant="contained" className={classes.button} onClick={() => changeColor(x.path)}>
-                    {x.name}
+                  <Button type="button" color="primary" variant="contained" className={classes.button} onClick={() => changeColor(button.path)}>
+                    {button.name}
                   </Button>
                 )
               }

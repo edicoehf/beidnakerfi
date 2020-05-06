@@ -7,7 +7,9 @@ import Sidebar from '../../components/Sidebar';
 import ChequeList from '../../components/Lists/ChequeList';
 import SearchForm from '../../components/Forms/SearchForm';
 import ChequeDetails from '../../components/ChequeDetails';
+import SuccessSnackbar from '../../components/Snackbars/SuccessSnackbar';
 import { getChequesByOrgId } from '../../services/apiGateway';
+import { sidebarButtons } from '../../config';
 
 
 // Style
@@ -20,12 +22,13 @@ const useStyles = makeStyles((themes) => ({
     width: '100%',
   },
   container: {
-    width: '80%',
-    marginLeft: themes.spacing(5),
+    width: '100%',
     display: 'flex',
-    paddingTop: themes.spacing(5),
-    alignItems: 'center',
     flexDirection: 'column',
+    alignItems: 'center',
+  },
+  sidebarContainer: {
+    width: '20%',
   },
 }));
 
@@ -35,6 +38,7 @@ const Cheques = () => {
   const [shouldRender, setShouldRender] = useState(true);
   const [cheque, setCheque] = useState({});
   const [chequeList, setChequeList] = useState([]);
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
 
   useEffect(() => {
@@ -49,9 +53,17 @@ const Cheques = () => {
     fetchCheques();
   }, [shouldRender]);
 
+
+  const handleSuccessSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
     <div className={classes.main}>
-      <div>
+      <div className={classes.sidebarContainer}>
         <Sidebar />
       </div>
       <div className={classes.container}>
@@ -68,9 +80,19 @@ const Cheques = () => {
       {
           drawerOpen
             // eslint-disable-next-line max-len
-            ? <ChequeDetails cheque={cheque} setCheque={setCheque} setShouldRender={setShouldRender} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+            ? (
+              <ChequeDetails
+                cheque={cheque}
+                setCheque={setCheque}
+                setShouldRender={setShouldRender}
+                drawerOpen={drawerOpen}
+                setDrawerOpen={setDrawerOpen}
+                setOpen={setOpen}
+              />
+            )
             : null
         }
+      { open ? <SuccessSnackbar open={open} handleClose={handleSuccessSnackbarClose} /> : null }
     </div>
   );
 };
