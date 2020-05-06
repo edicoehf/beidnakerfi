@@ -8,7 +8,6 @@ import Cheques from './pages/Cheques';
 import CreateUser from './pages/CreateUser';
 import CreateCheque from './pages/CreateCheque';
 import CreateDepartment from './pages/CreateDepartment';
-// import ViewCustomers from './pages/ViewCustomers';
 import ViewUsers from './pages/ViewUsers';
 import Unauthorized from './components/Unauthorized';
 import BarcodeGenerator from './pages/Barcode';
@@ -34,7 +33,6 @@ const Routes = () => {
         <PrivateRoute path="/createuser" component={CreateUser} checkPrivileges={checkPrivileges} />
         <PrivateRoute path="/createcheque" component={CreateCheque} checkPrivileges={checkPrivileges} />
         <PrivateRoute path="/createdepartment" component={CreateDepartment} checkPrivileges={checkPrivileges} />
-        {/* <PrivateRoute path="/viewcustomers" component={ViewCustomers} checkPrivileges={checkPrivileges} /> */}
         <PrivateRoute path="/viewusers" component={ViewUsers} checkPrivileges={checkPrivileges} />
         <Route path="/generate/:code" component={BarcodeGenerator} />
         <Route exact path="/401" component={Unauthorized} />
