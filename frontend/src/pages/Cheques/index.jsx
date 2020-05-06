@@ -8,8 +8,8 @@ import ChequeList from '../../components/Lists/ChequeList';
 import SearchForm from '../../components/Forms/SearchForm';
 import ChequeDetails from '../../components/ChequeDetails';
 import SuccessSnackbar from '../../components/Snackbars/SuccessSnackbar';
+
 import { getChequesByOrgId } from '../../services/apiGateway';
-import { sidebarButtons } from '../../config';
 
 
 // Style
@@ -83,6 +83,7 @@ const Cheques = () => {
           page={page}
           setShouldRender={setShouldRender}
         />
+        { open ? <SuccessSnackbar open={open} handleClose={handleSuccessSnackbarClose} /> : null }
       </div>
       {
           drawerOpen
@@ -99,7 +100,7 @@ const Cheques = () => {
             )
             : null
         }
-      { open ? <SuccessSnackbar open={open} handleClose={handleSuccessSnackbarClose} /> : null }
+
     </div>
   );
 };
