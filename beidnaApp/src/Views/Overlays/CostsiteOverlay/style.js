@@ -5,7 +5,6 @@ export default StyleSheet.create({
   overlay: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
     height: 500,
   },
   listItem: {
