@@ -5,12 +5,14 @@ import { useSelector } from 'react-redux';
 import ChangePasswordOverlay from '../Overlays/ChangePasswordOverlay';
 
 import TopNavigator from '../TopNavigator';
+import CostsiteOverlay from '../Overlays/CostsiteOverlay';
 
 // Styles
 import styles from './style';
 
 const UserDetails = () => {
   const [isVisible, setVisible] = useState(false);
+  const [isVisibleDep, setVisibleDep] = useState(false);
   const {
     userInfo: {
       username, departments, email, organization,
@@ -39,11 +41,27 @@ const UserDetails = () => {
         }
         <Text style={styles.userDepartmentDesc}>Deildir: </Text>
         {
-          departments ? (
-            departments.map((x) => (
-              <Text style={styles.centerItem} key={x.id}>{x.name}</Text>
-            ))
-          ) : null
+          departments.length > 1 ? (
+            <>
+              <TouchableOpacity onPress={() => setVisibleDep(true)}>
+                <View style={styles.defaultPick}>
+                  <Text style={styles.costsiteText}>{departments[0].name}</Text>
+                  <View style={styles.rightMark}>
+                    <Icon name="arrow-drop-down" />
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <CostsiteOverlay
+                departments={departments}
+                visible={isVisibleDep}
+                visibleFunc={setVisibleDep}
+              />
+            </>
+          ) : (
+            <View style={styles.oneCostsite}>
+              <Text style={styles.costsiteText}>{departments.name}</Text>
+            </View>
+          )
         }
         <TouchableOpacity
           style={styles.changePW}
