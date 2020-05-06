@@ -68,10 +68,14 @@ CostsiteOverlay.propTypes = {
   visibleFunc: PropTypes.func.isRequired,
   valueFunc: PropTypes.func.isRequired,
   value: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
+    id: PropTypes.number,
+    name: PropTypes.string,
   }),
 };
-CostsiteOverlay.defaultProps = { value: '' };
+CostsiteOverlay.defaultProps = {
+  value: {},
+  valueFunc: () => {}
+
+};
 
 // TODO: add prop validation
