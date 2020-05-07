@@ -1,5 +1,6 @@
 # API DOCUMENTATION
 ## Functional Endpoints
+
 `admin/` Built-in Django admin web interface. Only accessible by admin (staff) users.
 
 `api/login/`
@@ -15,6 +16,22 @@ All data requests require token authentication through the `Authorization` heade
 "Authorization": "Token 59e80eae37366203169e9c00bc9df2556b5f4ed3"
 ```
 All data is filtered by Organization. Users cannot interact with or read data from other organizations.
+
+### Parameters
+
+All list data requests support additional parameters for pagination, ordering and searching.
+
++ Pagination 
+    + `/?limit=10&offset=0`  
+    `limit` Amount of results per page.  
+    `offset` How many results into the data.
+
+    + ex. `/?limit=10&offset=30` for page 3.
++ Order by 
+    + `/?ordering=username` Order by field name.  
+    `/?ordering=-username` Order by descending 
++ Search 
+    + `/?search=John` Search all fields
 
 ### Users
 

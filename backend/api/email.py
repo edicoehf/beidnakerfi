@@ -9,7 +9,7 @@ def send_email(email_recipient, title, body):
     server = settings.MAIL_URL
     auth = ("api", settings.MAIL_KEY)
     data = {
-        "from": "Ingi Pingi <ingitho@gmail.com>",
+        "from": "Email Name <email@email.com>",
         "to": email_recipient,
         "subject": title,
         "text": body
