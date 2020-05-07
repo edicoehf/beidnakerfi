@@ -12,8 +12,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import { statusCodes } from '../../../config';
 import { sortBy } from '../../../services';
-import { getCheque } from '../../../services/apiGateway';
-import { getChequesByOrgId } from '../../../services/apiGateway';
+import { getCheque, getChequesByOrgId } from '../../../services/apiGateway';
 
 
 const useStyles = makeStyles((themes) => ({
@@ -53,7 +52,6 @@ const ChequeList = (props) => {
   const classes = useStyles();
   const [desc, setDesc] = useState(true);
   const [chequeList, setChequeList] = useState([]);
-  const [chequeCount, setChequeCount] = useState(0);
   const [page, setPage] = useState(0);
 
   const handleClick = async (cheque) => {
@@ -61,6 +59,7 @@ const ChequeList = (props) => {
     await setCheque(detaildCheque.data);
     setDrawerOpen(true);
   };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     setShouldRender(true);
@@ -70,19 +69,18 @@ const ChequeList = (props) => {
     const sorted = await sortBy(chequeList, item, subItem, setDesc, desc);
     setChequeList(sorted);
   };
-  useEffect(() => {
-    console.log('now')
-    const fetchCheques = async () => {
-      const result = await getChequesByOrgId(page);
-      if (result.status === 200) {
-        setChequeList(result.data.results);
-        setChequeCount(result.data.count);
-        setShouldRender(false);
-      }
-    };
 
+  const fetchCheques = async () => {
+    const result = await getChequesByOrgId(page, query);
+    if (result.status === 200) {
+      setChequeList(result.data.results);
+      setShouldRender(false);
+    }
+  };
+
+  useEffect(() => {
     if (shouldRender) fetchCheques();
-  }, [shouldRender]);
+  }, [shouldRender, page, setShouldRender, query, setChequeList]);
 
   return (
     <>
@@ -102,7 +100,7 @@ const ChequeList = (props) => {
           </TableHead>
           <TableBody>
             {
-            chequeList.filter((cheque) => cheque.code.includes(props.query)).map((cheque) => {
+            chequeList.map((cheque) => {
               const {
                 code, status, created,
               } = cheque;
@@ -113,7 +111,11 @@ const ChequeList = (props) => {
               const readableDate = new Date(created).toLocaleString('en-GB');
 
               return (
-                <TableRow className={classes.tableRow} onClick={() => handleClick(cheque)} key={code}>
+                <TableRow
+                  className={classes.tableRow}
+                  onClick={() => handleClick(cheque)}
+                  key={code}
+                >
                   <TableCell className={classes.tableCell}>
                     { code }
                   </TableCell>
@@ -131,7 +133,7 @@ const ChequeList = (props) => {
       </TableContainer>
       <TablePagination
         component="div"
-        count={chequeCount}
+        count={chequeList.length}
         rowsPerPage={10}
         rowsPerPageOptions={[]}
         page={page}
@@ -149,6 +151,8 @@ ChequeList.propTypes = {
   query: PropTypes.string,
   setCheque: PropTypes.func.isRequired,
   setDrawerOpen: PropTypes.func.isRequired,
+  shouldRender: PropTypes.bool.isRequired,
+  setShouldRender: PropTypes.func.isRequired,
 };
 
 export default ChequeList;

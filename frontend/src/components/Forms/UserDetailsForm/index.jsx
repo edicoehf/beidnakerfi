@@ -45,8 +45,7 @@ const UserDetailsForm = (props) => {
 
   const handlePasswordChange = async () => {
     const { newPassword, oldPassword, id } = userData;
-
-    const result = await changeUserPassword(id, newPassword, oldPassword);
+    await changeUserPassword(id, newPassword, oldPassword);
   };
 
   const isViewingHimself = () => {

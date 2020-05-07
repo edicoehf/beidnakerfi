@@ -38,7 +38,7 @@ const Cheques = () => {
   const [shouldRender, setShouldRender] = useState(true);
   const [open, setOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
-  const path =  window.location.pathname;
+  const path = window.location.pathname;
 
   const handleSuccessSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -60,12 +60,17 @@ const Cheques = () => {
       </div>
       <div className={classes.container}>
         {
-          path === '/createcheque' ?
-            <ChequeForm setOpen={setOpen} setErrorOpen={setErrorOpen} setShouldRender={setShouldRender} />
-          :
-            <SearchForm setSearch={setSearch} />
+          path === '/createcheque'
+            ? (
+              <ChequeForm
+                setOpen={setOpen}
+                setErrorOpen={setErrorOpen}
+                setShouldRender={setShouldRender}
+              />
+            )
+            : <SearchForm setSearch={setSearch} setShouldRender={setShouldRender} />
         }
-       <ChequeList
+        <ChequeList
           query={search}
           setCheque={setCheque}
           drawerOpen={drawerOpen}
