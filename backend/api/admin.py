@@ -7,7 +7,7 @@ from .models import User, Organization, Department, Cheque, Client
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password', 'organization')}),
-        (('Info'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'manager', 'groups', 'user_permissions')}),
+        (('Info'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_manager', 'groups', 'user_permissions')}),
         (('Dates'), {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (

@@ -285,6 +285,7 @@ export const getCheques = async (page, searchString) => {
   const APIKEY = getKey();
   const query = await axios
     .get(`${API_URL}/api/cheques/?search=${searchString}&limit=10&offset=${page * 10}`,
+
       {
         headers: {
           authorization: APIKEY,
