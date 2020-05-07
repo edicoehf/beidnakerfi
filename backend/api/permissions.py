@@ -1,9 +1,15 @@
 from rest_framework import permissions
 
-class IsOwnerOrAdmin(permissions.BasePermission):
+class IsManagerOrSuper(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_superuser or request.user.is_manager
+
     def has_object_permission(self, request, view, obj):
-        # TODO: Implement
-        return 0
+        return request.user.is_superuser or request.user.is_manager
+
+class IsSelfOrManagerOrSuper(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj == request.user or request.user.is_manager or request.user.is_superuser
 
 class IsSelfOrAdmin(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
