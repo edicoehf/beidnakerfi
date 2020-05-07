@@ -18,7 +18,7 @@ const CostSitePicker = () => {
   const [isVisible, setVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState(userInfo !== '' ? userInfo.departments[0] : '');
   const handleNewCheque = async () => {
-    const newCheque = await api.generateCheque(userInfo.token, userInfo.id, selectedValue.id);
+    const newCheque = await api.generateCheque(userInfo.token, selectedValue.id);
     navigate('NewCheque', { costsite: selectedValue, cheque: newCheque });
 
   };
