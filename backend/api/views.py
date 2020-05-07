@@ -213,7 +213,7 @@ class ChequeViewSet(ModelViewSet):
     queryset = Cheque.objects.all()
     lookup_field = 'code'
     permission_classes = [permissions.IsAuthenticated]
-    search_fields = [ 'code', 'description', 'invoice', 'created', 'user__username', 'department__name', 'department__costsite' ] #! TODO: Add search by seller
+    search_fields = [ 'code', 'description', 'invoice', 'created', 'user__username', 'department__name', 'department__costsite', 'seller__name' ]
     ordering_fields = [ 'code', 'price', 'description', 'created', 'user', 'department' ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
