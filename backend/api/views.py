@@ -213,7 +213,7 @@ class ChequeViewSet(ModelViewSet):
     queryset = Cheque.objects.all()
     lookup_field = 'code'
     permission_classes = [permissions.IsAuthenticated]
-    search_fields = [ 'code', 'description', 'invoice', 'created', 'user__username', 'department__name', 'department__costsite']
+    search_fields = [ 'code', 'description', 'invoice', 'created', 'user__username', 'department__name', 'department__costsite' ] #! TODO: Add search by seller
     ordering_fields = [ 'code', 'price', 'description', 'created', 'user', 'department' ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
@@ -228,7 +228,7 @@ class ChequeViewSet(ModelViewSet):
         # api/organizations/:id/cheques/
         elif 'organization_pk' in self.kwargs:
             if self.request.user.is_superuser and not self.request.user.organization.is_seller:
-                return Cheque.objects.filter(user__organization=self.request.user.organization.id).select_related('user', 'department', 'seller').order_by('-created')
+                return Cheque.objects.filter(department__users=self.request.user).select_related('user', 'department', 'seller').order_by('-created')
             else:
                 return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller').order_by('-created')
         else:
