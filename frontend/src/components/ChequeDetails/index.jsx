@@ -74,6 +74,9 @@ const ChequeDetails = (props) => {
     created,
     user: { username, email },
     department: { name: depName, costsite },
+    description,
+    price,
+    invoice = '',
   } = cheque;
 
   const { name: sellerName } = cheque.seller ? cheque.seller : '';
@@ -100,7 +103,7 @@ const ChequeDetails = (props) => {
       <Drawer PaperProps={{ className: classes.drawer }} anchor="right" open={drawerOpen} onClose={toggleClose}>
         <div className={classes.content}>
           <div className={classes.row}>
-            <p className={classes.desc}>Beidnanúmer: </p>
+            <p className={classes.desc}>Beiðnanúmer: </p>
             <p className={classes.item}>{code}</p>
           </div>
           <div className={classes.row}>
@@ -114,26 +117,30 @@ const ChequeDetails = (props) => {
           <div className={classes.row}>
             <p className={classes.desc}>Kaupandi: </p>
             <p className={classes.item}>
-              {username}
-              {' '}
-              -
-              {' '}
-              {email}
+              {`${username}  - ${email}`}
             </p>
           </div>
           <div className={classes.row}>
             <p className={classes.desc}>Deild: </p>
             <p className={classes.item}>
-              {depName}
-              {' '}
-              -
-              {' '}
-              {costsite}
+              {`${depName}  - ${costsite}`}
             </p>
           </div>
           <div className={classes.row}>
             <p className={classes.desc}>Seljandi: </p>
             <p className={classes.item}>{sellerName}</p>
+          </div>
+          <div className={classes.row}>
+            <p className={classes.desc}>Lýsing: </p>
+            <p className={classes.item}>{description}</p>
+          </div>
+          <div className={classes.row}>
+            <p className={classes.desc}>Verð: </p>
+            <p className={classes.item}>{price}</p>
+          </div>
+          <div className={classes.row}>
+            <p className={classes.desc}>Tilvísun: </p>
+            <p className={classes.item}>{invoice}</p>
           </div>
           {
               status === 2
