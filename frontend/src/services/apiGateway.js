@@ -5,9 +5,8 @@ require('dotenv').config();
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const getKey = () => `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
-
+const isSeller = () => JSON.parse(localStorage.getItem('tokens')).org_seller;
 const getOrgId = () => JSON.parse(localStorage.getItem('tokens')).org_id;
-
 
 /*
   USERS
@@ -248,14 +247,17 @@ export const getCheque = async (id) => {
   return query;
 };
 
+
 export const updateCheque = async (cheque) => {
   const APIKEY = getKey();
-  const { itemDescription, itemPrice, key } = cheque;
+  const { itemDescription, itemPrice, key, invoiceNumber  } = cheque;
+
   const query = await axios
     .patch(`${API_URL}/api/cheques/${key}/`,
       {
         description: itemDescription,
         price: itemPrice,
+        invoice: invoiceNumber,
       }, {
         headers: {
           authorization: APIKEY,
@@ -283,9 +285,10 @@ export const markAsPaid = async (code) => {
 
 export const getCheques = async (page, searchString) => {
   const APIKEY = getKey();
+  const orgId = getOrgId();
+  const url = isSeller ? `${API_URL}/api/organizations/${orgId}/cheques/?search=${searchString}&limit=10&offset=${page * 10}` : `${API_URL}/api/cheques/?search=${searchString}&limit=10&offset=${page * 10}`
   const query = await axios
-    .get(`${API_URL}/api/cheques/?search=${searchString}&limit=10&offset=${page * 10}`,
-
+    .get(url,
       {
         headers: {
           authorization: APIKEY,
