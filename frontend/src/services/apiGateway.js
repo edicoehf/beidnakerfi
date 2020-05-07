@@ -5,7 +5,7 @@ require('dotenv').config();
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 const getKey = () => `Token ${JSON.parse(localStorage.getItem('tokens')).token}`;
-const isSeller = () => JSON.parse(localStorage.getItem('tokens')).org_seller;
+export const isSeller = () => JSON.parse(localStorage.getItem('tokens')).org_seller;
 const getOrgId = () => JSON.parse(localStorage.getItem('tokens')).org_id;
 
 /*
