@@ -1,6 +1,7 @@
 export const views = {
   superSeller: ['/cheques', '/createcheque', '/createuser', '/viewusers'],
   superBuyer: ['/cheques', '/createuser', '/createdepartment', '/viewusers'],
+  departmentManager: ['/cheques', '/createuser', '/viewusers'],
   seller: ['/cheques', '/createcheque'],
   buyer: [],
 };
@@ -10,6 +11,14 @@ export const sidebarButtons = {
     buttons: [
       { name: 'Ný beiðni', path: '/createcheque', pressed: true },
       { name: 'Yfirlit beiðna', path: '/cheques', pressed: false },
+    ],
+  },
+  DepartmentManager: {
+    buttons: [
+      { name: 'Yfirlit beiðna', path: '/cheques', pressed: false },
+      { name: 'Skrá starfsmann', path: '/createuser', pressed: false },
+      { name: 'Starfsmannalisti', path: '/viewusers', pressed: false },
+
     ],
   },
   SuperBuyer: {
