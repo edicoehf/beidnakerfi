@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 
-import {
-  TextField, Button, Select, MenuItem,
-} from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 import { makeStyles } from '@material-ui/core/styles';
+
 import { getDepartments, createUser } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
@@ -28,7 +33,13 @@ const useStyles = makeStyles((themes) => ({
 
   inputField: {
     width: '100%',
-    margin: '2px',
+    marginTop: themes.spacing(2),
+  },
+
+  switch: {
+    marginLeft: 'auto',
+    marginTop: themes.spacing(2),
+    marginBottom: themes.spacing(5),
   },
 }));
 
@@ -37,13 +48,15 @@ const CreateUserForm = (props) => {
   const { register, handleSubmit } = useForm();
   const [costSites, setCostSites] = useState([]);
   const [deptValue, setDeptValue] = useState('');
+  const [isDeptManager, setIsDeptManager] = useState(false);
   const classes = useStyles();
   const isSeller = JSON.parse(localStorage.getItem('tokens')).org_seller;
+  const isSuperUser = JSON.parse(localStorage.getItem('tokens')).is_superuser;
   const { setOpen, setErrorOpen } = props;
   useEffect(() => {
     const fetchCostSites = async () => {
       const result = await getDepartments();
-      setCostSites(result.data.results);
+      setCostSites(result);
     };
 
     fetchCostSites();
@@ -60,6 +73,10 @@ const CreateUserForm = (props) => {
 
   const handleDeptChange = (e) => {
     setDeptValue(e.target.value);
+  };
+
+  const handleSwitchChange = () => {
+    setIsDeptManager((prev) => !prev);
   };
 
   return (
@@ -90,23 +107,38 @@ const CreateUserForm = (props) => {
       />
       {
         !isSeller ? (
-          <Select
-            name="department"
-            className={classes.inputField}
-            value={deptValue}
-            onChange={handleDeptChange}
-            autoWidth={false}
-            label="Deild"
-            required
-          >
-            {
+          <>
+            <Select
+              name="department"
+              className={classes.inputField}
+              value={deptValue}
+              onChange={handleDeptChange}
+              autoWidth={false}
+              label="Deild"
+              required
+            >
+              <MenuItem value="">
+                Deild
+              </MenuItem>
+              {
               costSites.map((site) => (
                 <MenuItem key={site.id} value={site.id}>
                   {site.name}
                 </MenuItem>
               ))
             }
-          </Select>
+            </Select>
+            {
+              isSuperUser ? (
+                <FormControlLabel
+                  className={classes.switch}
+                  control={<Switch checked={isDeptManager} onChange={handleSwitchChange} name="deptManager" />}
+                  label="Deildarstjóri"
+                  inputRef={register}
+                />
+              ) : null
+            }
+          </>
         ) : null
       }
       <Button color="primary" variant="contained" className={classes.button} type="submit">

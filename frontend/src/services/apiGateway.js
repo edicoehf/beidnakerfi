@@ -74,17 +74,17 @@ const addUserToDepartment = async (userId, deptId) => {
 
 export const createUser = async (newUser) => {
   const {
-    username, password, email, department,
+    username, password, email, department, deptManager,
   } = newUser;
   const OrgID = getOrgId();
   const APIKEY = getKey();
-
   const query = await axios
     .post(`${API_URL}/api/users/`, {
       username,
       password,
       email,
       organization: OrgID,
+      is_manager: deptManager,
     }, {
       headers: {
         authorization: APIKEY,
