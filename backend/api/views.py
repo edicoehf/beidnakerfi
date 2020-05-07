@@ -240,7 +240,7 @@ class ChequeViewSet(ModelViewSet):
                 return Cheque.objects.filter(department__users=user).select_related('user', 'department', 'seller').order_by('-created')
 
             else:
-                return Cheque.objects.filter(seller=user.organization.id).select_related('user', 'department', 'seller').order_by('-created')
+                return Cheque.objects.all().select_related('user', 'department', 'seller').order_by('-created')
 
     def get_serializer_class(self):
         if self.action == 'list':
