@@ -15,8 +15,8 @@ from .permissions import IsAdmin, IsSelfOrAdmin, IsSuperUser, IsSelfOrSuper, IsM
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
-    search_fields = [ 'username', 'email', 'departments__name' ]
-    ordering_fields = [ 'username', 'email', 'departments' ]
+    search_fields = [ 'username', 'email' ]
+    ordering_fields = [ 'username', 'email']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
