@@ -31,9 +31,9 @@ export const login = async (userlogin) => {
   return query;
 };
 
-export const getUsers = async (page) => {
+export const getUsers = async (page, searchString) => {
   const query = await axios
-    .get(`${API_URL}/api/users/?limit=10&offset=${page*10}`, {
+    .get(`${API_URL}/api/users/?search=${searchString}&limit=10&offset=${page * 10}`, {
       headers: {
         authorization: getKey(),
       },
@@ -42,8 +42,6 @@ export const getUsers = async (page) => {
     .catch((e) => e.response);
   return query;
 };
-
-// const getDepIDs = () => getUsers(JSON.parse(localStorage.getItem('tokens')).id);
 
 export const getUser = async (id) => {
   const query = await axios
@@ -76,17 +74,17 @@ const addUserToDepartment = async (userId, deptId) => {
 
 export const createUser = async (newUser) => {
   const {
-    username, password, email, department,
+    username, password, email, department, deptManager,
   } = newUser;
   const OrgID = getOrgId();
   const APIKEY = getKey();
-
   const query = await axios
     .post(`${API_URL}/api/users/`, {
       username,
       password,
       email,
       organization: OrgID,
+      is_manager: deptManager,
     }, {
       headers: {
         authorization: APIKEY,
@@ -173,17 +171,9 @@ export const activateUser = async (id) => {
 */
 
 export const getDepartments = async () => {
-  const APIKEY = getKey();
-
-  const query = await axios
-    .get(`${API_URL}/api/departments/`, {
-      headers: {
-        authorization: APIKEY,
-      },
-    })
-    .then((resp) => resp)
-    .catch((e) => e.response);
-  return query;
+  const userId = JSON.parse(localStorage.getItem('tokens')).id;
+  const query = await getUser(userId);
+  return query.data.departments;
 };
 
 export const getDepartment = async (id) => {
@@ -291,11 +281,11 @@ export const markAsPaid = async (code) => {
   return query;
 };
 
-export const getChequesByOrgId = async (page) => {
+export const getCheques = async (page, searchString) => {
   const APIKEY = getKey();
-  const orgId = getOrgId();
   const query = await axios
-    .get(`${API_URL}/api/cheques/?limit=10&offset=${page*10}`,
+    .get(`${API_URL}/api/cheques/?search=${searchString}&limit=10&offset=${page * 10}`,
+
       {
         headers: {
           authorization: APIKEY,
@@ -304,8 +294,6 @@ export const getChequesByOrgId = async (page) => {
     .then((resp) => resp)
     .catch((e) => e.response);
   return query;
-
-
 };
 
 export const getChequesByDepartmentId = async () => {
