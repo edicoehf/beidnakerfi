@@ -10,9 +10,8 @@ import ChequeForm from '../../components/Forms/ChequeForm';
 import ChequeDetails from '../../components/ChequeDetails';
 import SuccessSnackbar from '../../components/Snackbars/SuccessSnackbar';
 
-import { getChequesByOrgId } from '../../services/apiGateway';
 
-const useStyles = makeStyles((themes) => ({
+const useStyles = makeStyles(() => ({
   main: {
     display: 'flex',
     flexDirection: 'row',

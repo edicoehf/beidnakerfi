@@ -56,10 +56,12 @@ const SearchForm = (props) => {
 
 SearchForm.defaultProps = {
   setSearch: () => {},
+  setShouldRender: () => {},
 };
 
 SearchForm.propTypes = {
   setSearch: PropTypes.func,
+  setShouldRender: PropTypes.func,
 };
 
 export default SearchForm;
