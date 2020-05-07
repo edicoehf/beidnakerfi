@@ -9,7 +9,8 @@ import ChequeList from '../../components/Lists/ChequeList';
 import ChequeForm from '../../components/Forms/ChequeForm';
 import ChequeDetails from '../../components/ChequeDetails';
 import SuccessSnackbar from '../../components/Snackbars/SuccessSnackbar';
-import FailSnackbar from '../../components/Snackbars/FailSnackbar';
+
+import { getChequesByOrgId } from '../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
   main: {
@@ -74,23 +75,22 @@ const Cheques = () => {
         />
         { open ? <SuccessSnackbar open={open} handleClose={handleSuccessSnackbarClose} /> : null }
 
-        { errorOpen
-          ? <FailSnackbar open={errorOpen} handleClose={handleFailSnackbarClose} />
-          : null}
       </div>
-      { drawerOpen
-        // eslint-disable-next-line max-len
-        ? (
-          <ChequeDetails
-            cheque={cheque}
-            setCheque={setCheque}
-            setShouldRender={setShouldRender}
-            drawerOpen={drawerOpen}
-            setDrawerOpen={setDrawerOpen}
-            setOpen={setOpen}
-          />
-        )
-        : null}
+      {
+          drawerOpen
+            // eslint-disable-next-line max-len
+            ? (
+              <ChequeDetails
+                cheque={cheque}
+                setCheque={setCheque}
+                setShouldRender={setShouldRender}
+                drawerOpen={drawerOpen}
+                setDrawerOpen={setDrawerOpen}
+                setOpen={setOpen}
+              />
+            )
+            : null
+        }
     </div>
   );
 };
