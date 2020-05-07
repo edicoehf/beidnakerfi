@@ -286,7 +286,7 @@ export const markAsPaid = async (code) => {
 export const getCheques = async (page, searchString) => {
   const APIKEY = getKey();
   const orgId = getOrgId();
-  const url = isSeller ? `${API_URL}/api/organizations/${orgId}/cheques/?search=${searchString}&limit=10&offset=${page * 10}` : `${API_URL}/api/cheques/?search=${searchString}&limit=10&offset=${page * 10}`
+  const url = isSeller() ? `${API_URL}/api/organizations/${orgId}/cheques/?search=${searchString}&limit=10&offset=${page * 10}` : `${API_URL}/api/cheques/?search=${searchString}&limit=10&offset=${page * 10}`
   const query = await axios
     .get(url,
       {
