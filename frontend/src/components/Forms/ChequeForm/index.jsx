@@ -37,7 +37,12 @@ const useStyles = makeStyles((themes) => ({
 
 const ChequeForm = (props) => {
   const {
-    register, handleSubmit, errors, setError, clearError,
+    register,
+    handleSubmit,
+    errors,
+    setError,
+    clearError,
+    reset,
   } = useForm();
   const classes = useStyles();
   const [chequeData, setChequeData] = useState({
@@ -51,21 +56,26 @@ const ChequeForm = (props) => {
   const { setOpen, setErrorOpen, setShouldRender } = props;
 
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, e) => {
     if (chequeStatus >= 2) {
       setError('key', 'inUse', 'Beiðni er nú þegar í notkun');
     } else if (chequeStatus === 1) {
       clearError('key');
-      const { itemDescription, key, itemPrice } = data;
-      const result = await updateCheque({ itemDescription, key, itemPrice });
+      const { itemDescription, key, itemPrice, invoiceNumber } = data;
+      const result = await updateCheque({ itemDescription, key, itemPrice, invoiceNumber });
 
       if (result.status === 200) {
         setOpen(true);
         setShouldRender(true);
+        setChequeData({
+        costSite: '',
+        buyerName: '',
+        createdDate: '',});
       } else {
         setErrorOpen(true);
       }
     }
+    e.target.reset();
   };
 
   const getChequeData = async (chequeId) => {
@@ -149,7 +159,7 @@ const ChequeForm = (props) => {
             className={classes.inputField}
             name="itemPrice"
             inputRef={(e) => {
-              register();
+              register(e);
               priceField.current = e;
             }}
             label="Verð"
