@@ -12,7 +12,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import { statusCodes } from '../../../config';
 import { sortBy } from '../../../services';
-import { getCheque, getChequesByOrgId } from '../../../services/apiGateway';
+import { getCheque, getCheques } from '../../../services/apiGateway';
 
 
 const useStyles = makeStyles((themes) => ({
@@ -70,17 +70,17 @@ const ChequeList = (props) => {
     setChequeList(sorted);
   };
 
-  const fetchCheques = async () => {
-    const result = await getChequesByOrgId(page, query);
-    if (result.status === 200) {
-      setChequeList(result.data.results);
-      setShouldRender(false);
-    }
-  };
 
   useEffect(() => {
+    const fetchCheques = async () => {
+      const result = await getCheques(page, query);
+      if (result.status === 200) {
+        setChequeList(result.data.results);
+        setShouldRender(false);
+      }
+    };
     if (shouldRender) fetchCheques();
-  }, [shouldRender, page, setShouldRender, query, setChequeList]);
+  }, [shouldRender, page, setShouldRender, query]);
 
   return (
     <>

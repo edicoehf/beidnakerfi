@@ -39,28 +39,13 @@ const useStyles = makeStyles((themes) => ({
 }));
 
 const StaffList = (props) => {
+  const { query } = props;
   const classes = useStyles();
   const [staffList, setStaffList] = useState([]);
   const [desc, setDesc] = useState(true);
   const [page, setPage] = useState(0);
-  const [staffCount, setStaffCount] = useState(0);
 
-  useEffect(() => {
-    const getStaff = async () => {
-      const results = await getUsers(page);
-      if (results.status === 200) {
-        setStaffList(results.data.results);
-        setStaffCount(results.data.count);
-      }
-    };
 
-    getStaff();
-  }, []);
-
-  const sort = async (item, subItem) => {
-    const sorted = await sortBy(staffList, item, subItem, setDesc, desc);
-    setStaffList(sorted);
-  };
   const handleClick = async (uid) => {
     const { setUser, setDrawerOpen } = props;
 
@@ -70,9 +55,27 @@ const StaffList = (props) => {
       setDrawerOpen(true);
     }
   };
+
   const handleChangePage = (event, newPage) => {
-    setPage(newPage)
+    setPage(newPage);
   };
+
+  const sort = async (item, subItem) => {
+    const sorted = await sortBy(staffList, item, subItem, setDesc, desc);
+    setStaffList(sorted);
+  };
+
+  useEffect(() => {
+    const getStaff = async () => {
+      const results = await getUsers(page, query);
+      if (results.status === 200) {
+        setStaffList(results.data.results);
+      }
+    };
+
+    getStaff();
+  }, [page, query]);
+
   return (
     <>
       <TableContainer className={classes.container} component={Paper}>
@@ -108,7 +111,7 @@ const StaffList = (props) => {
       </TableContainer>
       <TablePagination
         component="div"
-        count={staffCount}
+        count={staffList.length}
         rowsPerPage={10}
         rowsPerPageOptions={[]}
         page={page}
