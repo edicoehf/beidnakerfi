@@ -232,7 +232,17 @@ class ChequeViewSet(ModelViewSet):
             else:
                 return Cheque.objects.filter(seller=self.kwargs['organization_pk']).select_related('user', 'department', 'seller').order_by('-created')
         else:
-            return Cheque.objects.all().select_related('user', 'department', 'seller').order_by('-created')
+        # Check for user privileges on main endpoint /api/cheques/
+            user = self.request.user
+
+            if user.is_superuser and not user.organization.is_seller:
+                return Cheque.objects.filter(user__organization=user.organization.id).select_related('user', 'department', 'seller').order_by('-created')
+
+            elif user.is_manager and not user.organization.is_seller:
+                return Cheque.objects.filter(department__users=user).select_related('user', 'department', 'seller').order_by('-created')
+
+            else:
+                return Cheque.objects.filter(seller=user.organization.id).select_related('user', 'department', 'seller').order_by('-created')
 
     def get_serializer_class(self):
         if self.action == 'list':

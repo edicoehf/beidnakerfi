@@ -295,7 +295,7 @@ export const getChequesByOrgId = async (page) => {
   const APIKEY = getKey();
   const orgId = getOrgId();
   const query = await axios
-    .get(`${API_URL}/api/organizations/${orgId}/cheques/?limit=10&offset=${page*10}`,
+    .get(`${API_URL}/api/cheques/?limit=10&offset=${page*10}`,
       {
         headers: {
           authorization: APIKEY,
