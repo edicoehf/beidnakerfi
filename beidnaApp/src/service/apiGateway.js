@@ -8,8 +8,7 @@ export const login = async (userlogin) => axios.post(`${API_URL}/api/login/`, {
 }).then((resp) => resp)
   .catch((e) => e.response);
 
-export const generateCheque = async (apiKey, userId, depId) => axios.post(`${API_URL}/api/cheques/`, {
-  user_id: userId,
+export const generateCheque = async (apiKey, depId) => axios.post(`${API_URL}/api/cheques/`, {
   dep_id: depId,
 }, {
   headers: {

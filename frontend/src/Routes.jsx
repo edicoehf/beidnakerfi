@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import LoginForm from './components/Forms/LoginForm';
 import Cheques from './pages/Cheques';
 import CreateUser from './pages/CreateUser';
-import CreateCheque from './pages/CreateCheque';
 import CreateDepartment from './pages/CreateDepartment';
 import ViewUsers from './pages/ViewUsers';
 import Unauthorized from './components/Unauthorized';
@@ -31,7 +30,7 @@ const Routes = () => {
         <Route exact path="/" component={LoginForm} />
         <PrivateRoute path="/cheques" component={Cheques} checkPrivileges={checkPrivileges} />
         <PrivateRoute path="/createuser" component={CreateUser} checkPrivileges={checkPrivileges} />
-        <PrivateRoute path="/createcheque" component={CreateCheque} checkPrivileges={checkPrivileges} />
+        <PrivateRoute path="/createcheque" component={Cheques} checkPrivileges={checkPrivileges} />
         <PrivateRoute path="/createdepartment" component={CreateDepartment} checkPrivileges={checkPrivileges} />
         <PrivateRoute path="/viewusers" component={ViewUsers} checkPrivileges={checkPrivileges} />
         <Route path="/generate/:code" component={BarcodeGenerator} />

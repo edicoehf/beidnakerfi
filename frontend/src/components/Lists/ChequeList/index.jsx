@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,6 +13,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import { statusCodes } from '../../../config';
 import { sortBy } from '../../../services';
 import { getCheque } from '../../../services/apiGateway';
+import { getChequesByOrgId } from '../../../services/apiGateway';
 
 
 const useStyles = makeStyles((themes) => ({
@@ -43,17 +44,17 @@ const useStyles = makeStyles((themes) => ({
 
 const ChequeList = (props) => {
   const {
+    query,
     setDrawerOpen,
     setCheque,
-    chequeList,
-    setChequeList,
-    count,
-    setPage,
-    page,
-    setShouldRender
+    setShouldRender,
+    shouldRender,
   } = props;
   const classes = useStyles();
   const [desc, setDesc] = useState(true);
+  const [chequeList, setChequeList] = useState([]);
+  const [chequeCount, setChequeCount] = useState(0);
+  const [page, setPage] = useState(0);
 
   const handleClick = async (cheque) => {
     const detaildCheque = await getCheque(cheque.code);
@@ -69,6 +70,19 @@ const ChequeList = (props) => {
     const sorted = await sortBy(chequeList, item, subItem, setDesc, desc);
     setChequeList(sorted);
   };
+  useEffect(() => {
+    console.log('now')
+    const fetchCheques = async () => {
+      const result = await getChequesByOrgId(page);
+      if (result.status === 200) {
+        setChequeList(result.data.results);
+        setChequeCount(result.data.count);
+        setShouldRender(false);
+      }
+    };
+
+    if (shouldRender) fetchCheques();
+  }, [shouldRender]);
 
   return (
     <>
@@ -117,7 +131,7 @@ const ChequeList = (props) => {
       </TableContainer>
       <TablePagination
         component="div"
-        count={count}
+        count={chequeCount}
         rowsPerPage={10}
         rowsPerPageOptions={[]}
         page={page}
@@ -135,9 +149,6 @@ ChequeList.propTypes = {
   query: PropTypes.string,
   setCheque: PropTypes.func.isRequired,
   setDrawerOpen: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  chequeList: PropTypes.array.isRequired,
-  setChequeList: PropTypes.func.isRequired,
 };
 
 export default ChequeList;
