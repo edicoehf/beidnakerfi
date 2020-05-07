@@ -61,7 +61,11 @@ const useStyles = makeStyles((themes) => ({
 const ChequeDetails = (props) => {
   const classes = useStyles();
   const {
-    drawerOpen, setDrawerOpen, cheque, setShouldRender, setOpen,
+    drawerOpen,
+    setDrawerOpen,
+    cheque,
+    setShouldRender,
+    setOpen,
   } = props;
 
   const {

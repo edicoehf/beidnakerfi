@@ -1,18 +1,16 @@
 // Dependencies
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Components
 import Sidebar from '../../components/Sidebar';
-import ChequeList from '../../components/Lists/ChequeList';
 import SearchForm from '../../components/Forms/SearchForm';
+import ChequeList from '../../components/Lists/ChequeList';
+import ChequeForm from '../../components/Forms/ChequeForm';
 import ChequeDetails from '../../components/ChequeDetails';
 import SuccessSnackbar from '../../components/Snackbars/SuccessSnackbar';
 
 import { getChequesByOrgId } from '../../services/apiGateway';
-
-
-// Style
 
 const useStyles = makeStyles((themes) => ({
   main: {
@@ -33,29 +31,14 @@ const useStyles = makeStyles((themes) => ({
 }));
 
 const Cheques = () => {
+  const classes = useStyles();
   const [search, setSearch] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [shouldRender, setShouldRender] = useState(true);
   const [cheque, setCheque] = useState({});
-  const [chequeList, setChequeList] = useState([]);
+  const [shouldRender, setShouldRender] = useState(true);
   const [open, setOpen] = useState(false);
-  const [chequeCount, setChequeCount] = useState(0);
-  const [page, setPage] = useState(0);
-  const classes = useStyles();
-
-  useEffect(() => {
-    const fetchCheques = async () => {
-      const result = await getChequesByOrgId(page);
-      if (result.status === 200) {
-        setChequeList(result.data.results);
-        setChequeCount(result.data.count);
-        setShouldRender(false);
-      }
-    };
-
-    fetchCheques();
-  }, [shouldRender]);
-
+  const [errorOpen, setErrorOpen] = useState(false);
+  const path =  window.location.pathname;
 
   const handleSuccessSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -64,26 +47,34 @@ const Cheques = () => {
     setOpen(false);
   };
 
+  const handleFailSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorOpen(false);
+  };
   return (
     <div className={classes.main}>
       <div className={classes.sidebarContainer}>
         <Sidebar />
       </div>
       <div className={classes.container}>
-        <SearchForm setSearch={setSearch} />
-        <ChequeList
+        {
+          path === '/createcheque' ?
+            <ChequeForm setOpen={setOpen} setErrorOpen={setErrorOpen} setShouldRender={setShouldRender} />
+          :
+            <SearchForm setSearch={setSearch} />
+        }
+       <ChequeList
           query={search}
           setCheque={setCheque}
           drawerOpen={drawerOpen}
           setDrawerOpen={setDrawerOpen}
-          chequeList={chequeList}
-          setChequeList={setChequeList}
-          count={chequeCount}
-          setPage={setPage}
-          page={page}
           setShouldRender={setShouldRender}
+          shouldRender={shouldRender}
         />
         { open ? <SuccessSnackbar open={open} handleClose={handleSuccessSnackbarClose} /> : null }
+
       </div>
       {
           drawerOpen
@@ -100,10 +91,8 @@ const Cheques = () => {
             )
             : null
         }
-
     </div>
   );
 };
-
 
 export default Cheques;
