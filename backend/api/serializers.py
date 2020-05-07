@@ -23,8 +23,8 @@ class UserListSerializer(serializers.ModelSerializer):
     departments = DepartmentListSerializer(source='department_user', many=True, required=False, read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'manager', 'email', 'departments', 'organization']
-        extra_kwargs = {'password': {'write_only': True}, 'manager': {'write_only': True}}
+        fields = ['id', 'username', 'password', 'is_manager', 'email', 'departments', 'organization']
+        extra_kwargs = {'password': {'write_only': True}, 'is_manager': {'write_only': True}}
     
     def create(self, validated_data):
         org_id = validated_data.pop('organization')
@@ -58,6 +58,7 @@ class DepartmentActionSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     organization = OrganizationListSerializer(required=True)
     departments = DepartmentListSerializer(source='department_user', many=True)
+
     class Meta:
         model = User
         fields = ('url', 'id', 'username', 'email', 'is_active', 'organization', 'departments')
