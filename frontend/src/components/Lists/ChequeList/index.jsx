@@ -52,6 +52,7 @@ const ChequeList = (props) => {
   const classes = useStyles();
   const [desc, setDesc] = useState(true);
   const [chequeList, setChequeList] = useState([]);
+  const [chequeCount, setChequeCount] = useState();
   const [page, setPage] = useState(0);
 
   const handleClick = async (cheque) => {
@@ -76,6 +77,7 @@ const ChequeList = (props) => {
       const result = await getCheques(page, query);
       if (result.status === 200) {
         setChequeList(result.data.results);
+        setChequeCount(result.data.count);
         setShouldRender(false);
       }
     };
@@ -133,7 +135,7 @@ const ChequeList = (props) => {
       </TableContainer>
       <TablePagination
         component="div"
-        count={chequeList.length}
+        count={chequeCount}
         rowsPerPage={10}
         rowsPerPageOptions={[]}
         page={page}

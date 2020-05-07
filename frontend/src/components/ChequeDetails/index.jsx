@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Drawer, makeStyles, Button } from '@material-ui/core';
 
 import { statusCodes } from '../../config';
-import { deleteCheque, markAsPaid } from '../../services/apiGateway';
+import { deleteCheque, markAsPaid, isSeller } from '../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
   drawer: {
@@ -143,7 +143,7 @@ const ChequeDetails = (props) => {
             <p className={classes.item}>{invoice}</p>
           </div>
           {
-              status === 2
+              status === 2 && isSeller()
                 ? (
                   <>
                     <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem greidd</Button>
@@ -153,7 +153,7 @@ const ChequeDetails = (props) => {
                 : null
             }
           {
-              status === 3
+              status === 3 && isSeller()
                 ? (
                   <>
                     <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem ógreidd</Button>

@@ -42,6 +42,7 @@ const StaffList = (props) => {
   const { query } = props;
   const classes = useStyles();
   const [staffList, setStaffList] = useState([]);
+  const [staffCount, setStaffCount] = useState([]);
   const [desc, setDesc] = useState(true);
   const [page, setPage] = useState(0);
 
@@ -67,9 +68,10 @@ const StaffList = (props) => {
 
   useEffect(() => {
     const getStaff = async () => {
-      const results = await getUsers(page, query);
-      if (results.status === 200) {
-        setStaffList(results.data.results);
+      const result = await getUsers(page, query);
+      if (result.status === 200) {
+        setStaffList(result.data.results);
+        setStaffCount(result.data.count);
       }
     };
 
@@ -111,7 +113,7 @@ const StaffList = (props) => {
       </TableContainer>
       <TablePagination
         component="div"
-        count={staffList.length}
+        count={staffCount}
         rowsPerPage={10}
         rowsPerPageOptions={[]}
         page={page}
