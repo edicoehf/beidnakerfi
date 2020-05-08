@@ -52,7 +52,7 @@ const ChequeList = (props) => {
   const classes = useStyles();
   const [desc, setDesc] = useState(true);
   const [chequeList, setChequeList] = useState([]);
-  const [chequeCount, setChequeCount] = useState();
+  const [chequeCount, setChequeCount] = useState(0);
   const [page, setPage] = useState(0);
 
   const handleClick = async (cheque) => {
