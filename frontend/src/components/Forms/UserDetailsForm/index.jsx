@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import {
   Button, TextField, List, ListItem, ListSubheader,
 } from '@material-ui/core';
@@ -8,7 +10,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
-  updateUser, deactivateUser, activateUser, changeUserPassword,
+  updateUser, deactivateUser, activateUser, changeUserPassword, isSeller
 } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
@@ -34,13 +36,13 @@ const UserDetailsForm = (props) => {
   const { handleSubmit, register } = useForm();
   const { user, setDrawerOpen } = props;
   const [userData, setUserData] = useState({ ...user, oldPassword: '', newPassword: '' });
-
+  const [isDeptManager, setIsDeptManager] = useState(user.is_manager);
   const isSuperUser = JSON.parse(localStorage.getItem('tokens')).is_superuser;
   const classes = useStyles();
 
   const onSubmit = async () => {
     const { id, username, email } = userData;
-    await updateUser({ id, username, email });
+    await updateUser({ id, username, email, isDeptManager });
   };
 
   const handlePasswordChange = async () => {
@@ -55,10 +57,15 @@ const UserDetailsForm = (props) => {
     return viewingId === selfId;
   };
 
+  const handleSwitchChange = () => {
+    setIsDeptManager((prev) => !prev);
+  };
+
   const userActivate = () => {
     activateUser(userData.id);
     setDrawerOpen(false);
   };
+
   const userDeactivate = () => {
     deactivateUser(userData.id);
     setDrawerOpen(false);
@@ -124,6 +131,16 @@ const UserDetailsForm = (props) => {
           value={userData.organization.name}
         />
         {
+          isSuperUser && !isSeller() ? (
+            <FormControlLabel
+              className={classes.switch}
+              control={<Switch checked={isDeptManager} onChange={handleSwitchChange} name="deptManager" />}
+              label="Deildarstjóri"
+              inputRef={register}
+            />
+          ) : null
+        }
+        {
           !user.organization.is_seller ? (
             <>
               <List
@@ -142,6 +159,7 @@ const UserDetailsForm = (props) => {
             </>
           ) : null
         }
+
         <Button type="submit" className={classes.button} variant="contained" color="primary">Vista breytingar</Button>
         {
           // eslint-disable-next-line no-nested-ternary

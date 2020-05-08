@@ -102,12 +102,13 @@ export const createUser = async (newUser) => {
 };
 
 export const updateUser = async (user) => {
-  const { id, email, username } = user;
+  const { id, email, username, isDeptManager } = user;
   const APIKEY = getKey();
   const query = await axios
     .patch(`${API_URL}/api/users/${id}/`, {
       email,
       username,
+      is_manager: isDeptManager,
     }, {
       headers: {
         authorization: APIKEY,
