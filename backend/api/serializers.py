@@ -61,7 +61,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', 'email', 'is_active', 'organization', 'departments')
+        fields = ('url', 'id', 'username', 'email', 'is_active', 'is_manager', 'organization', 'departments')
 
 class OrganizationDetailSerializer(serializers.ModelSerializer):
     departments = DepartmentListSerializer(many=True, read_only=True)
