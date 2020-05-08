@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -40,6 +41,10 @@ const useStyles = makeStyles((themes) => ({
     marginLeft: 'auto',
     marginTop: themes.spacing(2),
     marginBottom: themes.spacing(5),
+  },
+  label: {
+    alignSelf: 'flex-start',
+    paddingTop: 40,
   },
 }));
 
@@ -108,18 +113,15 @@ const CreateUserForm = (props) => {
       {
         !isSeller ? (
           <>
+          <InputLabel className={classes.label} htmlFor="department">Deild*</InputLabel>
             <Select
               name="department"
               className={classes.inputField}
               value={deptValue}
               onChange={handleDeptChange}
               autoWidth={false}
-              label="Deild"
               required
             >
-              <MenuItem value="">
-                Deild
-              </MenuItem>
               {
               costSites.map((site) => (
                 <MenuItem key={site.id} value={site.id}>

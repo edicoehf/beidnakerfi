@@ -102,12 +102,15 @@ export const createUser = async (newUser) => {
 };
 
 export const updateUser = async (user) => {
-  const { id, email, username } = user;
+  const {
+    id, email, username, isDeptManager,
+  } = user;
   const APIKEY = getKey();
   const query = await axios
     .patch(`${API_URL}/api/users/${id}/`, {
       email,
       username,
+      is_manager: isDeptManager,
     }, {
       headers: {
         authorization: APIKEY,
@@ -250,7 +253,9 @@ export const getCheque = async (id) => {
 
 export const updateCheque = async (cheque) => {
   const APIKEY = getKey();
-  const { itemDescription, itemPrice, key, invoiceNumber  } = cheque;
+  const {
+    itemDescription, itemPrice, key, invoiceNumber,
+  } = cheque;
 
   const query = await axios
     .patch(`${API_URL}/api/cheques/${key}/`,
@@ -286,7 +291,7 @@ export const markAsPaid = async (code) => {
 export const getCheques = async (page, searchString) => {
   const APIKEY = getKey();
   const orgId = getOrgId();
-  const url = isSeller() ? `${API_URL}/api/organizations/${orgId}/cheques/?search=${searchString}&limit=10&offset=${page * 10}` : `${API_URL}/api/cheques/?search=${searchString}&limit=10&offset=${page * 10}`
+  const url = isSeller() ? `${API_URL}/api/organizations/${orgId}/cheques/?search=${searchString}&limit=10&offset=${page * 10}` : `${API_URL}/api/cheques/?search=${searchString}&limit=10&offset=${page * 10}`;
   const query = await axios
     .get(url,
       {
