@@ -101,14 +101,9 @@ const ChequeDetails = (props) => {
     setShouldRender(true);
   };
 
-  const handleButtonClick = (btn) => {
-    if (btn === 'pay') {
-      setCallBack(() => () => handlePaid());
-      toggle();
-    } else if (btn === 'cancel') {
-      setCallBack(() => () => handleDelete());
-      toggle();
-    }
+  const handleButtonClick = (func) => {
+    setCallBack(() => () => func());
+    toggle();
   };
 
   return (
@@ -159,8 +154,8 @@ const ChequeDetails = (props) => {
               status === 2 && isSeller()
                 ? (
                   <>
-                    <Button onClick={() => handleButtonClick('pay')} className={classes.button} variant="contained" color="primary">Skrá sem greidd</Button>
-                    <Button onClick={() => handleButtonClick('cancel')} className={classes.button} variant="contained" color="primary">Hætta við beiðni</Button>
+                    <Button onClick={() => handleButtonClick(handlePaid)} className={classes.button} variant="contained" color="primary">Skrá sem greidd</Button>
+                    <Button onClick={() => handleButtonClick(handleDelete)} className={classes.button} variant="contained" color="primary">Hætta við beiðni</Button>
                   </>
                 )
                 : null
@@ -169,7 +164,7 @@ const ChequeDetails = (props) => {
               status === 3 && isSeller()
                 ? (
                   <>
-                    <Button onClick={() => handleButtonClick('pay')} className={classes.button} variant="contained" color="primary">Skrá sem ógreidd</Button>
+                    <Button onClick={() => handleButtonClick(handlePaid)} className={classes.button} variant="contained" color="primary">Skrá sem ógreidd</Button>
                   </>
                 )
                 : null
