@@ -9,8 +9,14 @@ import {
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import DepartmentList from  '../../Lists/DepartmentList';
+
 import {
-  updateUser, deactivateUser, activateUser, changeUserPassword, isSeller
+  updateUser,
+  deactivateUser,
+  activateUser,
+  changeUserPassword,
+  isSeller
 } from '../../../services/apiGateway';
 
 const useStyles = makeStyles((themes) => ({
@@ -29,6 +35,9 @@ const useStyles = makeStyles((themes) => ({
     marginTop: themes.spacing(2),
     width: '200px',
   },
+  switch: {
+    marginTop: themes.spacing(4),
+  }
 }));
 
 
@@ -143,19 +152,7 @@ const UserDetailsForm = (props) => {
         {
           !user.organization.is_seller ? (
             <>
-              <List
-                component="nav"
-                subheader={(
-                  <ListSubheader component="div">
-                    Deildir
-                  </ListSubheader>
-                )}
-                color="primary"
-              >
-                {
-                  user.departments.map((dept) => <ListItem key={dept.id}>{ dept.name }</ListItem>)
-                }
-              </List>
+              <DepartmentList departments={user.departments} />
             </>
           ) : null
         }
