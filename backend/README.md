@@ -69,11 +69,13 @@ All list data requests support additional parameters for pagination, ordering an
 
 `api/users/:id/activate/`
 
-+ `[POST]` Superuser and admin only. Sets the users is_active flag to True, enabling the account if it was disabled. No body required.
++ `[POST]` Superuser and admin only. Sets the users is_active flag to True, enabling the account if it was disabled.  
+ No body required.
 
 `api/users/:id/deactivate/`
 
-+ `[POST]` Superuser and admin only. Sets the users is_active flag to False, disabling the account if it was enabled. No body required.
++ `[POST]` Superuser and admin only. Sets the users is_active flag to False, disabling the account if it was enabled.  
+ No body required.
 
 `api/users/:id/cheques/`
 

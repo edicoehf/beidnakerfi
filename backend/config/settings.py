@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import django_heroku
 import environ
+import sys
 
 env = environ.Env()
 
@@ -101,8 +102,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+
+
 DATABASES = {
-    'default': env.db()
+    'default': env.db(),
 }
 
 # Password validation
@@ -150,3 +153,13 @@ CORS_ORIGIN_WHITELIST = [
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+# Use local DB for unit tests
+import sys
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'mydatabase',
+        }
+    }
