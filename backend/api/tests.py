@@ -61,14 +61,15 @@ class LoginTest(APITestCase):
 class UserTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.url = reverse("user-list")
 
-        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=False)
+        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=True)
 
         self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
         self.superseller = User.objects.create_superuser(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller)
         self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
         self.inactive = User.objects.create_user(username="inactive", password="edico123", is_active=False, organization=self.org_seller)
+
+        return super().setUp()
 
 #-------------------------------------- GET
     def test_get_users_no_login(self):
@@ -115,6 +116,24 @@ class UserTest(APITestCase):
 
         assert response.data['id'] == 1, \
             "Expected ID: 1. Got: {}".format(response.data['id'])
+
+    def test_user_get_data_filter(self):
+        """GET /api/users/:id/ of another Organization returns 403 Forbidden """
+        org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+
+        buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=org_buyer)
+
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("user-detail", args=[buyer.pk])
+        response = self.client.get(url)
+
+        
+        assert response.status_code == 404, \
+            "Expected 404 Not Found. Got: {}".format(response.status_code)
 
 #-------------------------------------- CREATE
     def test_create_user(self):
@@ -325,31 +344,31 @@ class UserTest(APITestCase):
         assert response.status_code == 403, \
             "Expected 403 Forbidden. Got: {}".format(response.status_code)
 
-    def test_activate_as_super(self):
-        """ DELETE /api/users/:id/ returns 201 No content """
+    def test_delete_as_super(self):
+        """ DELETE /api/users/:id/ returns 200 OK """
         self.client.login(username="superseller", password="edico123")
 
         token = Token.objects.get(user__username='superseller')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-        url = reverse("user-detail", args=[self.inactive.pk])
+        url = reverse("user-detail", args=[self.seller.pk])
         response = self.client.delete(url)
 
-        assert response.status_code == 201, \
-            "Expected 201 No Content. Got: {}".format(response.status_code)
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
 
-    def test_activate_as_manager(self):
-        """ DELETE /api/users/:id/ returns 201 No Content """
+    def test_delete_as_manager(self):
+        """ DELETE /api/users/:id/ returns 200 OK """
         self.client.login(username="manager", password="edico123")
 
         token = Token.objects.get(user__username='manager')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-        url = reverse("user-detail", args=[self.inactive.pk])
+        url = reverse("user-detail", args=[self.seller.pk])
         response = self.client.delete(url)
 
-        assert response.status_code == 201, \
-            "Expected 201 No Content. Got: {}".format(response.status_code)
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
 
 #-------------------------------------- SET_PASSWORD
     def test_set_password_self(self):
@@ -500,8 +519,85 @@ class UserTest(APITestCase):
         assert response.status_code == 200, \
             "Expected 200 OK. Got: {}".format(response.status_code)
 
+
     def tearDown(self):
         for user in User.objects.all():
             user.delete()
         for organization in Organization.objects.all():
             organization.delete()
+
+        return super().tearDown()
+
+
+class OrganizationTest(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=True)
+        self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+
+        self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_superuser(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller)
+        self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
+
+        self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
+
+        return super().setUp()
+
+#-------------------------------------- GET
+    def test_get_organizations(self):
+        """GET /api/organizations/ returns 200 OK """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("organization-list")
+        response = self.client.get(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+        body = response.json()['results']
+        assert len(body) == 1, \
+            "Expected 1 results. Got: {}".format(len(body))
+
+    def test_get_organization_detail(self):
+        """GET /api/organizations/:id/ returns 200 OK """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("organization-detail", args=[self.org_seller.pk])
+        response = self.client.get(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+    def test_get_organization_data_filter(self):
+        """GET /api/organizations/:id/ returns 404 Not Found """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("organization-detail", args=[self.org_buyer.pk])
+        response = self.client.get(url)
+
+        assert response.status_code == 404, \
+            "Expected 404 Not Found. Got: {}".format(response.status_code)
+
+#-------------------------------------- CREATE
+    def test_create_organization(self):
+        """POST /api/organizations/ returns 403 Forbidden """
+
+        return 0
+
+    def tearDown(self):
+        for user in User.objects.all():
+            user.delete()
+        for organization in Organization.objects.all():
+            organization.delete()
+
+        return super().tearDown()
