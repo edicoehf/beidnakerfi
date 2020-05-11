@@ -42,8 +42,8 @@ const ChequeForm = (props) => {
     errors,
     setError,
     clearError,
-    reset,
   } = useForm();
+
   const classes = useStyles();
   const [chequeData, setChequeData] = useState({
     costSite: '',
@@ -61,16 +61,21 @@ const ChequeForm = (props) => {
       setError('key', 'inUse', 'Beiðni er nú þegar í notkun');
     } else if (chequeStatus === 1) {
       clearError('key');
-      const { itemDescription, key, itemPrice, invoiceNumber } = data;
-      const result = await updateCheque({ itemDescription, key, itemPrice, invoiceNumber });
+      const {
+        itemDescription, key, itemPrice, invoiceNumber,
+      } = data;
+      const result = await updateCheque({
+        itemDescription, key, itemPrice, invoiceNumber,
+      });
 
       if (result.status === 200) {
         setOpen(true);
         setShouldRender(true);
         setChequeData({
-        costSite: '',
-        buyerName: '',
-        createdDate: '',});
+          costSite: '',
+          buyerName: '',
+          createdDate: '',
+        });
       } else {
         setErrorOpen(true);
       }

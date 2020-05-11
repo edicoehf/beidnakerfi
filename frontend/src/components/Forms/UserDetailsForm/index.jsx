@@ -3,21 +3,20 @@ import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import {
-  Button, TextField, List, ListItem, ListSubheader,
-} from '@material-ui/core';
-
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-
-import DepartmentList from  '../../Lists/DepartmentList';
+import CRUDDialog from '../../CRUDDialog';
+import DepartmentList from '../../Lists/DepartmentList';
 
 import {
   updateUser,
   deactivateUser,
   activateUser,
   changeUserPassword,
-  isSeller
+  isSeller,
 } from '../../../services/apiGateway';
+import useDialog from '../../../hooks/useDialog';
 
 const useStyles = makeStyles((themes) => ({
   form: {
@@ -37,7 +36,7 @@ const useStyles = makeStyles((themes) => ({
   },
   switch: {
     marginTop: themes.spacing(4),
-  }
+  },
 }));
 
 
@@ -48,15 +47,23 @@ const UserDetailsForm = (props) => {
   const [isDeptManager, setIsDeptManager] = useState(user.is_manager);
   const isSuperUser = JSON.parse(localStorage.getItem('tokens')).is_superuser;
   const classes = useStyles();
+  const { isShowing, toggle } = useDialog();
+  const [callBack, setCallBack] = useState(() => {});
 
   const onSubmit = async () => {
     const { id, username, email } = userData;
-    await updateUser({ id, username, email, isDeptManager });
+    await updateUser({
+      id, username, email, isDeptManager,
+    });
+
+    setDrawerOpen(false);
   };
 
   const handlePasswordChange = async () => {
     const { newPassword, oldPassword, id } = userData;
     await changeUserPassword(id, newPassword, oldPassword);
+
+    setDrawerOpen(false);
   };
 
   const isViewingHimself = () => {
@@ -80,9 +87,14 @@ const UserDetailsForm = (props) => {
     setDrawerOpen(false);
   };
 
+  const handleButtonClick = (func) => {
+    setCallBack(() => () => func());
+    toggle();
+  };
+
   return (
     <>
-      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+      <form className={classes.form}>
         <TextField
           name="username"
           label="Notendanafn"
@@ -157,19 +169,24 @@ const UserDetailsForm = (props) => {
           ) : null
         }
 
-        <Button type="submit" className={classes.button} variant="contained" color="primary">Vista breytingar</Button>
+        <Button type="button" onClick={() => handleButtonClick(onSubmit)} className={classes.button} variant="contained" color="primary">Vista breytingar</Button>
         {
           // eslint-disable-next-line no-nested-ternary
           isSuperUser
             ? user.is_active
-              ? <Button type="button" className={classes.button} variant="contained" color="primary" onClick={userDeactivate}>Loka aðgang</Button>
-              : <Button type="button" className={classes.button} variant="contained" color="primary" onClick={userActivate}>Opna aðgang</Button>
+              ? <Button type="button" className={classes.button} variant="contained" color="primary" onClick={() => handleButtonClick(userDeactivate)}>Loka aðgang</Button>
+              : <Button type="button" className={classes.button} variant="contained" color="primary" onClick={() => handleButtonClick(userActivate)}>Opna aðgang</Button>
             : null
         }
         {
-          isSuperUser || isViewingHimself() ? <Button type="button" className={classes.button} variant="contained" onClick={handlePasswordChange} color="primary">Breyta lykilorði</Button> : null
+          isSuperUser || isViewingHimself() ? <Button type="button" className={classes.button} variant="contained" onClick={() => handleButtonClick(handlePasswordChange)} color="primary">Breyta lykilorði</Button> : null
         }
       </form>
+      <CRUDDialog
+        isShowing={isShowing}
+        hide={toggle}
+        func={callBack}
+      />
     </>
   );
 };

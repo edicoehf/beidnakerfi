@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Drawer, makeStyles, Button } from '@material-ui/core';
+import CRUDDialog from '../CRUDDialog';
+import useDialog from '../../hooks/useDialog';
 
 import { statusCodes } from '../../config';
 import { deleteCheque, markAsPaid, isSeller } from '../../services/apiGateway';
@@ -60,6 +62,7 @@ const useStyles = makeStyles((themes) => ({
 }));
 const ChequeDetails = (props) => {
   const classes = useStyles();
+  const { isShowing, toggle } = useDialog();
   const {
     drawerOpen,
     setDrawerOpen,
@@ -67,6 +70,7 @@ const ChequeDetails = (props) => {
     setShouldRender,
     setOpen,
   } = props;
+  const [callBack, setCallBack] = useState(() => {});
 
   const {
     code,
@@ -85,17 +89,21 @@ const ChequeDetails = (props) => {
   const toggleClose = () => {
     setDrawerOpen(false);
   };
+
   const handleDelete = async () => {
     await deleteCheque(code);
     setDrawerOpen(false);
-    setOpen(true);
     setShouldRender(true);
   };
   const handlePaid = async () => {
     await markAsPaid(code);
     setDrawerOpen(false);
-    setOpen(true);
     setShouldRender(true);
+  };
+
+  const handleButtonClick = (func) => {
+    setCallBack(() => () => func());
+    toggle();
   };
 
   return (
@@ -146,8 +154,8 @@ const ChequeDetails = (props) => {
               status === 2 && isSeller()
                 ? (
                   <>
-                    <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem greidd</Button>
-                    <Button onClick={handleDelete} className={classes.button} variant="contained" color="primary">Hætta við beiðni</Button>
+                    <Button onClick={() => handleButtonClick(handlePaid)} className={classes.button} variant="contained" color="primary">Skrá sem greidd</Button>
+                    <Button onClick={() => handleButtonClick(handleDelete)} className={classes.button} variant="contained" color="primary">Hætta við beiðni</Button>
                   </>
                 )
                 : null
@@ -156,14 +164,19 @@ const ChequeDetails = (props) => {
               status === 3 && isSeller()
                 ? (
                   <>
-                    <Button onClick={handlePaid} className={classes.button} variant="contained" color="primary">Skrá sem ógreidd</Button>
-
+                    <Button onClick={() => handleButtonClick(handlePaid)} className={classes.button} variant="contained" color="primary">Skrá sem ógreidd</Button>
                   </>
                 )
                 : null
             }
         </div>
       </Drawer>
+      <CRUDDialog
+        isShowing={isShowing}
+        hide={toggle}
+        func={callBack}
+        openSnackbar={setOpen}
+      />
     </>
   );
 };
