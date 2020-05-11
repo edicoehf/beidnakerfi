@@ -591,8 +591,53 @@ class OrganizationTest(APITestCase):
 #-------------------------------------- CREATE
     def test_create_organization(self):
         """POST /api/organizations/ returns 403 Forbidden """
+        self.client.login(username="seller", password="edico123")
 
-        return 0
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "name": "New Organization",
+            "is_seller": True
+        }
+
+        url = reverse("organization-list")
+        response = self.client.post(url, data)
+
+        assert response.status_code == 403, \
+            "Expected 403 Forbidden. Got: {}".format(response.status_code)
+
+    def test_create_organization_as_super(self):
+        """POST /api/organizations/ returns 403 Forbidden """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "name": "New Organization",
+            "is_seller": True
+        }
+
+        url = reverse("organization-list")
+        response = self.client.post(url, data)
+
+        assert response.status_code == 403, \
+            "Expected 403 Forbidden. Got: {}".format(response.status_code)
+
+#-------------------------------------- DELETE
+    def test_delete_organization(self):
+        """POST /api/organizations/ returns 403 Forbidden """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("organization-detail", args=[self.org_seller.pk])
+        response = self.client.delete(url)
+
+        assert response.status_code == 403, \
+            "Expected 403 Forbidden. Got: {}".format(response.status_code)
 
     def tearDown(self):
         for user in User.objects.all():
@@ -601,3 +646,246 @@ class OrganizationTest(APITestCase):
             organization.delete()
 
         return super().tearDown()
+
+class DepartmentTest(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=True)
+        self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+
+        self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_superuser(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller)
+        self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
+
+        self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
+
+        self.department_seller = Department.objects.create(name="Seller Department", costsite="123456", organization=self.org_seller, users=[self.superseller, self.manager])
+        self.department_buyer = Department.objects.create(name="Buyer Department", costsite="654321", organization=self.org_buyer, users=[self.buyer,])
+
+        return super().setUp()
+
+    #-------------------------------------- GET
+    def test_get_departments(self):
+        """GET /api/departments/ returns 200 OK """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("department-list")
+        response = self.client.get(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+        body = response.json()['results']
+        assert len(body) == 1, \
+            "Expected 1 results. Got: {}".format(len(body))
+
+    def test_get_department_details(self):
+        """GET /api/departments/:id/ returns 200 OK """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("department-detail", args=[self.department_seller.pk])
+        response = self.client.get(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+    def test_get_department_data_filter(self):
+        """GET /api/departments/:id/ from another organization returns 404 Not Found """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("department-detail", args=[self.department_buyer.pk])
+        response = self.client.get(url)
+
+        assert response.status_code == 404, \
+            "Expected 404 OK. Got: {}".format(response.status_code)
+
+    #-------------------------------------- CREATE
+    def test_create_department(self):
+        """POST /api/departments/ returns 403 Forbidden """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "name": "New Seller Department",
+            "costsite": "5812345",
+            "organization": self.org_seller,
+            "users": [self.seller]
+        }
+
+        url = reverse("department-list")
+        response = self.client.post(url, data)
+
+        assert response.status_code == 403, \
+            "Expected 403 Forbidden. Got: {}".format(response.status_code)
+
+    def test_create_department_as_super(self):
+        """POST /api/departments/ returns 201 Created """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "name": "New Seller Department",
+            "costsite": "5812345",
+            "organization": self.org_seller,
+            "users": [self.seller]
+        }
+
+        url = reverse("department-list")
+        response = self.client.post(url, data)
+
+        assert response.status_code == 201, \
+            "Expected 201 Created. Got: {}".format(response.status_code)
+
+    #-------------------------------------- DELETE
+    def test_delete_department(self):
+        """DELETE /api/departments/:id/ returns 403 Forbidden """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("department-detail", args=[self.dep_seller.pk])
+        response = self.client.delete(url)
+
+        assert response.status_code == 403, \
+            "Expected 403 Forbidden. Got: {}".format(response.status_code)
+    
+    def test_delete_department(self):
+        """DELETE /api/departments/:id/ returns 204 No Content """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("department-detail", args=[self.dep_seller.pk])
+        response = self.client.delete(url)
+
+        assert response.status_code == 204, \
+            "Expected 204 No Content. Got: {}".format(response.status_code)
+    
+    #-------------------------------------- ADD_USER
+    def test_department_add_user(self):
+        """POST /api/departments/:id/add_user/ returns 403 Forbidden """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "user": self.seller.pk
+        }
+
+        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        assert response.status_code == 403, \
+            "Expected 403 Forbidden. Got: {}".format(response.status_code)
+
+    def test_department_add_user_as_super(self):
+        """POST /api/departments/:id/add_user/ returns 200 OK """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "user": self.seller.pk
+        }
+
+        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+    def test_department_add_user_as_manager(self):
+        """POST /api/departments/:id/add_user/ returns 200 OK """
+        self.client.login(username="manager", password="edico123")
+
+        token = Token.objects.get(user__username='manager')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "user": self.seller.pk
+        }
+
+        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+    #-------------------------------------- REMOVE_USER
+    def test_department_remove_user(self):
+        """POST /api/departments/:id/remove_user/ returns 403 Forbidden """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "user": self.seller.pk
+        }
+
+        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        url = reverse("department-remove-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        assert response.status_code == 403, \
+            "Expected 403 Forbidden. Got: {}".format(response.status_code)
+
+    def test_department_remove_user_as_super(self):
+        """POST /api/departments/:id/remove_user/ returns 200 OK """
+        self.client.login(username="superseller", password="edico123")
+
+        token = Token.objects.get(user__username='superseller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "user": self.seller.pk
+        }
+
+        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        url = reverse("department-remove-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+    def test_department_remove_user_as_manager(self):
+        """POST /api/departments/:id/remove_user/ returns 200 OK """
+        self.client.login(username="manager", password="edico123")
+
+        token = Token.objects.get(user__username='manager')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "user": self.seller.pk
+        }
+
+        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        url = reverse("department-remove-user", args=[self.dep_seller.pk])
+        response = self.client.post(url, data)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
