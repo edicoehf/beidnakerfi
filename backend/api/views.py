@@ -266,13 +266,13 @@ class ChequeViewSet(ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         cheque = self.get_object()
         seller = Organization.objects.get(pk=request.user.organization.id)
-        print(request.data)
 
         if not seller.is_seller:
             return Response({'success': False, 'error': 'Organization is not seller'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
-            return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
+        #---------- CLIENT REQUIREMENT DEPRECATED
+        # if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
+        #     return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
 
         if cheque.status == cheque.CREATED:
             request.data['status'] = cheque.PENDING

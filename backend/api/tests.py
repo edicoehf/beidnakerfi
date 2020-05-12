@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 
-from .models import Token, Organization, User, Department
+from .models import Token, Organization, User, Department, Cheque
 
 # Create your tests here.
 class LoginTest(APITestCase):
@@ -36,7 +36,7 @@ class LoginTest(APITestCase):
             "Expected ID: 1. Got: {}".format(response.data['id'])
     
     def test_incorrect_login(self):
-        """POST /api/login/ returns 400 Unauthorized and error message """
+        """POST /api/login/ returns 400 Bad Request and error message """
 
         data = {
             "username": "buyer",
@@ -46,7 +46,7 @@ class LoginTest(APITestCase):
         response = self.client.post(self.url, data)
 
         assert response.status_code == 400, \
-            "Expected 400 Unauthorized. Got: {}".format(response.status_code)
+            "Expected 400 Bad Request. Got: {}".format(response.status_code)
 
         data_size = len(response.data)
         assert data_size == 1, \
@@ -537,7 +537,7 @@ class OrganizationTest(APITestCase):
         self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
 
         self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
-        self.superseller = User.objects.create_superuser(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_user(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
         self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
 
         self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
@@ -655,13 +655,16 @@ class DepartmentTest(APITestCase):
         self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
 
         self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
-        self.superseller = User.objects.create_superuser(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_user(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
         self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
 
         self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
 
-        self.department_seller = Department.objects.create(name="Seller Department", costsite="123456", organization=self.org_seller, users=[self.superseller, self.manager])
-        self.department_buyer = Department.objects.create(name="Buyer Department", costsite="654321", organization=self.org_buyer, users=[self.buyer,])
+        self.department_seller = Department.objects.create(name="Seller Department", costsite="123456", organization=self.org_seller)
+
+        self.department_seller.users.add(self.superseller, self.manager)
+        
+        self.department_buyer = Department.objects.create(name="Buyer Department", costsite="654321", organization=self.org_buyer)
 
         return super().setUp()
 
@@ -721,7 +724,7 @@ class DepartmentTest(APITestCase):
             "name": "New Seller Department",
             "costsite": "5812345",
             "organization": self.org_seller,
-            "users": [self.seller]
+            "users": [self.seller, ]
         }
 
         url = reverse("department-list")
@@ -741,7 +744,7 @@ class DepartmentTest(APITestCase):
             "name": "New Seller Department",
             "costsite": "5812345",
             "organization": self.org_seller,
-            "users": [self.seller]
+            "users": [self.seller, ]
         }
 
         url = reverse("department-list")
@@ -758,7 +761,7 @@ class DepartmentTest(APITestCase):
         token = Token.objects.get(user__username='seller')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-        url = reverse("department-detail", args=[self.dep_seller.pk])
+        url = reverse("department-detail", args=[self.department_seller.pk])
         response = self.client.delete(url)
 
         assert response.status_code == 403, \
@@ -771,7 +774,7 @@ class DepartmentTest(APITestCase):
         token = Token.objects.get(user__username='superseller')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-        url = reverse("department-detail", args=[self.dep_seller.pk])
+        url = reverse("department-detail", args=[self.department_seller.pk])
         response = self.client.delete(url)
 
         assert response.status_code == 204, \
@@ -789,7 +792,7 @@ class DepartmentTest(APITestCase):
             "user": self.seller.pk
         }
 
-        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
         assert response.status_code == 403, \
@@ -806,7 +809,7 @@ class DepartmentTest(APITestCase):
             "user": self.seller.pk
         }
 
-        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
         assert response.status_code == 200, \
@@ -823,7 +826,7 @@ class DepartmentTest(APITestCase):
             "user": self.seller.pk
         }
 
-        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
         assert response.status_code == 200, \
@@ -841,11 +844,11 @@ class DepartmentTest(APITestCase):
             "user": self.seller.pk
         }
 
-        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
-        url = reverse("department-remove-user", args=[self.dep_seller.pk])
-        response = self.client.post(url, data)
+        url = reverse("department-remove-user", args=[self.department_seller.pk])
+        response = self.client.delete(url, data)
 
         assert response.status_code == 403, \
             "Expected 403 Forbidden. Got: {}".format(response.status_code)
@@ -861,11 +864,11 @@ class DepartmentTest(APITestCase):
             "user": self.seller.pk
         }
 
-        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
-        url = reverse("department-remove-user", args=[self.dep_seller.pk])
-        response = self.client.post(url, data)
+        url = reverse("department-remove-user", args=[self.department_seller.pk])
+        response = self.client.delete(url, data)
 
         assert response.status_code == 200, \
             "Expected 200 OK. Got: {}".format(response.status_code)
@@ -881,11 +884,243 @@ class DepartmentTest(APITestCase):
             "user": self.seller.pk
         }
 
-        url = reverse("department-add-user", args=[self.dep_seller.pk])
+        url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
-        url = reverse("department-remove-user", args=[self.dep_seller.pk])
-        response = self.client.post(url, data)
+        url = reverse("department-remove-user", args=[self.department_seller.pk])
+        response = self.client.delete(url, data)
 
         assert response.status_code == 200, \
             "Expected 200 OK. Got: {}".format(response.status_code)
+
+    def tearDown(self):
+        for user in User.objects.all():
+            user.delete()
+        for department in Department.objects.all():
+            department.delete()
+        for organization in Organization.objects.all():
+            organization.delete()
+
+        return super().tearDown()
+
+class ChequeTest(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=True)
+        self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+
+        self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_user(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
+        self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
+
+        self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
+
+        self.department_seller = Department.objects.create(name="Seller Department", costsite="123456", organization=self.org_seller)
+
+        self.department_seller.users.add(self.superseller, self.manager)
+        
+        self.department_buyer = Department.objects.create(name="Buyer Department", costsite="654321", organization=self.org_buyer)
+
+        self.department_buyer.users.add(self.buyer)
+
+        self.cheque1 = Cheque.objects.create(code="1234567891234", description="", price=0, user=self.buyer, department=self.department_buyer)
+        self.cheque2 = Cheque.objects.create(code="9876543211234", description="", price=2990, user=self.buyer, department=self.department_buyer, seller=self.org_seller, status=Cheque.PENDING)
+
+        return super().setUp()
+
+    #-------------------------------------- GET
+    def test_get_cheques_as_buyer(self):
+        """GET /api/cheques/ returns 200 OK """
+        self.client.login(username="buyer", password="edico123")
+
+        token = Token.objects.get(user__username='buyer')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("cheque-list")
+        response = self.client.get(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+        body = response.json()['results']
+        assert len(body) == 2, \
+            "Expected 2 results. Got: {}".format(len(body))
+
+    def test_get_cheques_as_seller(self):
+        """GET /api/cheques/ returns 200 OK """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("cheque-list")
+        response = self.client.get(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+        body = response.json()['results']
+        assert len(body) == 2, \
+            "Expected 2 results. Got: {}".format(len(body))
+
+    def test_get_cheque_details(self):
+        """GET /api/departments/:id/ returns 200 OK """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("cheque-detail", args=[self.cheque1.code])
+        response = self.client.get(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+    #-------------------------------------- CREATE
+    def test_create_cheque_as_seller(self):
+        """POST /api/cheques/ returns 400 Bad Request """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "user_id": self.seller.pk,
+            "dep_id": self.department_seller.pk
+        }
+
+        url = reverse("cheque-list")
+        response = self.client.post(url, data)
+
+        assert response.status_code == 400, \
+            "Expected 400 Forbidden. Got: {}".format(response.status_code)
+
+    def test_create_cheque_as_buyer(self):
+        """POST /api/cheques/ returns 403 Forbidden """
+        self.client.login(username="buyer", password="edico123")
+
+        token = Token.objects.get(user__username='buyer')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "user_id": self.buyer.pk,
+            "dep_id": self.department_buyer.pk
+        }
+
+        url = reverse("cheque-list")
+        response = self.client.post(url, data)
+
+        assert response.status_code == 201, \
+            "Expected 201 OK. Got: {}".format(response.status_code)
+
+    #-------------------------------------- UPDATE
+    def test_patch_cheque_as_buyer(self):
+        """PATCH /api/cheques/:id/ returns 400 Bad Request """
+        self.client.login(username="buyer", password="edico123")
+
+        token = Token.objects.get(user__username='buyer')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "description": "kvöldmatur",
+            "price": 1290,
+            "seller": self.org_buyer.pk
+        }
+
+        url = reverse("cheque-detail", args=[self.cheque1.code])
+        response = self.client.patch(url, data)
+
+        assert response.status_code == 400, \
+            "Expected 400 Bad Request. Got: {}".format(response.status_code)
+
+    def test_patch_cheque_as_seller(self):
+        """PATCH /api/cheques/:id/ returns 200 OK """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        data = {
+            "description": "kvöldmatur",
+            "price": 1290,
+            "seller": self.org_seller.pk
+        }
+
+        url = reverse("cheque-detail", args=[self.cheque1.code])
+        response = self.client.patch(url, data, format='json')
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+        assert response.data['description'] == "kvöldmatur", \
+            "Expected description: 'kvöldmatur'. Got: {}".format(response.data['description'])
+        
+        assert response.data['price'] == 1290, \
+            "Expected price: 1290. Got: {}".format(response.data['price'])
+        
+    def test_patch_cheque_status(self):
+        """PATCH /api/cheques/ returns 200 OK """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("cheque-detail", args=[self.cheque2.code])
+        response = self.client.patch(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+        assert response.data['status'] == Cheque.DONE, \
+            "Expected status: {}. Got: {}".format(Cheque.DONE, response.data['status'])
+
+        response = self.client.patch(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+        assert response.data['status'] == Cheque.PENDING, \
+            "Expected status: {}. Got: {}".format(Cheque.PENDING, response.data['status'])
+
+    #-------------------------------------- DELETE
+    def test_delete_cheque_as_seller(self):
+        """DELETE /api/cheques/:id/ returns 200 OK """
+        self.client.login(username="seller", password="edico123")
+
+        token = Token.objects.get(user__username='seller')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("cheque-detail", args=[self.cheque2.code])
+        response = self.client.delete(url)
+
+        assert response.status_code == 200, \
+            "Expected 200 OK. Got: {}".format(response.status_code)
+
+        assert response.data['status'] == Cheque.CANCELLED, \
+            "Expected status: {}. Got: {}".format(Cheque.CANCELLED, response.data['description'])
+
+    def test_delete_cheque_as_seller(self):
+        """DELETE /api/cheques/:id/ returns 201 No Content """
+        self.client.login(username="buyer", password="edico123")
+
+        token = Token.objects.get(user__username='buyer')
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+        url = reverse("cheque-detail", args=[self.cheque1.code])
+        response = self.client.delete(url)
+
+        assert response.status_code == 204, \
+            "Expected 204 No Content. Got: {}".format(response.status_code)
+    
+    def tearDown(self):
+        for cheque in Cheque.objects.all():
+            cheque.delete()
+        for user in User.objects.all():
+            user.delete()
+        for department in Department.objects.all():
+            department.delete()
+        for organization in Organization.objects.all():
+            organization.delete()
+
+        return super().tearDown()

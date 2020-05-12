@@ -19,7 +19,7 @@ All data is filtered by Organization. Users cannot interact with or read data fr
 
 ### Parameters
 
-All list data requests support additional parameters for pagination, ordering and searching.
+All data-list requests support additional parameters for pagination, ordering and searching.
 
 + Pagination 
     + `/?limit=10&offset=0`  
@@ -156,7 +156,7 @@ All list data requests support additional parameters for pagination, ordering an
 
 `api/departments/:id/remove_user/`
 
-+ `[POST]` Superuser and admin only. Removes user from Department. 
++ `[DELETE]` Superuser and admin only. Removes user from Department. 
     * Accepts `"user": {id}` as JSON body.
 
 `api/departments/:id/cheques/`
