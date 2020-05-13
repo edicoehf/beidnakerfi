@@ -47,5 +47,5 @@ urlpatterns = [
     path('api/', include(org_router.urls)),
     path('api/', include(dep_router.urls)),
     path('api/', include(user_router.urls)),
-    path('api/login/', loginToken.as_view())
+    path('api/login/', loginToken.as_view(), name='login')
 ]

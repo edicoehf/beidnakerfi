@@ -19,7 +19,7 @@ All data is filtered by Organization. Users cannot interact with or read data fr
 
 ### Parameters
 
-All list data requests support additional parameters for pagination, ordering and searching.
+All data-list requests support additional parameters for pagination, ordering and searching.
 
 + Pagination 
     + `/?limit=10&offset=0`  
@@ -69,11 +69,13 @@ All list data requests support additional parameters for pagination, ordering an
 
 `api/users/:id/activate/`
 
-+ `[POST]` Superuser and admin only. Sets the users is_active flag to True, enabling the account if it was disabled. No body required.
++ `[POST]` Superuser and admin only. Sets the users is_active flag to True, enabling the account if it was disabled.  
+ No body required.
 
 `api/users/:id/deactivate/`
 
-+ `[POST]` Superuser and admin only. Sets the users is_active flag to False, disabling the account if it was enabled. No body required.
++ `[POST]` Superuser and admin only. Sets the users is_active flag to False, disabling the account if it was enabled.  
+ No body required.
 
 `api/users/:id/cheques/`
 
@@ -154,7 +156,7 @@ All list data requests support additional parameters for pagination, ordering an
 
 `api/departments/:id/remove_user/`
 
-+ `[POST]` Superuser and admin only. Removes user from Department. 
++ `[DELETE]` Superuser and admin only. Removes user from Department. 
     * Accepts `"user": {id}` as JSON body.
 
 `api/departments/:id/cheques/`

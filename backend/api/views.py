@@ -65,7 +65,7 @@ class UserViewSet(ModelViewSet):
         user = self.get_object()
         if user.is_active:
             user_serializer = self.get_serializer(user)
-            return Response({'success': True, 'message': 'User already active', 'user': user_serializer.data}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'success': False, 'message': 'User already active', 'user': user_serializer.data}, status=status.HTTP_400_BAD_REQUEST)
 
         user.is_active = True
         user.save()
@@ -78,7 +78,7 @@ class UserViewSet(ModelViewSet):
         user = self.get_object()
         if not user.is_active:
             user_serializer = self.get_serializer(user)
-            return Response({'success': True, 'message': 'User already disabled', 'user': user_serializer.data}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'success': False, 'message': 'User already disabled', 'user': user_serializer.data}, status=status.HTTP_400_BAD_REQUEST)
 
         user.is_active = False
         user.save()
@@ -96,9 +96,9 @@ class UserViewSet(ModelViewSet):
         serializer = PasswordSerializer(data=request.data)
 
         # Superuser skips serializer check in order to set password for other users
-        if serializer.is_valid() or request.user.is_superuser:
-            if not user.check_password(serializer.data.get('old_password')) and not request.user.is_superuser:
-                return Response({'success': False, 'messsage': 'Password incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+        if serializer.is_valid() or request.user.is_superuser or request.user.is_manager:
+            if not user.check_password(serializer.data.get('old_password')) and not ( request.user.is_superuser or request.user.is_manager ):
+                return Response({'success': False, 'message': 'Password incorrect'}, status=status.HTTP_400_BAD_REQUEST)
             user.set_password(serializer.data.get('new_password'))
             user.save()
             
@@ -270,8 +270,9 @@ class ChequeViewSet(ModelViewSet):
         if not seller.is_seller:
             return Response({'success': False, 'error': 'Organization is not seller'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
-            return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
+        #---------- CLIENT REQUIREMENT DEPRECATED
+        # if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
+        #     return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
 
         if cheque.status == cheque.CREATED:
             request.data['status'] = cheque.PENDING
