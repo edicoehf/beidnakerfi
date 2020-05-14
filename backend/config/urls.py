@@ -30,12 +30,14 @@ router.register(r'organizations', OrganizationViewSet)
 router.register(r'cheques', ChequeViewSet)
 router.register(r'clients', ClientViewSet)
 
-org_router = routers.NestedSimpleRouter(router, r'organizations', lookup='organization')
+org_router = routers.NestedSimpleRouter(
+    router, r'organizations', lookup='organization')
 org_router.register(r'departments', DepartmentViewSet, 'org_departments')
 org_router.register(r'users', UserViewSet, 'org_user')
 org_router.register(r'cheques', ChequeViewSet, 'org_cheques')
 
-dep_router = routers.NestedSimpleRouter(router, r'departments', lookup='department')
+dep_router = routers.NestedSimpleRouter(
+    router, r'departments', lookup='department')
 dep_router.register(r'cheques', ChequeViewSet, 'dep_cheques')
 
 user_router = routers.NestedSimpleRouter(router, r'users', lookup='user')

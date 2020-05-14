@@ -14,5 +14,5 @@ def send_email(email_recipient, title, body):
         "subject": title,
         "text": body
     }
-    
+
     return requests.post(server, auth=auth, data=data)

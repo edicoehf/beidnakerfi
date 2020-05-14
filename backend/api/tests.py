@@ -6,14 +6,18 @@ from rest_framework import status
 from .models import Token, Organization, User, Department, Cheque
 
 # Create your tests here.
+
+
 class LoginTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.url = reverse("login")
 
-        self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+        self.org_buyer = Organization.objects.create(
+            name="Buyer Organization", is_seller=False)
 
-        self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
+        self.buyer = User.objects.create_user(
+            username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
 
     def test_login(self):
         """POST /api/login/ returns 200 OK and data """
@@ -22,7 +26,7 @@ class LoginTest(APITestCase):
             "username": "buyer",
             "password": "edico123"
         }
-        
+
         response = self.client.post(self.url, data)
 
         assert response.status_code == 200, \
@@ -31,10 +35,10 @@ class LoginTest(APITestCase):
         data_size = len(response.data)
         assert data_size == 9, \
             "Expected 9 fields. Got: {}".format(data_size)
-        
+
         assert response.data['id'] == 1, \
             "Expected ID: 1. Got: {}".format(response.data['id'])
-    
+
     def test_incorrect_login(self):
         """POST /api/login/ returns 400 Bad Request and error message """
 
@@ -42,7 +46,7 @@ class LoginTest(APITestCase):
             "username": "buyer",
             "password": "incorrect"
         }
-        
+
         response = self.client.post(self.url, data)
 
         assert response.status_code == 400, \
@@ -58,16 +62,22 @@ class LoginTest(APITestCase):
         for organization in Organization.objects.all():
             organization.delete()
 
+
 class UserTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=True)
+        self.org_seller = Organization.objects.create(
+            name="Seller Organization", is_seller=True)
 
-        self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
-        self.superseller = User.objects.create_superuser(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller)
-        self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
-        self.inactive = User.objects.create_user(username="inactive", password="edico123", is_active=False, organization=self.org_seller)
+        self.seller = User.objects.create_user(
+            username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_superuser(
+            username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller)
+        self.manager = User.objects.create_user(
+            username="manager", password="edico123", is_manager=True, organization=self.org_seller)
+        self.inactive = User.objects.create_user(
+            username="inactive", password="edico123", is_active=False, organization=self.org_seller)
 
         return super().setUp()
 
@@ -82,7 +92,8 @@ class UserTest(APITestCase):
             "Expected 401 Unauthorized. Got: {}".format(response.status_code)
 
         assert response.data['detail'] == "Authentication credentials were not provided.", \
-            "Expected 'Authentication credentials were not provided.' error message. Got: {}".format(response.data['detail'])
+            "Expected 'Authentication credentials were not provided.' error message. Got: {}".format(
+                response.data['detail'])
 
     def test_get_users(self):
         """GET /api/users/ returns 200 OK and data """
@@ -119,9 +130,11 @@ class UserTest(APITestCase):
 
     def test_user_get_data_filter(self):
         """GET /api/users/:id/ of another Organization returns 403 Forbidden """
-        org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+        org_buyer = Organization.objects.create(
+            name="Buyer Organization", is_seller=False)
 
-        buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=org_buyer)
+        buyer = User.objects.create_user(
+            username="buyer", email="buyer@email.com", password="edico123", organization=org_buyer)
 
         self.client.login(username="seller", password="edico123")
 
@@ -131,7 +144,6 @@ class UserTest(APITestCase):
         url = reverse("user-detail", args=[buyer.pk])
         response = self.client.get(url)
 
-        
         assert response.status_code == 404, \
             "Expected 404 Not Found. Got: {}".format(response.status_code)
 
@@ -156,7 +168,8 @@ class UserTest(APITestCase):
             "Expected 403 Forbidden. Got: {}".format(response.status_code)
 
         assert response.data['detail'] == "You do not have permission to perform this action.", \
-            "Expected 'You do not have permission to perform this action.' error message. Got: {}".format(response.data['detail'])
+            "Expected 'You do not have permission to perform this action.' error message. Got: {}".format(
+                response.data['detail'])
 
     def test_create_user_as_manager(self):
         """POST /api/users/ returns 201 Created and data """
@@ -186,7 +199,8 @@ class UserTest(APITestCase):
             "Expected ID: 5. Got: {}".format(response.data['id'])
 
         assert response.data['username'] == "seller2", \
-            "Expected username: seller2. Got: {}".format(response.data['username'])
+            "Expected username: seller2. Got: {}".format(
+                response.data['username'])
 
     def test_create_user_as_super(self):
         """POST /api/users/ returns 201 Created and data """
@@ -216,7 +230,8 @@ class UserTest(APITestCase):
             "Expected ID: 5. Got: {}".format(response.data['id'])
 
         assert response.data['username'] == "seller2", \
-            "Expected username: seller2. Got: {}".format(response.data['username'])
+            "Expected username: seller2. Got: {}".format(
+                response.data['username'])
 
     def test_create_manager_as_super(self):
         """POST /api/users/ returns 201 Created and data """
@@ -247,7 +262,8 @@ class UserTest(APITestCase):
             "Expected ID: 5. Got: {}".format(response.data['id'])
 
         assert response.data['username'] == "manager2", \
-            "Expected username: manager. Got: {}".format(response.data['username'])
+            "Expected username: manager. Got: {}".format(
+                response.data['username'])
 
 #-------------------------------------- EDIT
     def test_edit_self(self):
@@ -268,7 +284,8 @@ class UserTest(APITestCase):
             "Expected 200 OK. Got: {}".format(response.status_code)
 
         assert response.data['email'] == "newemail@seller.com", \
-            "Expected email: newemail@seller.com. Got: {}".format(response.data['email'])
+            "Expected email: newemail@seller.com. Got: {}".format(
+                response.data['email'])
 
     def test_edit_others(self):
         """PATCH /api/users/:id/ returns 403 Forbidden and error """
@@ -288,7 +305,8 @@ class UserTest(APITestCase):
             "Expected 403 Forbidden. Got: {}".format(response.status_code)
 
         assert response.data['detail'] == "You do not have permission to perform this action.", \
-            "Expected 'You do not have permission to perform this action.' error message. Got: {}".format(response.data['detail'])
+            "Expected 'You do not have permission to perform this action.' error message. Got: {}".format(
+                response.data['detail'])
 
     def test_edit_others_as_super(self):
         """PATCH /api/users/:id/ returns 200 OK and data """
@@ -308,7 +326,8 @@ class UserTest(APITestCase):
             "Expected 200 OK. Got: {}".format(response.status_code)
 
         assert response.data['email'] == "superemail@seller.com", \
-            "Expected email: superemail@seller.com. Got: {}".format(response.data['email'])
+            "Expected email: superemail@seller.com. Got: {}".format(
+                response.data['email'])
 
     def test_edit_others_as_manager(self):
         """PATCH /api/users/:id/ returns 200 OK and data """
@@ -328,7 +347,8 @@ class UserTest(APITestCase):
             "Expected 200 OK. Got: {}".format(response.status_code)
 
         assert response.data['email'] == "manageremail@seller.com", \
-            "Expected email: manageremail@seller.com. Got: {}".format(response.data['email'])
+            "Expected email: manageremail@seller.com. Got: {}".format(
+                response.data['email'])
 
 #-------------------------------------- DELETE
     def test_delete(self):
@@ -388,7 +408,7 @@ class UserTest(APITestCase):
 
         assert response.status_code == 200, \
             "Expected 200 OK. Got: {}".format(response.status_code)
-    
+
     def test_set_password_others(self):
         """PUT /api/users/:id/set_password/ returns 403 Forbidden """
         self.client.login(username="seller", password="edico123")
@@ -519,7 +539,6 @@ class UserTest(APITestCase):
         assert response.status_code == 200, \
             "Expected 200 OK. Got: {}".format(response.status_code)
 
-
     def tearDown(self):
         for user in User.objects.all():
             user.delete()
@@ -533,14 +552,20 @@ class OrganizationTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=True)
-        self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+        self.org_seller = Organization.objects.create(
+            name="Seller Organization", is_seller=True)
+        self.org_buyer = Organization.objects.create(
+            name="Buyer Organization", is_seller=False)
 
-        self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
-        self.superseller = User.objects.create_user(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
-        self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
+        self.seller = User.objects.create_user(
+            username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_user(
+            username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
+        self.manager = User.objects.create_user(
+            username="manager", password="edico123", is_manager=True, organization=self.org_seller)
 
-        self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
+        self.buyer = User.objects.create_user(
+            username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
 
         return super().setUp()
 
@@ -647,24 +672,33 @@ class OrganizationTest(APITestCase):
 
         return super().tearDown()
 
+
 class DepartmentTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=True)
-        self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+        self.org_seller = Organization.objects.create(
+            name="Seller Organization", is_seller=True)
+        self.org_buyer = Organization.objects.create(
+            name="Buyer Organization", is_seller=False)
 
-        self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
-        self.superseller = User.objects.create_user(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
-        self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
+        self.seller = User.objects.create_user(
+            username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_user(
+            username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
+        self.manager = User.objects.create_user(
+            username="manager", password="edico123", is_manager=True, organization=self.org_seller)
 
-        self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
+        self.buyer = User.objects.create_user(
+            username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
 
-        self.department_seller = Department.objects.create(name="Seller Department", costsite="123456", organization=self.org_seller)
+        self.department_seller = Department.objects.create(
+            name="Seller Department", costsite="123456", organization=self.org_seller)
 
         self.department_seller.users.add(self.superseller, self.manager)
-        
-        self.department_buyer = Department.objects.create(name="Buyer Department", costsite="654321", organization=self.org_buyer)
+
+        self.department_buyer = Department.objects.create(
+            name="Buyer Department", costsite="654321", organization=self.org_buyer)
 
         return super().setUp()
 
@@ -766,7 +800,7 @@ class DepartmentTest(APITestCase):
 
         assert response.status_code == 403, \
             "Expected 403 Forbidden. Got: {}".format(response.status_code)
-    
+
     def test_delete_department(self):
         """DELETE /api/departments/:id/ returns 204 No Content """
         self.client.login(username="superseller", password="edico123")
@@ -779,7 +813,7 @@ class DepartmentTest(APITestCase):
 
         assert response.status_code == 204, \
             "Expected 204 No Content. Got: {}".format(response.status_code)
-    
+
     #-------------------------------------- ADD_USER
     def test_department_add_user(self):
         """POST /api/departments/:id/add_user/ returns 403 Forbidden """
@@ -847,7 +881,8 @@ class DepartmentTest(APITestCase):
         url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
-        url = reverse("department-remove-user", args=[self.department_seller.pk])
+        url = reverse("department-remove-user",
+                      args=[self.department_seller.pk])
         response = self.client.delete(url, data)
 
         assert response.status_code == 403, \
@@ -867,7 +902,8 @@ class DepartmentTest(APITestCase):
         url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
-        url = reverse("department-remove-user", args=[self.department_seller.pk])
+        url = reverse("department-remove-user",
+                      args=[self.department_seller.pk])
         response = self.client.delete(url, data)
 
         assert response.status_code == 200, \
@@ -887,7 +923,8 @@ class DepartmentTest(APITestCase):
         url = reverse("department-add-user", args=[self.department_seller.pk])
         response = self.client.post(url, data)
 
-        url = reverse("department-remove-user", args=[self.department_seller.pk])
+        url = reverse("department-remove-user",
+                      args=[self.department_seller.pk])
         response = self.client.delete(url, data)
 
         assert response.status_code == 200, \
@@ -903,29 +940,40 @@ class DepartmentTest(APITestCase):
 
         return super().tearDown()
 
+
 class ChequeTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
 
-        self.org_seller = Organization.objects.create(name="Seller Organization", is_seller=True)
-        self.org_buyer = Organization.objects.create(name="Buyer Organization", is_seller=False)
+        self.org_seller = Organization.objects.create(
+            name="Seller Organization", is_seller=True)
+        self.org_buyer = Organization.objects.create(
+            name="Buyer Organization", is_seller=False)
 
-        self.seller = User.objects.create_user(username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
-        self.superseller = User.objects.create_user(username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
-        self.manager = User.objects.create_user(username="manager", password="edico123", is_manager=True, organization=self.org_seller)
+        self.seller = User.objects.create_user(
+            username="seller", email="seller@email.com", password="edico123", organization=self.org_seller)
+        self.superseller = User.objects.create_user(
+            username="superseller", email="superseller@email.com", password="edico123", organization=self.org_seller, is_superuser=True)
+        self.manager = User.objects.create_user(
+            username="manager", password="edico123", is_manager=True, organization=self.org_seller)
 
-        self.buyer = User.objects.create_user(username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
+        self.buyer = User.objects.create_user(
+            username="buyer", email="buyer@email.com", password="edico123", organization=self.org_buyer)
 
-        self.department_seller = Department.objects.create(name="Seller Department", costsite="123456", organization=self.org_seller)
+        self.department_seller = Department.objects.create(
+            name="Seller Department", costsite="123456", organization=self.org_seller)
 
         self.department_seller.users.add(self.superseller, self.manager)
-        
-        self.department_buyer = Department.objects.create(name="Buyer Department", costsite="654321", organization=self.org_buyer)
+
+        self.department_buyer = Department.objects.create(
+            name="Buyer Department", costsite="654321", organization=self.org_buyer)
 
         self.department_buyer.users.add(self.buyer)
 
-        self.cheque1 = Cheque.objects.create(code="1234567891234", description="", price=0, user=self.buyer, department=self.department_buyer)
-        self.cheque2 = Cheque.objects.create(code="9876543211234", description="", price=2990, user=self.buyer, department=self.department_buyer, seller=self.org_seller, status=Cheque.PENDING)
+        self.cheque1 = Cheque.objects.create(
+            code="1234567891234", description="", price=0, user=self.buyer, department=self.department_buyer)
+        self.cheque2 = Cheque.objects.create(code="9876543211234", description="", price=2990, user=self.buyer,
+                                             department=self.department_buyer, seller=self.org_seller, status=Cheque.PENDING)
 
         return super().setUp()
 
@@ -1054,11 +1102,12 @@ class ChequeTest(APITestCase):
             "Expected 200 OK. Got: {}".format(response.status_code)
 
         assert response.data['description'] == "kvöldmatur", \
-            "Expected description: 'kvöldmatur'. Got: {}".format(response.data['description'])
-        
+            "Expected description: 'kvöldmatur'. Got: {}".format(
+                response.data['description'])
+
         assert response.data['price'] == 1290, \
             "Expected price: 1290. Got: {}".format(response.data['price'])
-        
+
     def test_patch_cheque_status(self):
         """PATCH /api/cheques/ returns 200 OK """
         self.client.login(username="seller", password="edico123")
@@ -1073,7 +1122,8 @@ class ChequeTest(APITestCase):
             "Expected 200 OK. Got: {}".format(response.status_code)
 
         assert response.data['status'] == Cheque.DONE, \
-            "Expected status: {}. Got: {}".format(Cheque.DONE, response.data['status'])
+            "Expected status: {}. Got: {}".format(
+                Cheque.DONE, response.data['status'])
 
         response = self.client.patch(url)
 
@@ -1081,7 +1131,8 @@ class ChequeTest(APITestCase):
             "Expected 200 OK. Got: {}".format(response.status_code)
 
         assert response.data['status'] == Cheque.PENDING, \
-            "Expected status: {}. Got: {}".format(Cheque.PENDING, response.data['status'])
+            "Expected status: {}. Got: {}".format(
+                Cheque.PENDING, response.data['status'])
 
     #-------------------------------------- DELETE
     def test_delete_cheque_as_seller(self):
@@ -1098,7 +1149,8 @@ class ChequeTest(APITestCase):
             "Expected 200 OK. Got: {}".format(response.status_code)
 
         assert response.data['status'] == Cheque.CANCELLED, \
-            "Expected status: {}. Got: {}".format(Cheque.CANCELLED, response.data['description'])
+            "Expected status: {}. Got: {}".format(
+                Cheque.CANCELLED, response.data['description'])
 
     def test_delete_cheque_as_seller(self):
         """DELETE /api/cheques/:id/ returns 201 No Content """
@@ -1112,7 +1164,7 @@ class ChequeTest(APITestCase):
 
         assert response.status_code == 204, \
             "Expected 204 No Content. Got: {}".format(response.status_code)
-    
+
     def tearDown(self):
         for cheque in Cheque.objects.all():
             cheque.delete()

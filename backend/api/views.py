@@ -8,15 +8,16 @@ from rest_framework.response import Response
 
 from .models import User, Department, Organization, Cheque, Client
 from .serializers import UserListSerializer, OrganizationListSerializer, DepartmentListSerializer, ChequeListSerializer, ClientSerializer,  \
-                         UserDetailSerializer, OrganizationDetailSerializer, DepartmentDetailSerializer,  ChequeDetailSerializer, \
-                         DepartmentActionSerializer, ChequeActionSerializer,  ClientActionSerializer, PasswordSerializer
+    UserDetailSerializer, OrganizationDetailSerializer, DepartmentDetailSerializer,  ChequeDetailSerializer, \
+    DepartmentActionSerializer, ChequeActionSerializer,  ClientActionSerializer, PasswordSerializer
 
 from .permissions import IsAdmin, IsSelfOrAdmin, IsSuperUser, IsSelfOrSuper, IsManagerOrSuper, IsSelfOrManagerOrSuper, IsUserInOrg, IsUserOrgBuyer
 
+
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
-    search_fields = [ 'username', 'email' ]
-    ordering_fields = [ 'username', 'email']
+    search_fields = ['username', 'email']
+    ordering_fields = ['username', 'email']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
@@ -25,7 +26,7 @@ class UserViewSet(ModelViewSet):
         else:
             organization = self.request.user.organization
             return User.objects.filter(organization=organization).prefetch_related('department_user').order_by('-date_joined')
-    
+
     def get_serializer_class(self):
         if self.action == 'list':
             return UserListSerializer
@@ -39,13 +40,17 @@ class UserViewSet(ModelViewSet):
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [permissions.IsAuthenticated]
         elif self.action == 'create' or self.action == 'destroy':
-            permission_classes = [permissions.IsAuthenticated, IsManagerOrSuper, IsUserInOrg]
+            permission_classes = [
+                permissions.IsAuthenticated, IsManagerOrSuper, IsUserInOrg]
         elif self.action == 'update' or self.action == 'partial_update':
-            permission_classes = [permissions.IsAuthenticated, IsSelfOrManagerOrSuper, IsUserInOrg]
+            permission_classes = [
+                permissions.IsAuthenticated, IsSelfOrManagerOrSuper, IsUserInOrg]
         elif self.action == 'activate' or self.action == 'deactivate':
-            permission_classes = [permissions.IsAuthenticated, IsManagerOrSuper, IsUserInOrg]
+            permission_classes = [
+                permissions.IsAuthenticated, IsManagerOrSuper, IsUserInOrg]
         elif self.action == 'set_password':
-            permission_classes = [permissions.IsAuthenticated, IsSelfOrManagerOrSuper, IsUserInOrg]
+            permission_classes = [
+                permissions.IsAuthenticated, IsSelfOrManagerOrSuper, IsUserInOrg]
         return [permission() for permission in permission_classes]
 
     def destroy(self, request, *args, **kwargs):
@@ -56,7 +61,7 @@ class UserViewSet(ModelViewSet):
 
         user.is_active = False
         user.save()
-        
+
         user_serializer = self.get_serializer(user)
         return Response({'success': True, 'message': 'User disabled', 'user': user_serializer.data}, status=status.HTTP_200_OK)
 
@@ -69,7 +74,7 @@ class UserViewSet(ModelViewSet):
 
         user.is_active = True
         user.save()
-        
+
         user_serializer = self.get_serializer(user)
         return Response({'success': True, 'message': 'User activated', 'user': user_serializer.data}, status=status.HTTP_200_OK)
 
@@ -82,7 +87,7 @@ class UserViewSet(ModelViewSet):
 
         user.is_active = False
         user.save()
-        
+
         user_serializer = self.get_serializer(user)
         return Response({'success': True, 'message': 'User disabled', 'user': user_serializer.data}, status=status.HTTP_200_OK)
 
@@ -97,14 +102,15 @@ class UserViewSet(ModelViewSet):
 
         # Superuser skips serializer check in order to set password for other users
         if serializer.is_valid() or request.user.is_superuser or request.user.is_manager:
-            if not user.check_password(serializer.data.get('old_password')) and not ( request.user.is_superuser or request.user.is_manager ):
+            if not user.check_password(serializer.data.get('old_password')) and not (request.user.is_superuser or request.user.is_manager):
                 return Response({'success': False, 'message': 'Password incorrect'}, status=status.HTTP_400_BAD_REQUEST)
             user.set_password(serializer.data.get('new_password'))
             user.save()
-            
+
             return Response({'success': True, 'message': 'New password set'}, status=status.HTTP_200_OK)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class OrganizationViewSet(ModelViewSet):
     queryset = Organization.objects.all()
@@ -130,10 +136,11 @@ class OrganizationViewSet(ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
+
 class DepartmentViewSet(ModelViewSet):
     queryset = Department.objects.all()
-    search_fields = [ 'name', 'costsite' ]
-    ordering_fields = [ 'name', 'costsite' ]
+    search_fields = ['name', 'costsite']
+    ordering_fields = ['name', 'costsite']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
@@ -154,15 +161,17 @@ class DepartmentViewSet(ModelViewSet):
             return DepartmentDetailSerializer
         else:
             return DepartmentListSerializer
-    
+
     def get_permissions(self):
         permission_classes = []
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [permissions.IsAuthenticated]
         elif self.action == 'create' or self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
-            permission_classes = [permissions.IsAuthenticated, IsManagerOrSuper, IsUserInOrg]
+            permission_classes = [
+                permissions.IsAuthenticated, IsManagerOrSuper, IsUserInOrg]
         elif self.action == 'add_user' or self.action == 'remove_user':
-            permission_classes = [permissions.IsAuthenticated, IsManagerOrSuper, IsUserInOrg]
+            permission_classes = [
+                permissions.IsAuthenticated, IsManagerOrSuper, IsUserInOrg]
 
         return [permission() for permission in permission_classes]
 
@@ -175,9 +184,9 @@ class DepartmentViewSet(ModelViewSet):
         try:
             user = User.objects.get(id=data['user'])
             department = Department.objects.get(id=pk)
-            
+
             if department.users.filter(id=user.id, department_user=department).exists():
-               return Response({'success': False, 'error': 'User already registered to department'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'success': False, 'error': 'User already registered to department'}, status=status.HTTP_400_BAD_REQUEST)
 
             department.users.add(user)
 
@@ -209,12 +218,15 @@ class DepartmentViewSet(ModelViewSet):
         except Department.DoesNotExist:
             return Response({'success': False, 'error': 'Department not found'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ChequeViewSet(ModelViewSet):
     queryset = Cheque.objects.all()
     lookup_field = 'code'
     permission_classes = [permissions.IsAuthenticated]
-    search_fields = [ 'code', 'description', 'invoice', 'created', 'user__username', 'department__name', 'department__costsite', 'seller__name' ]
-    ordering_fields = [ 'code', 'price', 'description', 'created', 'user', 'department' ]
+    search_fields = ['code', 'description', 'invoice', 'created',
+                     'user__username', 'department__name', 'department__costsite', 'seller__name']
+    ordering_fields = ['code', 'price', 'description',
+                       'created', 'user', 'department']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):
@@ -257,7 +269,8 @@ class ChequeViewSet(ModelViewSet):
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [permissions.IsAuthenticated]
         elif self.action == 'create':
-            permissions_classes = [permissions.IsAuthenticated, IsUserOrgBuyer, ]
+            permissions_classes = [
+                permissions.IsAuthenticated, IsUserOrgBuyer, ]
         elif self.action == 'update' or self.action == 'partial_update' or self.action == 'destroy':
             permission_classes = [permissions.IsAuthenticated]
 
@@ -270,7 +283,7 @@ class ChequeViewSet(ModelViewSet):
         if not seller.is_seller:
             return Response({'success': False, 'error': 'Organization is not seller'}, status=status.HTTP_400_BAD_REQUEST)
 
-        #---------- CLIENT REQUIREMENT DEPRECATED
+        # ---------- CLIENT REQUIREMENT DEPRECATED
         # if not Client.objects.filter(buyer=cheque.user.organization, seller=seller).exists():
         #     return Response({'success': False, 'error': 'Seller not in Buyer client list'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -318,12 +331,13 @@ class ChequeViewSet(ModelViewSet):
     #     print('# of Queries: {}'.format(len(connection.queries)))
     #     return response
 
+
 class ClientViewSet(ModelViewSet):
     queryset = Client.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
-    search_fields = [ 'buyer__name', 'seller__name ']
-    ordering_fields = [ 'buyer', 'seller' ]
+    search_fields = ['buyer__name', 'seller__name ']
+    ordering_fields = ['buyer', 'seller']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
 
     def get_queryset(self):

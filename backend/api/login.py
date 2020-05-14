@@ -6,6 +6,7 @@ from .models import Department
 
 from .authentication import token_login_handler, expire_time
 
+
 class loginToken(ObtainAuthToken):
     def _user_groups(self, user):
         groups = user.groups.all()
@@ -28,12 +29,13 @@ class loginToken(ObtainAuthToken):
             return None
 
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
 
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        
+
         if not created:
             token = token_login_handler(token)
 
@@ -47,5 +49,5 @@ class loginToken(ObtainAuthToken):
             'org_seller': user.organization.is_seller,
             'is_superuser': user.is_superuser,
             'is_manager': user.is_manager
-            
+
         })

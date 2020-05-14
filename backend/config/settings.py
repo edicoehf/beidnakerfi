@@ -103,7 +103,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 
-
 DATABASES = {
     'default': env.db(),
 }
@@ -155,7 +154,6 @@ CORS_ORIGIN_WHITELIST = [
 django_heroku.settings(locals())
 
 # Use local DB for unit tests
-import sys
 if 'test' in sys.argv:
     DATABASES = {
         'default': {
