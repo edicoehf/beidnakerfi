@@ -24,7 +24,7 @@ class UserBasicSerializer(serializers.ModelSerializer):
 
 class UserListSerializer(serializers.ModelSerializer):
     organization = serializers.IntegerField(
-        source='organization.id', write_only=True)
+        source='organization.id', write_only=True, required=True)
     departments = DepartmentListSerializer(
         source='department_user', many=True, required=False, read_only=True)
 

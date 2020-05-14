@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User, Organization, Department, Cheque, Client
+from .models import User, Organization, Department, Cheque
 
 
 @admin.register(User)
@@ -25,4 +25,3 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(Organization)
 admin.site.register(Department)
 admin.site.register(Cheque)
-admin.site.register(Client)
