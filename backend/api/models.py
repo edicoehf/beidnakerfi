@@ -75,7 +75,7 @@ class Cheque(models.Model):
 
     code = models.CharField(("Cheque code"), unique=True, max_length=20)
     description = models.CharField(
-        ("Placeholder for cheque information fields"), max_length=200)
+        ("Description"), max_length=200)
     price = models.FloatField(("Price"))
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="cheque_user", on_delete=models.CASCADE)
