@@ -30,7 +30,7 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "uuid-js": "^0.7.5",
-    "react-native-webview": "8.1.1",
+    "react-native-webview": "11.0.0",
     "react-native-svg": "11.0.1"
   },
   "devDependencies": {
